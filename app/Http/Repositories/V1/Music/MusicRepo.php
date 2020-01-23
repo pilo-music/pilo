@@ -1,15 +1,15 @@
 <?php
 
-namespace App\Http\Repositories\V1\Artist;
+namespace App\Http\Repositories\V1\Music;
 
-class ArtistRepo implements Builder
+class MusicRepo implements Builder
 {
     private static $instance = null;
 
-    public static function getInstance(): ArtistRepo
+    public static function getInstance(): MusicRepo
     {
         if (self::$instance == null) {
-            self::$instance = new ArtistRepo();
+            self::$instance = new MusicRepo();
         }
 
         return self::$instance;
