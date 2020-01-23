@@ -11,16 +11,19 @@ class CustomResponse
     const SUCCESS = "success";
     const ERROR = "error";
 
-    public static function create($data, $status, $response_code = 200)
+    public static function create($data, string $message, bool $status, $response_code = 200)
     {
         if (isset($data)) {
             return response()->json([
                 "data" => $data,
-                "status" => $status
+                "message" => $message,
+                "status" => $status,
             ], $response_code);
-        }else{
+        } else {
             return response()->json([
-                "status" => $status
+                "data" => [],
+                "message" => $message,
+                "status" => $status,
             ], $response_code);
         }
     }

@@ -21,6 +21,7 @@ class Album extends Model implements AuditableContract
     const SORT_OLDEST = "oldest";
 
     const DEFAULT_ITEM_COUNT = 12;
+    const DEFAULT_ITEM_SORT = self::SORT_LATEST;
 
 
 
@@ -82,5 +83,4 @@ class Album extends Model implements AuditableContract
     {
         return $this->hasMany(Music::class);
     }
-
 }
