@@ -3,7 +3,7 @@
 
 namespace App\Http\Repositories\V1\Album;
 
-use App\Models\Album;
+use Illuminate\Support\Collection;
 
 class ToJsonArray
 {
@@ -11,30 +11,26 @@ class ToJsonArray
 
     public function __construct()
     {
-        $this->albums = null;
+        $this->albums = collect([]);
     }
 
     /**
      * Set the value of albums
      *
+     * @param $albums
      * @return  self
      */
-    public function setAlbums($albums)
+    public function setAlbums(Collection $albums)
     {
         $this->albums = $albums;
 
         return $this;
     }
 
-    public function build(): array
+    public function build(): Collection
     {
-        if (isset($this->albums)) {
-            $return_info = [];
-            foreach ($this->albums as $album) {
-                $return_info[] = AlbumRepo::getInstance()->toJsonArray()->setAlbums($album)->build();
-            }
-            return $return_info;
-        }
-        return [];
+        return $this->albums->map(function ($item) {
+            return AlbumRepo::getInstance()->toJsonArray()->setAlbums($item)->build();
+        });
     }
 }

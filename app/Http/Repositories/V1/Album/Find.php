@@ -46,6 +46,7 @@ class Find
     /**
      * Set the value of page
      *
+     * @param $page
      * @return  self
      */
     public function setPage($page)
@@ -58,6 +59,7 @@ class Find
     /**
      * Set the value of sort
      *
+     * @param $sort
      * @return  self
      */
     public function setSort($sort)
@@ -70,6 +72,7 @@ class Find
     /**
      * Set the value of name
      *
+     * @param $name
      * @return  self
      */
     public function setName($name)
@@ -82,6 +85,7 @@ class Find
     /**
      * Set the value of slug
      *
+     * @param $slug
      * @return  self
      */
     public function setSlug($slug)
@@ -94,6 +98,7 @@ class Find
     /**
      * Set the value of artist
      *
+     * @param $artist
      * @return  self
      */
     public function setArtist($artist)
@@ -106,6 +111,7 @@ class Find
     /**
      * Set the value of toJson
      *
+     * @param bool $toJson
      * @return  self
      */
     public function setToJson(bool $toJson = true)
@@ -125,6 +131,9 @@ class Find
             if (!$this->artist instanceof Artist) {
                 $this->artist = ArtistRepo::getInstance()->find()->setSlug($this->artist)->build();
             }
+
+            if (!$this->artist)
+                return null;
         }
 
         if (isset($this->name) && !empty($this->name)) {
@@ -165,7 +174,7 @@ class Find
              * find from slug
              */
             if (isset($this->slug) && $this->slug != "") {
-                $album = Album::where('status', Album::STATUS_ACTIVE)
+                $album = Album::query()->where('status', Album::STATUS_ACTIVE)
                     ->where('slug', $this->slug)->first();
 
                 if ($this->toJson) {

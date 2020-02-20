@@ -3,8 +3,6 @@
 
 namespace App\Http\Repositories\V1\Album;
 
-use App\Models\Album;
-
 class ToJson
 {
     protected $album;
@@ -17,6 +15,7 @@ class ToJson
     /**
      * Set the value of album
      *
+     * @param $album
      * @return  self
      */
     public function setAlbum($album)

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Controllers\Controller;
 use App\Http\Repositories\V1\Album\AlbumRepo;
+use App\Http\Response;
 use App\Libs\ViewAnalyse;
 use App\Models\Album;
 use App\Models\ViewAnalyse as Analyse;
@@ -11,42 +12,54 @@ use Illuminate\Http\Request;
 
 class AlbumController extends Controller
 {
-    protected $albumRepo;
 
-    public function __construct()
+    public function index()
     {
-        $this->albumRepo = AlbumRepo::getInstance();
+        /*
+         * get params
+         */
+        $sort = request()->has('sort') ? request()->type : Album::SORT_LATEST;
+        $page = request()->has('page') ? request()->page : 1;
+        $count = request()->has('count') ? request()->count : 12;
+        $artist = request()->artist;
+
+        $data = AlbumRepo::getInstance()->get()->setPage($page)
+            ->setCount($count)
+            ->setArtist($artist)
+            ->setSort($sort)
+            ->setToJson()
+            ->build();
+
+        if (!$data) {
+            abort(404);
+        }
+
+        return CustomResponse::create($data, '', true);
     }
 
     public function single(Request $request)
     {
-        // $request->validate([
-        //     'slug' => 'required|exists:albums'
-        // ]);
-        // $hasLike = auth()->check() ? true : false;
+        $request->validate([
+            'slug' => 'required|exists:albums'
+        ]);
 
-        // /**
-        //  * @var Album $album
-        //  */
-        // $album = $this->albumRepo->find()->setName($request->input('slug'))->build();
-        // if (!$album) {
-        //     // return abort(404);
-        // }
+        $album = AlbumRepo::getInstance()->find()->setSlug($request->slug)->setToJson()->build();
+        if (!$album) {
+            abort(404);
+        }
 
-        // ViewAnalyse::addView(Analyse::POST_TYPE_ALBUM, $album['id']);
-        // $album->play_count = $album->play_count + 1;
-        // $album->save();
+        $artists = $album->artists()->get();
+        $related = $this->musicRepo->get(Music::TYPE_LATEST, $artists[0], 12, 1, false);
+        if ($related == null)
+            $related = [];
 
-        // return CustomResponse::create([
-        //     'album' => $this->albumRepo->toJson($album),
-        //     'musics' => $this->musicRepo->toJsonArray($this->albumRepo->musics($album)),
-        //     'related' => $this->musicRepo->toJsonArray($related),
-        //     'has_like' => LikeRepo::hasLike(request()->client_id, $album, 1),
-        //     'has_dislike' => LikeRepo::hasLike(request()->client_id, $album, 0),
-        // ], CustomResponse::SUCCESS);
-    }
-
-    public function get()
-    {
+        return CustomResponse::create([
+            'album' => $album,
+            'categories' => $this->albumRepo->categories($album),
+            'musics' => $this->musicRepo->toJsonArray($this->albumRepo->musics($album)),
+            'related' => $this->musicRepo->toJsonArray($related),
+            'has_like' => LikeRepo::hasLike(request()->client_id, $album, 1),
+            'has_dislike' => LikeRepo::hasLike(request()->client_id, $album, 0),
+        ], '', true);
     }
 }
