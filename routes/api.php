@@ -38,6 +38,9 @@ Route::prefix('v1')->namespace('Api\V1')->group(function () {
     Route::get('/album', 'AlbumController@single');
     Route::get('/albums', 'AlbumController@index');
 
+    Route::get('/music', 'MusicController@single');
+    Route::get('/musics', 'MusicController@index');
+
 //        Route::get('/related', 'RelatedController@get');
 //
 //        Route::get('/plans', 'PlanController@get');

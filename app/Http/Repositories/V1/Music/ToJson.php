@@ -36,8 +36,8 @@ class ToJson
                 'link128' => preg_replace("/ /", "%20", $music->link128 ?? ""),
                 'link320' => preg_replace("/ /", "%20", $music->link320 ?? ""),
                 'lyric' => $this->music->text ?? "",
-                'like_count' => $music->like_count,
-                'play_count' => $music->play_count,
+                'like_count' => $this->music->like_count,
+                'play_count' => $this->music->play_count,
                 'created_at' => Carbon::parse($this->music->created_at)->format('D d,Y'),
                 'type' => 'music',
                 'tags' => ArtistRepo::getInstance()->toJsonArray()->setArtists($this->music->artists()->get())->build()

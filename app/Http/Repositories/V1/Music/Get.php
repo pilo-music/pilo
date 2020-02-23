@@ -101,26 +101,26 @@ class Get
                 if (!$this->artist)
                     return collect([]);
             }
-            $music = $this->artist->albums()->where('status', Music::STATUS_ACTIVE);
+            $musics = $this->artist->albums()->where('status', Music::STATUS_ACTIVE);
         } else {
-            $music = Music::query()->where('status', Music::STATUS_ACTIVE);
+            $musics = Music::query()->where('status', Music::STATUS_ACTIVE);
         }
 
         switch ($this->sort) {
             case Music::SORT_LATEST:
-                $music = $music->latest();
+                $musics = $musics->latest();
                 break;
             case  Music::SORT_BEST:
-                $music = $music->orderBy('play_count');
+                $musics = $musics->orderBy('play_count');
                 break;
         }
 
-        $music = $music->skip(($this->page - 1) * $this->count)->take($this->count)->get();
+        $musics = $musics->skip(($this->page - 1) * $this->count)->take($this->count)->get();
 
         if ($this->toJson) {
-            $music = MusicRepo::getInstance()->toJsonArray()->setMusics($music)->build();
+            $musics = MusicRepo::getInstance()->toJsonArray()->setMusics($musics)->build();
         }
 
-        return $music;
+        return $musics;
     }
 }

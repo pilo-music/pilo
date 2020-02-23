@@ -29,10 +29,6 @@ class AlbumController extends Controller
             ->setToJson()
             ->build();
 
-        if (!$data) {
-            abort(404);
-        }
-
         return CustomResponse::create($data, '', true);
     }
 
