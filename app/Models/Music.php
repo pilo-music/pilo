@@ -19,6 +19,13 @@ class Music extends Model implements AuditableContract
     const STATUS_JUST_IN_APP = 2;
     const STATUS_JUST_IN_WEB = 3;
 
+    const SORT_LATEST = "latest";
+    const SORT_BEST = "best";
+    const SORT_OLDEST = "oldest";
+
+    const DEFAULT_ITEM_COUNT = 12;
+    const DEFAULT_ITEM_SORT = self::SORT_LATEST;
+
     /**
      * Return the sluggable configuration array for this model.
      *
@@ -76,47 +83,5 @@ class Music extends Model implements AuditableContract
     public function bookmarks()
     {
         return $this->morphMany(Bookmark::class, "bookmarkable");
-    }
-
-    public function tags()
-    {
-        return $this->morphMany(Tag::class, 'tagable');
-    }
-
-
-    public function write_tags(array $tags)
-    {
-        $textEncoding = 'UTF-8';
-        try {
-            $getID3 = new \getID3;
-        } catch (\getid3_exception $e) {
-        }
-        $getID3->setOption(array('encoding' => $textEncoding));
-        $tagwriter = new  \getid3_writetags;
-        $tagwriter->filename = $this->path;
-        $tagwriter->tagformats = array('id3v2.3');
-        // set various options (optional)
-        $tagwriter->overwrite_tags = true;
-        $tagwriter->tag_encoding = $textEncoding;
-        $tagwriter->remove_other_tags = true;
-        $fileInfo = $getID3->analyze($this->path);
-        // populate data array
-        $tagData['comment'] = array();
-        foreach ($tags as $tag => $value) {
-            $tagData[$tag] = array($value);
-        }
-        if (!empty($fileInfo['comments']['picture'])) {
-            $tagData['attached_picture'][0]['picturetypeid'] = 3;
-            $tagData['attached_picture'][0]['description'] = 'Cover';
-            $tagData['attached_picture'][0]['data'] = $fileInfo['comments']['picture'][0]['data'];
-            $tagData['attached_picture'][0]['mime'] = $fileInfo['comments']['picture'][0]['image_mime'];
-        }
-        $tagwriter->tag_data = $tagData;
-        // write tags
-        $tagwriter->WriteTags();
-        return array(
-            'warnings' => $tagwriter->warnings,
-            'errors' => $tagwriter->errors
-        );
     }
 }

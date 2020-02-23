@@ -36,7 +36,7 @@ Route::prefix('v1')->namespace('Api\V1')->group(function () {
 //        Route::get('/playlists/vitrines', 'PlaylistVitrineController@home');
 
     Route::get('/album', 'AlbumController@single');
-//        Route::get('/albums', 'AlbumController@get');
+    Route::get('/albums', 'AlbumController@index');
 
 //        Route::get('/related', 'RelatedController@get');
 //

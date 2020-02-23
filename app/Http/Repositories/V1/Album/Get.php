@@ -95,7 +95,7 @@ class Get
     /**
      * @return Collection
      */
-    public function build() : Collection
+    public function build(): Collection
     {
         if (isset($this->artist)) {
             if (!$this->artist instanceof Artist) {
@@ -108,12 +108,12 @@ class Get
             $album = Album::query()->where('status', Album::STATUS_ACTIVE);
         }
 
-        switch ($this->type) {
+        switch ($this->sort) {
             case Album::SORT_LATEST:
                 $album = $album->latest();
                 break;
             case  Album::SORT_BEST:
-                return $album->skip(($this->page - 1) * $this->count)->take($this->count)->get()->sortBy('play_count');
+                $album = $album->orderBy('play_count');
                 break;
         }
 

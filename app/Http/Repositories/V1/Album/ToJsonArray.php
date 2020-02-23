@@ -27,10 +27,10 @@ class ToJsonArray
         return $this;
     }
 
-    public function build(): Collection
+    public function build()
     {
         return $this->albums->map(function ($item) {
-            return AlbumRepo::getInstance()->toJsonArray()->setAlbums($item)->build();
+            return AlbumRepo::getInstance()->toJson()->setAlbum($item)->build();
         });
     }
 }

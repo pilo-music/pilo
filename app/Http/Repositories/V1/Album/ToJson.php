@@ -3,6 +3,8 @@
 
 namespace App\Http\Repositories\V1\Album;
 
+use Illuminate\Support\Carbon;
+
 class ToJson
 {
     protected $album;
@@ -29,17 +31,14 @@ class ToJson
     {
         if ($this->album) {
             return [
-                'id' => $this->album->id,
-                'name' => $this->album->name == null ? "" : $this->album->name,
-                'description' => $this->album->description == null ? "" : $this->album->description,
+                'slug' => $this->album->slug,
+                'name' => $this->album->title == null ? "" : $this->album->title,
                 'image' => get_image($this->album, 'image'),
                 'thumbnail' => get_image($this->album, 'thumbnail'),
                 'music_count' => $this->album->music_count == null ? 0 : $this->album->music_count,
-                'duration' => $this->album->duration,
-                'likes' => $this->album->like_count,
-                'dislikes' => $this->album->dislike_count,
-                'created_at' => $this->album->created_at,
-                'play_count' => $this->album->play_count == null ? 0 : $this->album->play_count,
+                'like_count' => $this->album->like_count,
+                'created_at' => Carbon::parse($this->album->created_at)->format('D d,Y'),
+                'play_count' => $this->album->play_count,
                 'artist' => $this->album->artist->name,
                 'type' => 'album'
             ];

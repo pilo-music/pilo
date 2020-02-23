@@ -2,6 +2,152 @@
 
 namespace App\Http\Repositories\V1\Music;
 
+use App\Models\Music;
+
 class Find
 {
+    protected $count;
+    protected $page;
+    protected $sort;
+    protected $name;
+    protected $slug;
+    protected $toJson;
+
+
+    public function __construct()
+    {
+        $this->count = Music::DEFAULT_ITEM_COUNT;
+        $this->page = 1;
+        $this->sort = Music::DEFAULT_ITEM_SORT;
+        $this->name = null;
+        $this->slug = null;
+        $this->toJson = false;
+    }
+
+
+    /**
+     * Set the value of count
+     *
+     * @param $count
+     * @return  self
+     */
+    public function setCount($count)
+    {
+        $this->count = $count;
+
+        return $this;
+    }
+
+    /**
+     * Set the value of page
+     *
+     * @param $page
+     * @return  self
+     */
+    public function setPage($page)
+    {
+        $this->page = $page;
+
+        return $this;
+    }
+
+    /**
+     * Set the value of sort
+     *
+     * @param $sort
+     * @return  self
+     */
+    public function setSort($sort)
+    {
+        $this->sort = $sort;
+
+        return $this;
+    }
+
+    /**
+     * Set the value of name
+     *
+     * @param $name
+     * @return  self
+     */
+    public function setName($name)
+    {
+        $this->name = $name;
+
+        return $this;
+    }
+
+    /**
+     * Set the value of slug
+     *
+     * @param $slug
+     * @return  self
+     */
+    public function setSlug($slug)
+    {
+        $this->slug = $slug;
+
+        return $this;
+    }
+
+
+    /**
+     * Set the value of toJson
+     *
+     * @param bool $toJson
+     * @return  self
+     */
+    public function setToJson(bool $toJson = true)
+    {
+        $this->toJson = $toJson;
+
+        return $this;
+    }
+
+
+    /**
+     * @return array|null|Music
+     */
+    public function build()
+    {
+        if (isset($this->name) && !empty($this->name)) {
+            /*
+             *  find from name
+             */
+            $musics = Music::query()->where('name', 'LIKE', '%' . $this->name . '%')
+                ->where('status', Music::STATUS_ACTIVE);
+
+            switch ($this->sort) {
+                case Music::SORT_LATEST:
+                    $musics = $musics->latest();
+                    break;
+                case  Music::SORT_BEST:
+                    $musics = $musics->orderBy('play_count');
+                    break;
+            }
+
+            $musics = $musics->skip(($this->page - 1) * $this->count)->take($this->count)->get();
+
+            if ($this->toJson) {
+                $musics = MusicRepo::getInstance()->toJsonArray()->setMusics($musics)->build();
+            }
+
+            return $musics;
+        } else {
+            /*
+             * find from slug
+             */
+            if (isset($this->slug) && $this->slug != "") {
+                $music = Music::query()->where('status', Music::STATUS_ACTIVE)
+                    ->where('slug', $this->slug)->first();
+
+                if ($this->toJson) {
+                    $music = MusicRepo::getInstance()->toJson()->setMusic($music)->build();
+                }
+
+                return $music;
+            }
+        }
+        return null;
+    }
 }

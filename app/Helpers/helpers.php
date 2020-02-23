@@ -7,13 +7,15 @@ if (!function_exists('get_image')) {
             $image = $model[$column];
             if (!isset($image) || $image == "")
                 return "";
-            if (substr_count($image, 'storage') > 0) {
-                if (substr_count($image, '/storage') > 0) {
-                    $image = config()->get('app.url') . $image;
-                } else
-                    $image = config()->get('app.url') . '/' . $image;
-            } else {
-                $image = config()->get('app.url') . '/storage/' . $image;
+            if (substr_count($image, 'http') == 0) {
+                if (substr_count($image, 'storage') > 0) {
+                    if (substr_count($image, '/storage') > 0) {
+                        $image = config()->get('app.url') . $image;
+                    } else
+                        $image = config()->get('app.url') . '/' . $image;
+                } else {
+                    $image = config()->get('app.url') . '/storage/' . $image;
+                }
             }
 
             return preg_replace("/ /", "%20", $image);
