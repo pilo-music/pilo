@@ -12,6 +12,13 @@ class Playlist extends Model
     const STATUS_JUST_IN_APP = 2;
     const STATUS_JUST_IN_WEB = 3;
 
+    const SORT_LATEST = "latest";
+    const SORT_BEST = "best";
+    const SORT_OLDEST = "oldest";
+
+    const DEFAULT_ITEM_COUNT = 12;
+    const DEFAULT_ITEM_SORT = self::SORT_LATEST;
+
     use Sluggable;
 
     protected $guarded = ['id'];

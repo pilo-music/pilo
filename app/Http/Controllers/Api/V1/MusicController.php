@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api\V1;
 
+use App\Http\Controllers\Api\CustomResponse;
 use App\Http\Controllers\Controller;
 use App\Http\Repositories\V1\Bookmark\BookmarkRepo;
 use App\Http\Repositories\V1\Like\LikeRepo;
@@ -43,6 +44,9 @@ class MusicController extends Controller
             abort(404);
         }
 
+        /**
+         * @todo make better related music
+         */
         return CustomResponse::create([
             'music' => MusicRepo::getInstance()->toJson()->setMusic($music)->build(),
             'related' => MusicRepo::getInstance()->get()->setArtist($music->artist)->setToJson()->build(),

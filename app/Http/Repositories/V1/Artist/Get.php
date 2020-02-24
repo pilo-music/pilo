@@ -77,7 +77,7 @@ class Get
                 $artists = $artists->latest();
                 break;
             case  Artist::SORT_BEST:
-                $artists = $artists->where('is_best', true)->latest();
+                $artists = $artists->where('isbest', true)->latest();
                 break;
             default:
                 break;

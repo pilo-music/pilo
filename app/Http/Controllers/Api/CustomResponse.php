@@ -1,16 +1,13 @@
 <?php
 
 
-namespace App\Http\Controllers\Api\V1;
+namespace App\Http\Controllers\Api;
 
 
 use Illuminate\Http\Response;
 
 class CustomResponse
 {
-    const SUCCESS = "success";
-    const ERROR = "error";
-
     public static function create($data, string $message, bool $status, $response_code = 200)
     {
         if (isset($data)) {

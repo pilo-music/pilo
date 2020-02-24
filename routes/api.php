@@ -15,31 +15,28 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::prefix('v1')->namespace('Api\V1')->group(function () {
-//        Route::post("/login", 'ClientController@login');
+//        Route::post("/login", 'UserController@login');
 //
-//        Route::post("/verify", 'ClientController@verify');
+//        Route::post("/verify", 'UserController@verify');
 //        Route::get("/version", 'VersionController@get');
 //
 //        Route::get('/vitrine', 'HomeController@home');
 //        Route::get('/vitrine/single', 'HomeController@single');
 //        Route::get('/search', 'SearchController@search');
 //
-//        Route::get('/music', 'MusicController@single');
-//        Route::get('/musics', 'MusicController@get');
+    Route::get('/musics', 'MusicController@index');
+    Route::get('/music', 'MusicController@single');
 //
-//        Route::get('/artist', 'ArtistController@single');
-//        Route::get('/artists', 'ArtistController@get');
-//
+    Route::get('/artists', 'ArtistController@index');
+    Route::get('/artist', 'ArtistController@single');
+
 //        Route::get('/playlist', 'PlaylistController@single');
 //        Route::get('/playlists', 'PlaylistController@get');
 //        Route::get('/playlists/vitrine', 'PlaylistVitrineController@single');
 //        Route::get('/playlists/vitrines', 'PlaylistVitrineController@home');
 
-    Route::get('/album', 'AlbumController@single');
     Route::get('/albums', 'AlbumController@index');
-
-    Route::get('/music', 'MusicController@single');
-    Route::get('/musics', 'MusicController@index');
+    Route::get('/album', 'AlbumController@single');
 
 //        Route::get('/related', 'RelatedController@get');
 //
@@ -48,8 +45,8 @@ Route::prefix('v1')->namespace('Api\V1')->group(function () {
 //        Route::post('/playcount/add', 'PlayCountController@add');
 
     Route::group(['middleware' => 'auth:api'], function () {
-//            Route::post("/update", 'ClientController@update');
-//            Route::post("/me", 'ClientController@me');
+//            Route::post("/update", 'UserController@update');
+//            Route::post("/me", 'UserController@me');
 //
 //            Route::get('/foryou', 'ForYouController@get');
 //            Route::get('/foryou/playlists', 'ForYouController@playlists');

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api\V1;
 
+use App\Http\Controllers\Api\CustomResponse;
 use App\Http\Controllers\Controller;
 use App\Http\Repositories\V1\Album\AlbumRepo;
 use App\Http\Repositories\V1\Bookmark\BookmarkRepo;
@@ -42,6 +43,7 @@ class AlbumController extends Controller
         if (!$album) {
             abort(404);
         }
+
         $related = AlbumRepo::getInstance()->get()->setArtist($album->artist)->setToJson()->build();
         if (count($related) < 12) {
             $related = $related->merge(AlbumRepo::getInstance()->random()->setCount(12 - count($related))->build());

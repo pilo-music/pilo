@@ -14,6 +14,7 @@ class ToJsonArray
     /**
      * Set the value of artists
      *
+     * @param $artists
      * @return  self
      */
     public function setArtists($artists)
@@ -26,13 +27,8 @@ class ToJsonArray
 
     public function build()
     {
-        if (isset($this->artists)) {
-            $return_info = [];
-            foreach ($this->artists as $artist) {
-                $return_info[] = ArtistRepo::getInstance()->toJsonArray()->setArtists($artist)->build();
-            }
-            return $return_info;
-        }
-        return [];
+        return $this->artists->map(function ($item) {
+            return ArtistRepo::getInstance()->toJson()->setArtist($item)->build();
+        });
     }
 }

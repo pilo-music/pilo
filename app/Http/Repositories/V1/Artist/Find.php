@@ -104,13 +104,15 @@ class Find
              * find from id
              */
             if (isset($this->slug)) {
-                $artist = Artist::query()->where('status', Artist::STATUS_ACTIVE)
+                $artists = Artist::query()->where('status', Artist::STATUS_ACTIVE)
                     ->where('slug', $this->slug)->first();
 
 
                 if ($this->toJson) {
-                    $artists = ArtistRepo::getInstance()->toJson()->setArtist($artist)->build();
+                    $artists = ArtistRepo::getInstance()->toJson()->setArtist($artists)->build();
                 }
+
+                return $artists;
             }
         }
         return null;

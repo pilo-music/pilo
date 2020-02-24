@@ -31,6 +31,7 @@ class ToJson
     /**
      * Set the value of client
      *
+     * @param $client
      * @return  self
      */
     public function setClient($client)
@@ -44,7 +45,7 @@ class ToJson
     {
         if (isset($this->artist)) {
             return [
-                'id' => $this->artist->id,
+                'slug' => $this->artist->slug,
                 'name' => $this->artist->name == null ? "" : $this->artist->name,
                 'image' => get_image($this->artist, 'image'),
                 'thumbnail' => get_image($this->artist, 'thumbnail'),
@@ -53,10 +54,10 @@ class ToJson
                 'album_count' => $this->artist->albums()->where('status', Album::STATUS_ACTIVE)->get()->count(),
                 'created_at' => date('Y-m-d', strtotime($this->artist->created_at)),
                 'region' => $this->artist->region == null ? "" : $this->artist->region,
-                'followers_count' => $this->artist->followers_count,
+//                'followers_count' => $this->artist->followers_count,
                 'type' => 'artist',
-                'is_follow' => FollowRepoImpl::isFollow($this->client->id, $this->artist),
-                'playlist_count' => count(PlaylistRepoImpl::artistPlaylist($this->artist))
+//                'is_follow' => FollowRepoImpl::isFollow($this->client->id, $this->artist),
+//                'playlist_count' => count(PlaylistRepoImpl::artistPlaylist($this->artist))
             ];
         }
     }
