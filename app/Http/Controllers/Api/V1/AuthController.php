@@ -4,17 +4,12 @@ namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Controllers\Api\CustomResponse;
 use App\Http\Controllers\Controller;
-use App\Http\Repositories\V1\Request\RequestRepo;
 use App\Http\Repositories\V1\User\UserRepo;
 use App\Mail\VerifyMail;
-use App\Models\FailedLogin;
 use App\Models\User;
 use App\Models\VerifyCode;
-use App\Models\VerifyUser;
-use DateTime;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Laravel\Socialite\Facades\Socialite;
@@ -31,7 +26,6 @@ class AuthController extends Controller
     {
         $request->validate([
             'email' => 'required|email|max:190',
-            'password' => 'required',
         ]);
 
         /**
@@ -44,6 +38,20 @@ class AuthController extends Controller
             ], '', true);
         }
 
+        return CustomResponse::create([
+            'status' => 'login',
+        ], '', true);
+    }
+
+
+    public function password(Request $request)
+    {
+        $request->validate([
+            'email' => 'required|email|exists:users|max:190',
+            'password' => 'required'
+        ]);
+
+        $user = User::query()->where('email', $request->email)->first();
         /**
          * check password
          */
@@ -104,13 +112,7 @@ class AuthController extends Controller
         /**
          * check code expired after 15 min
          */
-        $now = now()->toDateTimeString();
-        $code_time = $verifyCode->created_at->toDateTimeString();
-        $datetime1 = new DateTime($now);
-        $datetime2 = new DateTime($code_time);
-
-        $interval = $datetime1->diff($datetime2);
-        if ($interval->format('%i') > 15) {
+        if (is_past($verifyCode->created_at,15)){
             return CustomResponse::create(null, __("messages.verify_code_expired"), false);
         }
 
@@ -134,7 +136,6 @@ class AuthController extends Controller
 
         return CustomResponse::create([
             'access_token' => $token,
-            'status' => 'login',
             'user' => UserRepo::getInstance()->toJson()->setUser($user)->build(),
         ], '', true);
     }

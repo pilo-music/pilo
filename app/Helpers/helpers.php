@@ -23,3 +23,17 @@ if (!function_exists('get_image')) {
         return "";
     }
 }
+
+if (!function_exists('is_past')) {
+    function is_past($date, $time, $format = "%i")
+    {
+        $datetime1 = new DateTime(now());
+        $datetime2 = new DateTime($date);
+
+        $interval = $datetime1->diff($datetime2);
+        if ($interval->format($format) > $time) {
+            return true;
+        }
+        return false;
+    }
+}
