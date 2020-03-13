@@ -2,17 +2,13 @@
 
 namespace App\Models;
 
-use OwenIt\Auditing\Auditable;
-use OwenIt\Auditing\Contracts\Auditable as AuditableContract;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Laravel\Passport\HasApiTokens;
 
-use Tymon\JWTAuth\Contracts\JWTSubject;
-
-class User extends Authenticatable implements AuditableContract, JWTSubject
+class User extends Authenticatable
 {
-    use Auditable;
-    use Notifiable;
+    use Notifiable,HasApiTokens;
     const  Administrator = 1;
 
     const USER_STATUS_DEACTIVE = 0;
@@ -85,25 +81,4 @@ class User extends Authenticatable implements AuditableContract, JWTSubject
         return $this->hasMany(Message::class);
     }
 
-    // Rest omitted for brevity
-
-    /**
-     * Get the identifier that will be stored in the subject claim of the JWT.
-     *
-     * @return mixed
-     */
-    public function getJWTIdentifier()
-    {
-        return $this->getKey();
-    }
-
-    /**
-     * Return a key value array, containing any custom claims to be added to the JWT.
-     *
-     * @return array
-     */
-    public function getJWTCustomClaims()
-    {
-        return [];
-    }
 }

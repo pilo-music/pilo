@@ -13,6 +13,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Laravel\Socialite\Facades\Socialite;
+use Tymon\JWTAuth\Facades\JWTAuth;
 
 class AuthController extends Controller
 {
@@ -26,39 +27,25 @@ class AuthController extends Controller
     {
         $request->validate([
             'email' => 'required|email|max:190',
+            'password' => 'required'
         ]);
 
         /**
          * check user exists in db
          */
-        $user = User::query()->where('email', $request->email)->first();
+        $user = User::query()->where('email', trim($request->email))->first();
         if (!$user) {
-            return CustomResponse::create([
-                'status' => 'register',
-            ], '', true);
+            return CustomResponse::create(null, __('messages.wrong_email_password'), false);
         }
 
-        return CustomResponse::create([
-            'status' => 'login',
-        ], '', true);
-    }
-
-
-    public function password(Request $request)
-    {
-        $request->validate([
-            'email' => 'required|email|exists:users|max:190',
-            'password' => 'required'
-        ]);
-
-        $user = User::query()->where('email', $request->email)->first();
         /**
          * check password
          */
 
         if (!Hash::check($request->password, $user->password)) {
-            return CustomResponse::create(null, __("messages.password_is_incorrect"), false);
+            return CustomResponse::create(null, __("messages.wrong_email_password"), false);
         }
+
 
         /**
          * check user status
@@ -92,6 +79,35 @@ class AuthController extends Controller
         ], '', true);
     }
 
+
+    public function register(Request $request)
+    {
+        $request->validate([
+            'email' => 'required|email|max:190',
+            'password' => 'required|confirmed|min:6',
+            'name' => 'required|max:190'
+        ]);
+
+        if (User::query()->where('email', trim($request->email))->exists()) {
+            return CustomResponse::create(null, __("messages.email_exists"), false);
+        }
+
+        $user = User::query()->create([
+            'name' => $request->name,
+            'password' => bcrypt($request->password),
+            'email' => $request->email
+        ]);
+
+        $code = VerifyCode::create([
+            'email' => $user->email,
+            'code' => mt_rand(100000, 999999),
+            'is_active' => 1
+        ]);
+        Mail::to($user->email)->send(new VerifyMail($code->code));
+
+        return CustomResponse::create(null, '', true);
+    }
+
     public function verify(Request $request)
     {
         $request->validate([
@@ -104,7 +120,7 @@ class AuthController extends Controller
          */
         $verifyCode = VerifyCode::query()->where('code', $request->code)
             ->where('email', $request->email)
-            ->where('is_active', true)->first();
+            ->first();
         if (!$verifyCode) {
             return CustomResponse::create(null, __('messages.verify_not_found'), false);
         }
@@ -112,12 +128,11 @@ class AuthController extends Controller
         /**
          * check code expired after 15 min
          */
-        if (is_past($verifyCode->created_at,15)){
+        if (is_past($verifyCode->created_at, 15)) {
             return CustomResponse::create(null, __("messages.verify_code_expired"), false);
         }
 
         $user = User::query()->where('email', $verifyCode->email)->first();
-
         /**
          * update user info
          */
@@ -125,8 +140,13 @@ class AuthController extends Controller
         $user->email_verified_at = now();
         $user->save();
 
-        $token = auth()->guard('api')->login($user);
+        // Get some user from somewhere
+        $user = User::first();
 
+// Get the token
+        $token = auth()->login($user);
+
+        dd($token);
 
         /**
          * deactivate verify code

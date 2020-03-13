@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use Cviebrock\EloquentSluggable\Sluggable;
 use Illuminate\Database\Eloquent\Model;
 
 class Playlist extends Model
@@ -19,23 +18,7 @@ class Playlist extends Model
     const DEFAULT_ITEM_COUNT = 12;
     const DEFAULT_ITEM_SORT = self::SORT_LATEST;
 
-    use Sluggable;
-
     protected $guarded = ['id'];
-
-    /**
-     * Return the sluggable configuration array for this model.
-     *
-     * @return array
-     */
-    public function sluggable()
-    {
-        return [
-            'slug' => [
-                'source' => 'title',
-            ],
-        ];
-    }
 
     public function user()
     {
@@ -45,6 +28,6 @@ class Playlist extends Model
 
     public function musics()
     {
-        return $this->morphedByMany(Music::class,'playlistable');
+        return $this->morphedByMany(Music::class, 'playlistable');
     }
 }

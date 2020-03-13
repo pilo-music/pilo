@@ -2,17 +2,12 @@
 
 namespace App\Models;
 
-use Cviebrock\EloquentSluggable\Sluggable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Notifications\Notifiable;
-use OwenIt\Auditing\Auditable;
-use OwenIt\Auditing\Contracts\Auditable as AuditableContract;
 
-class Music extends Model implements AuditableContract
+class Music extends Model
 {
-    use Auditable;
     use Notifiable;
-    use Sluggable;
 
     const STATUS_ACTIVE = 1;
     const STATUS_DRAFT = 0;
@@ -25,25 +20,6 @@ class Music extends Model implements AuditableContract
 
     const DEFAULT_ITEM_COUNT = 12;
     const DEFAULT_ITEM_SORT = self::SORT_LATEST;
-
-    /**
-     * Return the sluggable configuration array for this model.
-     *
-     * @return array
-     */
-    public function sluggable()
-    {
-        return [
-            'slug' => [
-                'source' => 'fullname',
-            ],
-        ];
-    }
-
-    public function getFullnameAttribute()
-    {
-        return $this->artist->name . '-' . $this->title;
-    }
 
 
     public function path()

@@ -15,9 +15,9 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::prefix('v1')->namespace('Api\V1')->group(function () {
-    Route::post("/login", 'UserController@login');
-    Route::post("/password", 'UserController@password');
-    Route::post("/verify", 'UserController@verify');
+    Route::post("/login", 'AuthController@login');
+    Route::post("/register", 'AuthController@register');
+    Route::post("/verify", 'AuthController@verify');
 
 //        Route::get("/version", 'VersionController@get');
 //

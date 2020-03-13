@@ -2,15 +2,10 @@
 
 namespace App\Models;
 
-use Cviebrock\EloquentSluggable\Sluggable;
 use Illuminate\Database\Eloquent\Model;
-use OwenIt\Auditing\Auditable;
-use OwenIt\Auditing\Contracts\Auditable as AuditableContract;
 
-class Album extends Model implements AuditableContract
+class Album extends Model
 {
-    use Auditable, Sluggable;
-
     const STATUS_ACTIVE = 1;
     const STATUS_DRAFT = 0;
     const STATUS_JUST_IN_APP = 2;
@@ -28,26 +23,6 @@ class Album extends Model implements AuditableContract
     protected $guarded = [
         'id'
     ];
-
-    /**
-     * Return the sluggable configuration array for this model.
-     *
-     * @return array
-     */
-    public function sluggable()
-    {
-        return [
-            'slug' => [
-                'source' => 'fullname'
-            ]
-        ];
-    }
-
-    public function getFullnameAttribute()
-    {
-        return $this->artist->name . '-' . $this->title;
-    }
-
 
     public function path()
     {

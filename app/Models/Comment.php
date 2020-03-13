@@ -3,12 +3,9 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use OwenIt\Auditing\Auditable;
-use OwenIt\Auditing\Contracts\Auditable as AuditableContract;
 
-class Comment extends Model  implements AuditableContract
+class Comment extends Model
 {
-    use Auditable;
     protected $guarded = ['id','status'];
 
     const STATUS_DEACTIVE = 0;

@@ -8,7 +8,6 @@ use App\Http\Repositories\V1\User\UserRepo;
 use App\Mail\PasswordResetRequest;
 use App\Models\VerifyCode;
 use App\User;
-use DateTime;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 
@@ -64,14 +63,7 @@ class ForgotPasswordController extends Controller
          * check code expired after 15 min
          *
          */
-        $now = now()->toDateTimeString();
-        $code_time = $code->created_at->toDateTimeString();
-        $datetime1 = new DateTime($now);
-        $datetime2 = new DateTime($code_time);
-
-        $interval = $datetime1->diff($datetime2);
-
-        if ($interval->format('%i') > 15) {
+        if (is_past($code->created_at,15)){
             return CustomResponse::create(null, __("messages.verify_code_expired"), false);
         }
 
