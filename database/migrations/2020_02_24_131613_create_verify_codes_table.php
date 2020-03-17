@@ -17,7 +17,6 @@ class CreateVerifyCodesTable extends Migration
             $table->bigIncrements('id');
             $table->string('email');
             $table->string('code');
-            $table->boolean('is_active')->default(0);
             $table->timestamps();
         });
     }

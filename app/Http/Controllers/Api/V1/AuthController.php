@@ -60,7 +60,6 @@ class AuthController extends Controller
                 $code = VerifyCode::create([
                     'email' => $user->email,
                     'code' => mt_rand(100000, 999999),
-                    'is_active' => 1
                 ]);
                 Mail::to($user->email)->send(new VerifyMail($code->code));
                 return CustomResponse::create([
@@ -69,8 +68,7 @@ class AuthController extends Controller
             }
         }
 
-        $credentials = request(['email', 'password']);
-        $token = auth()->attempt($credentials);
+        $token = $user->createToken('Client token')->accessToken;
 
         return CustomResponse::create([
             'access_token' => $token,
@@ -101,7 +99,6 @@ class AuthController extends Controller
         $code = VerifyCode::create([
             'email' => $user->email,
             'code' => mt_rand(100000, 999999),
-            'is_active' => 1
         ]);
         Mail::to($user->email)->send(new VerifyMail($code->code));
 
@@ -129,6 +126,7 @@ class AuthController extends Controller
          * check code expired after 15 min
          */
         if (is_past($verifyCode->created_at, 15)) {
+            $verifyCode->delete();
             return CustomResponse::create(null, __("messages.verify_code_expired"), false);
         }
 
@@ -140,20 +138,14 @@ class AuthController extends Controller
         $user->email_verified_at = now();
         $user->save();
 
-        // Get some user from somewhere
-        $user = User::first();
-
-// Get the token
-        $token = auth()->login($user);
-
-        dd($token);
 
         /**
-         * deactivate verify code
+         * delete verify code
          */
-        $verifyCode->is_active = false;
-        $verifyCode->save();
+        $verifyCode->delete();
 
+
+        $token = $user->createToken('Client token')->accessToken;
         return CustomResponse::create([
             'access_token' => $token,
             'user' => UserRepo::getInstance()->toJson()->setUser($user)->build(),

@@ -19,6 +19,9 @@ Route::prefix('v1')->namespace('Api\V1')->group(function () {
     Route::post("/register", 'AuthController@register');
     Route::post("/verify", 'AuthController@verify');
 
+    Route::post('/forgot-passport/create','ForgotPasswordController@create');
+    Route::post('/forgot-passport/reset','ForgotPasswordController@reset');
+
 //        Route::get("/version", 'VersionController@get');
 //
 //        Route::get('/vitrine', 'HomeController@home');
@@ -47,7 +50,7 @@ Route::prefix('v1')->namespace('Api\V1')->group(function () {
 
     Route::group(['middleware' => 'auth:api'], function () {
 //            Route::post("/update", 'UserController@update');
-//            Route::post("/me", 'UserController@me');
+            Route::post("/me", 'UserController@me');
 //
 //            Route::get('/foryou', 'ForYouController@get');
 //            Route::get('/foryou/playlists', 'ForYouController@playlists');

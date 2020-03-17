@@ -21,12 +21,6 @@ class ForgotPasswordController extends Controller
 
         $user = User::query()->where('email', $request->email)->first();
 
-
-        /**
-         *  delete all codes
-         */
-        VerifyCode::query()->where('email', $user->email)->delete();
-
         /**
          * create verify code
          */
@@ -34,7 +28,6 @@ class ForgotPasswordController extends Controller
         VerifyCode::create([
             'email' => $user->email,
             'code' => $code,
-            'is_active' => true,
         ]);
         /**
          * send verify Code
@@ -50,6 +43,7 @@ class ForgotPasswordController extends Controller
         $request->validate([
             'email' => 'required|exists:users,email',
             'code' => 'required',
+            'password' => 'required|min:6|confirmed'
         ]);
 
         $code = VerifyCode::query()->where('email', $request->email)
@@ -63,7 +57,8 @@ class ForgotPasswordController extends Controller
          * check code expired after 15 min
          *
          */
-        if (is_past($code->created_at,15)){
+        if (is_past($code->created_at, 15)) {
+//            $code->delete();
             return CustomResponse::create(null, __("messages.verify_code_expired"), false);
         }
 
@@ -72,8 +67,9 @@ class ForgotPasswordController extends Controller
         $user->password = bcrypt($request->password);
         $user->save();
 
+//        $code->delete();
 
-        $token = auth()->guard('api')->login($user);
+        $token = $user->createToken('Client token')->accessToken;
 
         return CustomResponse::create([
             'access_token' => $token,
