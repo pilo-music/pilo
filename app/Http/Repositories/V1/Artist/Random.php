@@ -18,6 +18,7 @@ class Random
     /**
      * Set the value of count
      *
+     * @param $count
      * @return  self
      */
     public function setCount($count)
@@ -30,6 +31,7 @@ class Random
     /**
      * Set the value of toJson
      *
+     * @param bool $toJson
      * @return  self
      */
     public function setToJson(bool $toJson = true)

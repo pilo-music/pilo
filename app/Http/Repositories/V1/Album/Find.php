@@ -34,6 +34,7 @@ class Find
     /**
      * Set the value of count
      *
+     * @param $count
      * @return  self
      */
     public function setCount($count)

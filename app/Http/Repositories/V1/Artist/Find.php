@@ -25,6 +25,7 @@ class Find
     /**
      * Set the value of name
      *
+     * @param $name
      * @return  self
      */
     public function setName($name)
@@ -37,6 +38,7 @@ class Find
     /**
      * Set the value of slug
      *
+     * @param $slug
      * @return  self
      */
     public function setSlug($slug)
@@ -49,6 +51,7 @@ class Find
     /**
      * Set the value of count
      *
+     * @param $count
      * @return  self
      */
     public function setCount($count)
@@ -61,6 +64,7 @@ class Find
     /**
      * Set the value of page
      *
+     * @param $page
      * @return  self
      */
     public function setPage($page)
@@ -73,6 +77,7 @@ class Find
     /**
      * Set the value of toJson
      *
+     * @param bool $toJson
      * @return  self
      */
     public function setToJson(bool $toJson = true)

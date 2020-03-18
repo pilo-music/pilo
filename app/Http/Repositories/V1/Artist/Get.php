@@ -22,6 +22,7 @@ class Get
     /**
      * Set the value of sort
      *
+     * @param $sort
      * @return  self
      */
     public function setSort($sort)
@@ -34,6 +35,7 @@ class Get
     /**
      * Set the value of count
      *
+     * @param $count
      * @return  self
      */
     public function setCount($count)
@@ -46,6 +48,7 @@ class Get
     /**
      * Set the value of page
      *
+     * @param $page
      * @return  self
      */
     public function setPage($page)
@@ -58,6 +61,7 @@ class Get
     /**
      * Set the value of toJson
      *
+     * @param bool $toJson
      * @return  self
      */
     public function setToJson(bool $toJson = true)

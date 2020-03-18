@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Repositories\V1\Artist;
+namespace App\Http\Repositories\V1\Home;
 
 use App\Models\Album;
 use App\Models\Music;
@@ -19,7 +19,6 @@ class ToJson
     /**
      * Set the value of artist
      *
-     * @param $artist
      * @return  self
      */
     public function setArtist($artist)

@@ -58,7 +58,6 @@ class ForgotPasswordController extends Controller
          *
          */
         if (is_past($code->created_at, 15)) {
-//            $code->delete();
             return CustomResponse::create(null, __("messages.verify_code_expired"), false);
         }
 
@@ -67,13 +66,6 @@ class ForgotPasswordController extends Controller
         $user->password = bcrypt($request->password);
         $user->save();
 
-//        $code->delete();
-
-        $token = $user->createToken('Client token')->accessToken;
-
-        return CustomResponse::create([
-            'access_token' => $token,
-            'user' => UserRepo::getInstance()->toJson()->setUser($user)->build(),
-        ], '', true);
+        return CustomResponse::create(UserRepo::getInstance()->toJson()->setUser($user)->build(), '', true);
     }
 }
