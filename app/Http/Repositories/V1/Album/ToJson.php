@@ -43,5 +43,7 @@ class ToJson
                 'type' => 'album'
             ];
         }
+
+        return null;
     }
 }

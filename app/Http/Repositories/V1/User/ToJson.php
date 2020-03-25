@@ -38,5 +38,6 @@ class ToJson
                 "pic" => get_image($this->user,'pic') ?? "",
             ];
         }
+        return  null;
     }
 }

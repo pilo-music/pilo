@@ -37,6 +37,11 @@ class PlaylistRepo implements Builder
         return new Random();
     }
 
+    public function updateImage() : UpdateImage
+    {
+        return new UpdateImage();
+    }
+
     public function toJsonArray(): ToJsonArray
     {
         return new ToJsonArray();

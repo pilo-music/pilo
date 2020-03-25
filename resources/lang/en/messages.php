@@ -6,5 +6,8 @@ return [
     'profile_update_successfully' => 'Profile update successfully',
     'verify_code_sent' => 'Verify code sent to your email',
     'wrong_email_password' => 'Email or password is incorrect',
-    'email_exists' => 'Email taken before'
+    'email_exists' => 'Email taken before',
+    'playlist_create' => "Playlist create successfully",
+    'playlist_update' => "Playlist update successfully",
+    'playlist_delete' => "Playlist delete successfully",
 ];

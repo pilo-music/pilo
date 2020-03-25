@@ -23,7 +23,7 @@ class CreatePromotionsTable extends Migration
             $table->string("slug")->unique();
             $table->integer('type');
             $table->integer('url')->nullable();
-            $table->boolean("is_active");
+            $table->tinyInteger("status");
             $table->timestamps();
         });
     }

@@ -55,6 +55,13 @@ return [
             'visibility' => 'public',
         ],
 
+        'custom-ftp' => [
+            'driver' => 'ftp',
+            'host' => '88.99.148.242',
+            'username' => 'mobin@dl.pilo.app',
+            'password' => 'xailY5VW',
+        ],
+
         's3' => [
             'driver' => 's3',
             'key' => env('AWS_ACCESS_KEY_ID'),

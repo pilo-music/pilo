@@ -1,17 +1,18 @@
 <?php
 
 
-namespace App\Http\Repositories\V1\Home;
+namespace App\Http\Repositories\V1\Promotion;
 
 
-class HomeRepo implements Builder
+class PromotionRepo implements Builder
 {
+
     private static $instance = null;
 
-    public static function getInstance(): HomeRepo
+    public static function getInstance(): PromotionRepo
     {
         if (self::$instance == null) {
-            self::$instance = new HomeRepo();
+            self::$instance = new PromotionRepo();
         }
 
         return self::$instance;
@@ -22,18 +23,13 @@ class HomeRepo implements Builder
         return new Find();
     }
 
-    public function get()
+    public function toJson()
     {
-        return new Get();
+        return new ToJson();
     }
 
     public function toJsonArray()
     {
         return new ToJsonArray();
-    }
-
-    public function toJson()
-    {
-        return new ToJson();
     }
 }

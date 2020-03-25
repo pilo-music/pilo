@@ -18,10 +18,13 @@ class Home extends Model
     const TYPE_ALBUMS = 3;
     const TYPE_PLAYLISTS = 4;
     const TYPE_PROMOTIONS = 5;
-    const TYPE_AD = 6;
     const TYPE_ALBUM_MUSIC_GRID = 7;
     const TYPE_PLAYLIST_GRID = 8;
     const TYPE_MUSIC_GRID = 9;
     const TYPE_MUSIC_TRENDING = 10;
+
+    const SORT_LATEST = "latest";
+    const SORT_BEST = "best";
+    const SORT_OLDEST = "oldest";
 
 }

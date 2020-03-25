@@ -4,7 +4,7 @@ namespace Tests\Feature;
 
 use Tests\TestCase;
 
-class BaseTest extends TestCase
+class Base extends TestCase
 {
     /**
      * A basic feature test example.

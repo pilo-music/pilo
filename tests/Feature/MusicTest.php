@@ -4,12 +4,12 @@ namespace Tests\Feature;
 
 use App\Models\Music;
 
-class MusicTest extends BaseTest
+class MusicTest extends Base
 {
     public function testMusic()
     {
-        $album = Music::query()->latest()->first()->slug;
-        $response = $this->json('GET', "/api/v1/music?slug=$album");
+        $music = Music::query()->where('status', 1)->latest()->first()->slug;
+        $response = $this->json('GET', "/api/v1/music?slug=$music");
         $this->assertAll($response);
     }
 

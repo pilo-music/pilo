@@ -15,6 +15,10 @@ class UserController extends Controller
 
     public function update(Request $request)
     {
+        $request->validate([
+            'pic' => 'is_image'
+        ]);
+
         $user = auth()->user();
         if ($request->has('pic')) {
             $img = Image::make($request->get('pic'));

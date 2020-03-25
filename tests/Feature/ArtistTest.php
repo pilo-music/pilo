@@ -4,7 +4,7 @@ namespace Tests\Feature;
 
 use App\Models\Artist;
 
-class ArtistTest extends BaseTest
+class ArtistTest extends Base
 {
     public function testArtist()
     {

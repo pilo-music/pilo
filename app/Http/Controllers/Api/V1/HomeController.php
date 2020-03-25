@@ -4,7 +4,14 @@ namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Controllers\Api\CustomResponse;
 use App\Http\Controllers\Controller;
+use App\Http\Repositories\V1\Album\AlbumRepo;
+use App\Http\Repositories\V1\Artist\ArtistRepo;
+use App\Http\Repositories\V1\Music\MusicRepo;
+use App\Http\Repositories\V1\Playlist\PlaylistRepo;
+use App\Http\Repositories\V1\Promotion\PromotionRepo;
+use App\Models\Album;
 use App\Models\Home;
+use App\Models\Music;
 use Illuminate\Http\Request;
 
 class HomeController extends Controller
@@ -19,69 +26,55 @@ class HomeController extends Controller
             /*
              * get data from item type
              */
-            $data[] = $this->getVitrineData($item, false, $item->count, 1);
+            $data[] = $this->getVitrineData($item);
         }
 
         return CustomResponse::create($data, '', true);
     }
 
-    public function single()
+    public function single(Request $request)
     {
-        /*
+        $request->validate([
+            'id' => 'required|exists:homes'
+        ]);
+        /**
          * get params
          */
-        $id = request()->id;
-        $page = request()->has('page') ? request()->page : 1;
-        $count = request()->has('count') ? request()->count : 12;
-
-        if (!isset($id)) {
-            return Response::create(false, 'Missing Params', \Illuminate\Http\Response::HTTP_BAD_REQUEST);
-        }
-
-        $vitrine = Vitrine::where('id', $id)->where('status', Vitrine::STATUS_ACTIVE)->first();
-        if (!$vitrine) {
-            return Response::create(false, 'not found', \Illuminate\Http\Response::HTTP_NOT_FOUND);
-        }
-        $return_info = $this->getVitrineData($vitrine, false, $count, $page);
-        return Response::create(true, 'Vitrine', $return_info);
+        $vitrine = Home::query()->where('id', $request->id)->where('status', Home::STATUS_ACTIVE)->firstOrFail();
+        $data = $this->getVitrineData($vitrine);
+        return CustomResponse::create($data, '', true);
     }
 
 
-    private function getVitrineData($item, $get_all, $count, $page)
+    private function getVitrineData($item)
     {
         switch ($item->type) {
-            case Vitrine::TYPE_ARTISTS:
-                $return_info = $this->getArtists($item, "artists", $get_all, $count, $page);
+            case Home::TYPE_ARTISTS:
+                $return_info = $this->getArtists($item, "artists");
                 break;
-            case Vitrine::TYPE_MUSICS:
-                $return_info = $this->getMusics($item, "musics", $get_all, $count, $page);
+            case Home::TYPE_MUSICS:
+                $return_info = $this->getMusics($item, "musics");
                 break;
-            case Vitrine::TYPE_ALBUMS:
-                $return_info = $this->getAlbums($item, "albums", $get_all, $count, $page);
+            case Home::TYPE_ALBUMS:
+                $return_info = $this->getAlbums($item, "albums");
                 break;
-            case Vitrine::TYPE_PLAYLISTS:
-                $return_info = $this->getPlaylists($item, Playlist::TYPE_PLAYLIST, "playlists", $get_all, $count, $page);
+            case Home::TYPE_PLAYLISTS:
+                $return_info = $this->getPlaylists($item, "playlists");
                 break;
-            case Vitrine::TYPE_CHARTS:
-                $return_info = $this->getPlaylists($item, Playlist::TYPE_CHARTS, "charts", $get_all, $count, $page);
+            case Home::TYPE_PROMOTIONS:
+                $return_info = $this->getPromotion($item, 'promotion');
                 break;
-            case Vitrine::TYPE_GENRES:
-                $return_info = $this->getPlaylists($item, Playlist::TYPE_GENRES, "genres", $get_all, $count, $page);
+            case Home::TYPE_ALBUM_MUSIC_GRID:
+                $return_info = $this->getGridAlbumMusics($item, "album_music_grid");
                 break;
-            case Vitrine::TYPE_HERO_SLIDERS:
-                $return_info = $this->getHeroSliders($item, $get_all, $count, $page);
+            case Home::TYPE_MUSIC_GRID:
+                $return_info = $this->getMusics($item, "music_grid");
                 break;
-            case Vitrine::TYPE_AD:
-                $return_info = $this->getAd($item);
+            case Home::TYPE_PLAYLIST_GRID:
+                $return_info = $this->getPlaylists($item, "playlist_grid");
                 break;
-            case Vitrine::TYPE_MUSIC_GRID:
-                $return_info = $this->getGridMusics($item, "grid", $get_all, $count, $page);
-                break;
-            case Vitrine::TYPE_PLAYLIST_GRID:
-                $return_info = $this->getPlaylistGridMusics($item, Playlist::TYPE_PLAYLIST, "playlist_grid", $get_all, $count, $page);
-                break;
-            case Vitrine::TYPE_MUSIC_TRENDING:
-                $return_info = $this->getTrendingMusics($item, "trending", $get_all, $count, $page);
+            case Home::TYPE_MUSIC_TRENDING:
+                $return_info = $this->getMusics($item, "trending");
                 break;
             default:
                 $return_info = [];
@@ -91,214 +84,152 @@ class HomeController extends Controller
     }
 
 
-    private function getArtists($item, $type, $get_all, $count, $page)
+    private function getArtists($home, $type)
     {
         $artists = [];
-        if ($get_all || !isset($item->value) || $item->value == "" || $item->value == "-") {
-            $artists = $this->artistRepo->get($item->sort, $count, $page, request()->region);
+        if (!$this->checkHomeValue($home)) {
+            $artists = ArtistRepo::getInstance()->get()->setCount($home->count)->setSort($home->sort)->setToJson();
         } else {
-            if ($page == 2) {
-                return [];
-            }
-            $ids = explode('-', $item->value);
-            foreach ($ids as $id) {
-                if (isset($id)) {
-                    $artist = $this->artistRepo->find(null, $id);
-                    if ($artist)
-                        $artists[] = $artist;
-                }
+            $items = $this->explodeHomeItems($home);
+            foreach ($items as $item) {
+                $artist = ArtistRepo::getInstance()->find()->setId($item)->setToJson()->build();
+                if ($artist)
+                    $artists[] = $artist;
             }
         }
 
         return [
-            'id' => $item->id,
-            'name' => $item->name,
+            'id' => $home->id,
+            'name' => $home->name,
             'type' => $type,
-            'data' => $this->artistRepo->toJsonArray($artists, request()->client_id)
+            'data' => $artists
         ];
     }
 
 
-    private function getMusics($item, $type, $get_all, $count, $page)
+    private function getMusics($home, $type)
     {
         $musics = [];
-        if ($get_all || !isset($item->value) || $item->value == "" || $item->value == "-") {
-            $musics = $this->musicRepo->get($item->sort, null, $count, $page, false, request()->region);
+        if (!$this->checkHomeValue($home)) {
+            $musics = MusicRepo::getInstance()->get()->setSort($home->sort)->setCount($home->count)->setToJson();
         } else {
-            if ($page == 2) {
-                return [];
-            }
-            $ids = explode('-', $item->value);
-            foreach ($ids as $id) {
-                if (isset($id)) {
-                    $music = $this->musicRepo->find(null, $id);
-                    if ($music)
-                        $musics[] = $music;
-                }
+            $items = $this->explodeHomeItems($home);
+            foreach ($items as $item) {
+                $music = MusicRepo::getInstance()->find()->setId($item)->setToJson()->build();
+                if ($music)
+                    $musics[] = $music;
             }
         }
 
         return [
-            'id' => $item->id,
-            'name' => $item->name,
+            'id' => $home->id,
+            'name' => $home->name,
             'type' => $type,
-            'data' => $this->musicRepo->toJsonArray($musics)
+            'data' => $musics
         ];
     }
 
 
-    private function getAlbums($item, $type, $get_all, $count, $page)
+    private function getAlbums($home, $type)
     {
         $albums = [];
-        if ($get_all || !isset($item->value) || $item->value == "" || $item->value == "-") {
-            $albums = $this->albumRepo->get($item->sort, null, $count, $page, request()->region);
+        if (!$this->checkHomeValue($home)) {
+            $albums = AlbumRepo::getInstance()->get()->setSort($home->sort)->setCount($home->count)->setToJson()->build();
         } else {
-            if ($page == 2) {
-                return [];
-            }
-            $ids = explode('-', $item->value);
-            foreach ($ids as $id) {
-                if (isset($id)) {
-                    $album = $this->albumRepo->find(null, $id);
-                    if ($album) {
-                        $albums[] = $album;
-                    }
+            $items = $this->explodeHomeItems($home);
+            foreach ($items as $item) {
+                $album = AlbumRepo::getInstance()->find()->setId($item)->setToJson()->build();
+                if ($album) {
+                    $albums[] = $album;
                 }
             }
         }
 
         return [
-            'id' => $item->id,
-            'name' => $item->name,
+            'id' => $home->id,
+            'name' => $home->name,
             'type' => $type,
-            'data' => $this->albumRepo->toJsonArray($albums)
+            'data' => $albums
         ];
     }
 
 
-    private function getPlaylists($item, $type, $typeName, $get_all, $count, $page)
+    private function getPlaylists($home, $type)
     {
         $playlists = [];
-        if ($get_all || !isset($item->value) || $item->value == "" || $item->value == "-") {
-            $playlists = $this->playlistRepo->get($type, $item->sort, $count, $page, null, request()->region);
+        if (!$this->checkHomeValue($home)) {
+            $playlists = PlaylistRepo::getInstance()->get()->setSort($home->sort)
+                ->setCount($home->count)
+                ->setToJson()->build();
         } else {
-            if ($page == 2) {
-                return [];
-            }
-            $ids = explode('-', $item->value);
-            foreach ($ids as $id) {
-                if (isset($id)) {
-                    $playlist = $this->playlistRepo->find(null, $id, false, $type);
-                    if ($playlist)
-                        $playlists[] = $playlist;
-                }
+            $items = $this->explodeHomeItems($home);
+            foreach ($items as $item) {
+                $playlist = PlaylistRepo::getInstance()->find()->setId($item)->setToJson()->build();
+                if ($playlist)
+                    $playlists[] = $playlist;
             }
         }
 
         return [
-            'id' => $item->id,
-            'name' => $item->name,
-            'type' => $typeName,
-            'data' => $this->playlistRepo->toJsonArray($playlists)
+            'id' => $home->id,
+            'name' => $home->name,
+            'type' => $type,
+            'data' => $playlists
         ];
     }
 
-
-    private function getAd($item)
+    private function getPromotion($home, $type)
     {
-        $heroSlider = $this->heroSliderRepo->find($item->value, HeroSlider::TYPE_AD);
-        if ($heroSlider) {
-            return [
-                'id' => $item->id,
-                'name' => $item->name,
-                'type' => "ad",
-                'data' => $this->heroSliderRepo->toJson($heroSlider)
-            ];
-        }
-        return [
-            'id' => $item->id,
-            'name' => $item->name,
-            'type' => "ad",
-            'data' => []
-        ];
-    }
+        $promotions = [];
+        if ($this->checkHomeValue($home)) {
+            $items = $this->explodeHomeItems($home);
+            foreach ($items as $item) {
+                $promotion = PromotionRepo::getInstance()->find()->setId($item)->setToJson();
+                if ($promotion)
+                    $promotions[] = $promotion;
 
-    private function getHeroSliders($item, $get_all, $count, $page)
-    {
-        $heroSliders = [];
-        if ($get_all || !isset($item->value) || $item->value == "" || $item->value == "-") {
-            $heroSliders = $this->heroSliderRepo->get(null, $count, $page);
-        } else {
-            if ($page == 2) {
-                return [];
-            }
-            $ids = explode('-', $item->value);
-            foreach ($ids as $id) {
-                if (isset($id)) {
-                    $heroSlider = $this->heroSliderRepo->find($id, null);
-                    if (isset($heroSlider))
-                        $heroSliders[] = $this->heroSliderRepo->toJson($heroSlider);
-                }
             }
         }
 
         return [
-            'id' => $item->id,
-            'name' => $item->name,
-            'type' => "hero_sliders",
-            'data' => $heroSliders
+            'id' => $home->id,
+            'name' => $home->name,
+            'type' => $type,
+            'data' => $promotions
         ];
     }
 
     /*
      * this func return last album and musics
      */
-    private function getGridMusics($item, $type, $get_all, $count, $page)
+    private function getGridAlbumMusics($home, $type)
     {
-        if ($item->value != null || $item->value != "null" || $item != "-") {
-            return $this->getMusics($item, "grid", $get_all, $count, $page);
-        }
+        if (!$this->checkHomeValue($home)) {
+            $limit = $home->count;
+            $musics = Music::query()->where('created_at', '>', now()->subDays(7))
+                ->where('status', Music::STATUS_ACTIVE)
+                ->latest()
+                ->take(7)->get();
 
+            $albums = Album::query()->where('status', 1)
+                ->where('status', Album::STATUS_ACTIVE)
+                ->where('created_at', '>', now()->subDays(7))
+                ->latest()->get();
 
-        if (!$get_all) {
-            $limit = $item->count;
-            if (isset(request()->region)) {
-                $musics = Music::where('created_at', '>', now()->subDays(7))
-                    ->where('status', Music::STATUS_ACTIVE)
-                    ->where('region', request()->region)
-                    ->latest()
-                    ->take(7)->get();
-            } else {
-                $musics = Music::where('created_at', '>', now()->subDays(7))
-                    ->where('status', Music::STATUS_ACTIVE)
-                    ->latest()
-                    ->take(7)->get();
-            }
-
-            if (isset(request()->region)) {
-                $albums = Album::where('status', 1)
-                    ->where('region', request()->region)
-                    ->where('status', Album::STATUS_ACTIVE)
-                    ->where('created_at', '>', now()->subDays(7))
-                    ->latest()->get();
-            } else {
-                $albums = Album::where('status', 1)
-                    ->where('status', Album::STATUS_ACTIVE)
-                    ->where('created_at', '>', now()->subDays(7))
-                    ->latest()->get();
-            }
         } else {
-            $limit = $count;
-            $musics = $this->musicRepo->get(Music::TYPE_LATEST, null, $count, $page, true, request()->region);
-            $albums = $this->albumRepo->get(Album::TYPE_LATEST, null, $count, $page, request()->region);
+            $limit = 18;
+            $musics = MusicRepo::getInstance()->get()->setSort(Music::SORT_LATEST)
+                ->setCount(9)->build();
+            $albums = AlbumRepo::getInstance()->get()->setSort(Album::SORT_LATEST)
+                ->setCount(9)->build();
         }
 
 
         if (isset($albums) && count($albums) == 0)
-            $albums = $this->albumRepo->getRandom(12);
+            $albums = AlbumRepo::getInstance()->random()->setCount($limit - count($albums))->build();
 
         if (isset($musics) && count($musics) == 0)
-            $musics = $this->musicRepo->getRandom(12);
+            $musics = MusicRepo::getInstance()->random()->setCount($limit - count($musics))->build();
 
 
         $musics_albums = $musics->merge($albums)->sortByDesc('created_at');
@@ -309,79 +240,33 @@ class HomeController extends Controller
         foreach ($musics_albums as $musics_album) {
             if ($count <= $limit) {
                 if ($musics_album instanceof Album) {
-                    $data[] = $this->albumRepo->toJson($musics_album);
+                    $data[] = AlbumRepo::getInstance()->toJson()->setAlbum($musics_album)->build();
                 } else if ($musics_album instanceof Music) {
-                    $data[] = $this->musicRepo->toJson($musics_album);
+                    $data[] = MusicRepo::getInstance()->toJson()->setMusic($musics_album)->build();
                 }
             }
             $count++;
         }
 
         return [
-            'id' => $item->id,
-            'name' => $item->name,
+            'id' => $home->id,
+            'name' => $home->name,
             'type' => $type,
             'data' => $data
         ];
     }
 
-    private function getTrendingMusics($item, $type, $get_all, $count, $page)
+    private function explodeHomeItems($item)
     {
-        if ($item->value != null || $item->value != "null" || $item != "-") {
-            return $this->getMusics($item, "musics", $get_all, $count, $page);
-        }
-
-        if (!$get_all) {
-            $musics = $this->musicRepo->get(Music::TYPE_BEST, null, $item->count, 1, true, request()->region);
-            $albums = $this->albumRepo->get(Album::TYPE_BEST, null, $item->count, 1, request()->region);
-        } else {
-            $musics = $this->musicRepo->get(Music::TYPE_BEST, null, $count, $page, true, request()->region);
-            $albums = $this->albumRepo->get(Album::TYPE_BEST, null, $count, $page, request()->region);
-        }
-
-        $musics_albums = $musics->merge($albums)->sortByDesc('play_count');
-
-        $data = [];
-        foreach ($musics_albums as $musics_album) {
-            if ($musics_album instanceof Album) {
-                $data[] = $this->albumRepo->toJson($musics_album);
-            } else if ($musics_album instanceof Music) {
-                $data[] = $this->musicRepo->toJson($musics_album);
-            }
-        }
-
-        return [
-            'id' => $item->id,
-            'name' => $item->name,
-            'type' => $type,
-            'data' => $data
-        ];
+        return $item->value != null ? explode('-', $item->value) : $item->value;
     }
 
-    private function getPlaylistGridMusics($item, $type, $typeName, $get_all, $count, $page)
-    {
-        $playlists = [];
-        if ($get_all || !isset($item->value) || $item->value == "" || $item->value == "-") {
-            $playlists = $this->playlistRepo->get($type, $item->sort, $count, $page, null, request()->region);
-        } else {
-            if ($page == 2) {
-                return [];
-            }
-            $ids = explode('-', $item->value);
-            foreach ($ids as $id) {
-                if (isset($id)) {
-                    $playlist = $this->playlistRepo->find(null, $id, false, $type);
-                    if ($playlist)
-                        $playlists[] = $playlist;
-                }
-            }
-        }
 
-        return [
-            'id' => $item->id,
-            'name' => $item->name,
-            'type' => $typeName,
-            'data' => $this->playlistRepo->toJsonArray($playlists)
-        ];
+    private function checkHomeValue($home)
+    {
+        if (!isset($home->value) || $home->value == "" || $home->value == "-") {
+            return false;
+        }
+        return true;
     }
 }

@@ -1,17 +1,18 @@
 <?php
 
 
-namespace App\Http\Repositories\V1\Like;
+namespace App\Http\Repositories\V1\Follow;
 
-class LikeRepo implements Builder
+
+class FollowRepo implements Builder
 {
 
     private static $instance = null;
 
-    public static function getInstance(): LikeRepo
+    public static function getInstance(): FollowRepo
     {
         if (self::$instance == null) {
-            self::$instance = new LikeRepo();
+            self::$instance = new FollowRepo();
         }
 
         return self::$instance;

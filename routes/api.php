@@ -19,13 +19,13 @@ Route::prefix('v1')->namespace('Api\V1')->group(function () {
     Route::post("/register", 'AuthController@register');
     Route::post("/verify", 'AuthController@verify');
 
-    Route::post('/forgot-passport/create','ForgotPasswordController@create');
-    Route::post('/forgot-passport/reset','ForgotPasswordController@reset');
+    Route::post('/forgot-passport/create', 'ForgotPasswordController@create');
+    Route::post('/forgot-passport/reset', 'ForgotPasswordController@reset');
 
 //        Route::get("/version", 'VersionController@get');
 //
-//        Route::get('/vitrine', 'HomeController@home');
-//        Route::get('/vitrine/single', 'HomeController@single');
+    Route::get('/homes', 'HomeController@index');
+    Route::get('/home', 'HomeController@single');
 //        Route::get('/search', 'SearchController@search');
 //
     Route::get('/musics', 'MusicController@index');
@@ -34,23 +34,17 @@ Route::prefix('v1')->namespace('Api\V1')->group(function () {
     Route::get('/artists', 'ArtistController@index');
     Route::get('/artist', 'ArtistController@single');
 
-//        Route::get('/playlist', 'PlaylistController@single');
-//        Route::get('/playlists', 'PlaylistController@get');
-//        Route::get('/playlists/vitrine', 'PlaylistVitrineController@single');
-//        Route::get('/playlists/vitrines', 'PlaylistVitrineController@home');
+    Route::get('/playlists', 'PlaylistController@index');
+    Route::get('/playlist', 'PlaylistController@single');
 
     Route::get('/albums', 'AlbumController@index');
     Route::get('/album', 'AlbumController@single');
 
-//        Route::get('/related', 'RelatedController@get');
-//
-//        Route::get('/plans', 'PlanController@get');
-//
 //        Route::post('/playcount/add', 'PlayCountController@add');
 
     Route::group(['middleware' => 'auth:api'], function () {
 //            Route::post("/update", 'UserController@update');
-            Route::post("/me", 'UserController@me');
+        Route::post("/me", 'UserController@me');
 //
 //            Route::get('/foryou', 'ForYouController@get');
 //            Route::get('/foryou/playlists', 'ForYouController@playlists');
@@ -59,10 +53,10 @@ Route::prefix('v1')->namespace('Api\V1')->group(function () {
 //
 //            Route::post('/playcount/user/add', 'PlayCountController@add');
 //
-//            Route::post('/playlist/add', 'PlaylistController@add');
-//            Route::post('/playlist/update', 'PlaylistController@update');
-//            Route::post('/playlist/delete', 'PlaylistController@delete');
-//            Route::post('/playlist/music', 'PlaylistController@music');
+            Route::post('/playlist/create', 'PlaylistController@create');
+            Route::post('/playlist/edit', 'PlaylistController@edit');
+            Route::post('/playlist/delete', 'PlaylistController@delete');
+            Route::post('/playlist/music', 'PlaylistController@music');
 //
 //            Route::get('/likes', 'LikeController@get');
 //            Route::post('/like', 'LikeController@like');
@@ -82,8 +76,7 @@ Route::prefix('v1')->namespace('Api\V1')->group(function () {
 //            Route::get('/histories', 'PlayHistoryController@get');
 //            Route::post('/history/add', 'PlayHistoryController@add');
 //
-//            Route::post('/payment/add', 'TransactionController@add');
-//
+
 //            Route::get('/notifications', 'NotificationController@get');
 
     });

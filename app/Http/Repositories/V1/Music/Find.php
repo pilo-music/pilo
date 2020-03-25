@@ -11,6 +11,7 @@ class Find
     protected $sort;
     protected $name;
     protected $slug;
+    protected $id;
     protected $toJson;
 
 
@@ -22,6 +23,7 @@ class Find
         $this->name = null;
         $this->slug = null;
         $this->toJson = false;
+        $this->id = null;
     }
 
 
@@ -104,6 +106,15 @@ class Find
         return $this;
     }
 
+    /**
+     * @param mixed $id
+     * @return Find
+     */
+    public function setId($id): Find
+    {
+        $this->id = $id;
+        return $this;
+    }
 
     /**
      * @return array|null|Music
@@ -133,8 +144,19 @@ class Find
             }
 
             return $musics;
+        } elseif (isset($this->id)) {
+            /**
+             * find from slug
+             */
+            $music = Music::query()->where('status', Music::STATUS_ACTIVE)
+                ->where('id', $this->id)->first();
+
+            if ($this->toJson) {
+                $music = MusicRepo::getInstance()->toJson()->setMusic($music)->build();
+            }
+            return $music;
         } else {
-            /*
+            /**
              * find from slug
              */
             if (isset($this->slug) && $this->slug != "") {
@@ -150,4 +172,6 @@ class Find
         }
         return null;
     }
+
+
 }

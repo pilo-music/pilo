@@ -22,7 +22,7 @@ class ArtistController extends Controller
          */
         $sort = request()->has('sort') ? request()->sort : Artist::SORT_LATEST;
         $page = request()->has('page') ? request()->page : 1;
-        $count = request()->has('count') ? request()->count : 12;
+        $count = request()->has('count') ? request()->count : Artist::DEFAULT_ITEM_COUNT;
 
         $data = ArtistRepo::getInstance()->get()->setPage($page)
             ->setCount($count)

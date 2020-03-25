@@ -81,4 +81,8 @@ class User extends Authenticatable
         return $this->hasMany(Message::class);
     }
 
+    public function follows()
+    {
+        return $this->hasMany(Follow::class);
+    }
 }

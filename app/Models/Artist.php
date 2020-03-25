@@ -62,4 +62,10 @@ class Artist extends Model
     {
         return $this->morphedByMany(Video::class, 'artistable');
     }
+
+
+    public function follows()
+    {
+        return $this->hasMany(Follow::class);
+    }
 }

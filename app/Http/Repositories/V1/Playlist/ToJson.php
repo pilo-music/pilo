@@ -34,8 +34,11 @@ class ToJson
                 'slug' => $this->playlist->slug,
                 'name' => $this->playlist->title == null ? "" : $this->playlist->title,
                 'image' => get_image($this->playlist, 'image'),
-                'thumbnail' => get_image($this->playlist, 'thumbnail'),
-                'music_count' => $this->playlist->music_count == null ? 0 : $this->playlist->music_count,
+                'image_one' => get_image($this->playlist, 'image_one'),
+                'image_two' => get_image($this->playlist, 'image_two'),
+                'image_three' => get_image($this->playlist, 'image_three'),
+                'image_four' => get_image($this->playlist, 'image_four'),
+                'music_count' => $this->playlist->music_count,
                 'like_count' => $this->playlist->like_count,
                 'created_at' => Carbon::parse($this->playlist->created_at)->format('D d,Y'),
                 'play_count' => $this->playlist->play_count,
@@ -43,5 +46,7 @@ class ToJson
                 'type' => 'playlist'
             ];
         }
+
+        return  null;
     }
 }

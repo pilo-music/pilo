@@ -4,7 +4,7 @@ namespace Tests\Feature;
 
 use App\Models\Music;
 
-class MusicsTest extends BaseTest
+class MusicsTest extends Base
 {
     public function testMusics()
     {

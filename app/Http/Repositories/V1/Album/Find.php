@@ -14,6 +14,7 @@ class Find
     protected $page;
     protected $sort;
     protected $name;
+    protected $id;
     protected $slug;
     protected $artist;
     protected $toJson;
@@ -28,6 +29,7 @@ class Find
         $this->slug = null;
         $this->artist = null;
         $this->toJson = false;
+        $this->id = null;
     }
 
 
@@ -122,6 +124,16 @@ class Find
         return $this;
     }
 
+    /**
+     * @param mixed $id
+     * @return Find
+     */
+    public function setId($id): Find
+    {
+        $this->id = $id;
+        return $this;
+    }
+
 
     /**
      * @return array|null|Album
@@ -170,6 +182,17 @@ class Find
             }
 
             return $albums;
+        } elseif (isset($this->id)) {
+
+            $album = Album::query()->where('status', Album::STATUS_ACTIVE)
+                ->where('id', $this->id)->first();
+
+            if ($this->toJson) {
+                $album = AlbumRepo::getInstance()->toJson()->setAlbum($album)->build();
+            }
+
+            return $album;
+
         } else {
             /*
              * find from slug
@@ -187,4 +210,6 @@ class Find
         }
         return null;
     }
+
+
 }

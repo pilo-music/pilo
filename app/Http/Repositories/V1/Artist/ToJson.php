@@ -2,18 +2,20 @@
 
 namespace App\Http\Repositories\V1\Artist;
 
+use App\Http\Repositories\V1\Follow\FollowRepo;
+use App\Http\Repositories\V1\Playlist\PlaylistRepo;
 use App\Models\Album;
 use App\Models\Music;
 
 class ToJson
 {
     protected $artist;
-    protected  $client;
+    protected $user;
 
     public function __construct()
     {
         $this->artist = null;
-        $this->client = null;
+        $this->user = null;
     }
 
     /**
@@ -30,14 +32,14 @@ class ToJson
     }
 
     /**
-     * Set the value of client
+     * Set the value of user
      *
-     * @param $client
+     * @param $user
      * @return  self
      */
-    public function setClient($client)
+    public function setuser($user)
     {
-        $this->client = $client;
+        $this->user = $user;
 
         return $this;
     }
@@ -47,19 +49,18 @@ class ToJson
         if (isset($this->artist)) {
             return [
                 'slug' => $this->artist->slug,
-                'name' => $this->artist->name == null ? "" : $this->artist->name,
+                'name' => $this->artist->name ?? "",
                 'image' => get_image($this->artist, 'image'),
                 'thumbnail' => get_image($this->artist, 'thumbnail'),
-                'header_image' => get_image($this->artist, 'header_image'),
-                'music_count' => $this->artist->musics()->where('status', Music::STATUS_ACTIVE)->get()->count(),
-                'album_count' => $this->artist->albums()->where('status', Album::STATUS_ACTIVE)->get()->count(),
+                'music_count' => $this->artist->music_count,
+                'album_count' => $this->artist->album_count,
+                'followers_count' => $this->artist->followers_count,
+                'playlist_count' => $this->artist->playlist_count,
+                'is_follow' => FollowRepo::getInstance()->has()->setArtist($this->artist)->setUser($this->user)->build(),
                 'created_at' => date('Y-m-d', strtotime($this->artist->created_at)),
-                'region' => $this->artist->region == null ? "" : $this->artist->region,
-//                'followers_count' => $this->artist->followers_count,
                 'type' => 'artist',
-//                'is_follow' => FollowRepoImpl::isFollow($this->client->id, $this->artist),
-//                'playlist_count' => count(PlaylistRepoImpl::artistPlaylist($this->artist))
             ];
         }
+        return null;
     }
 }

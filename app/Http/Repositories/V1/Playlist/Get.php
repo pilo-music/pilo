@@ -15,6 +15,7 @@ class Get
     protected $page;
     protected $sort;
     protected $artist;
+    protected $user;
     protected $toJson;
 
 
@@ -24,6 +25,7 @@ class Get
         $this->page = 1;
         $this->sort = Playlist::SORT_LATEST;
         $this->artist = null;
+        $this->user = null;
         $this->toJson = false;
     }
 
@@ -93,6 +95,16 @@ class Get
     }
 
     /**
+     * @param mixed $user
+     * @return Get
+     */
+    public function setUser($user): Get
+    {
+        $this->user = $user;
+        return $this;
+    }
+
+    /**
      * @return Collection
      */
     public function build(): Collection
@@ -108,8 +120,15 @@ class Get
 //            }
 //            $playlists = $this->artist->albums()->where('status', Playlist::STATUS_ACTIVE);
 //        } else {
-            $playlists = Playlist::query()->where('status', Playlist::STATUS_ACTIVE);
+//            $playlists = Playlist::query()->where('status', Playlist::STATUS_ACTIVE);
 //        }
+
+        if (isset($this->user)) {
+            $playlists = Playlist::query()->whereNull('user_id')
+                ->orWhere('user_id', $this->user->id)->where('status', Playlist::STATUS_ACTIVE);
+        } else {
+            $playlists = Playlist::query()->whereNull('user_id')->where('status', Playlist::STATUS_ACTIVE);
+        }
 
         switch ($this->sort) {
             case Playlist::SORT_LATEST:

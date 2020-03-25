@@ -43,6 +43,6 @@ class ToJson
                 'tags' => ArtistRepo::getInstance()->toJsonArray()->setArtists($this->music->artists()->get())->build()
             ];
         }
+        return null;
     }
-
 }

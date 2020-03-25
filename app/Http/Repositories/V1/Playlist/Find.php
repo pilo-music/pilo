@@ -12,10 +12,12 @@ class Find
     protected $count;
     protected $page;
     protected $sort;
+    protected $id;
     protected $name;
     protected $slug;
     protected $artist;
     protected $toJson;
+    protected $user;
 
 
     public function __construct()
@@ -27,6 +29,8 @@ class Find
         $this->slug = null;
         $this->artist = null;
         $this->toJson = false;
+        $this->id = null;
+        $this->user = null;
     }
 
 
@@ -121,10 +125,27 @@ class Find
         return $this;
     }
 
+    /**
+     * @param mixed $id
+     * @return Find
+     */
+    public function setId($id): Find
+    {
+        $this->id = $id;
+        return $this;
+    }
 
     /**
-     * @return array|null|Album
+     * @param mixed $user
+     * @return Find
      */
+    public function setUser($user): Find
+    {
+        $this->user = $user;
+        return $this;
+    }
+
+
     public function build()
     {
         /**
@@ -139,12 +160,15 @@ class Find
 //                return null;
 //        }
 
-        if (isset($this->name) && !empty($this->name)) {
+        if (!isset($this->id) && !isset($this->slug) && !isset($this->name))
+            return null;
+
+        if (isset($this->name)) {
             /*
              *  find from name
              */
             $playlists = Playlist::query()->where('name', 'LIKE', '%' . $this->name . '%')
-                ->where('status', Playlist::STATUS_ACTIVE);
+                ->whereNull('user_id')->where('status', Playlist::STATUS_ACTIVE);
 
             if (isset($this->artist)) {
                 $playlists = $playlists->where('artist_id', $this->artist->id);
@@ -172,21 +196,47 @@ class Find
             }
 
             return $playlists;
+        } elseif (isset($this->id)) {
+
+            $playlist = Playlist::query()->where('status', Playlist::STATUS_ACTIVE)
+                ->where('id', $this->id)->first();
+
+            $playlist = $this->checkUser($playlist);
+
+            if ($this->toJson) {
+                $playlist = PlaylistRepo::getInstance()->toJson()->setPlaylist($playlist)->build();
+            }
+
+            return $playlist;
+
         } else {
-            /*
-             * find from slug
-             */
-            if (isset($this->slug) && $this->slug != "") {
-                $playlist = Playlist::query()->where('status', Playlist::STATUS_ACTIVE)
-                    ->where('slug', $this->slug)->first();
 
-                if ($this->toJson) {
-                    $playlist = PlaylistRepo::getInstance()->toJson()->setAlbum($playlist)->build();
-                }
+            $playlist = Playlist::query()->where('status', Playlist::STATUS_ACTIVE)
+                ->where('slug', $this->slug)->first();
 
+            $playlist = $this->checkUser($playlist);
+
+            if ($this->toJson) {
+                $playlist = PlaylistRepo::getInstance()->toJson()->setPlaylist($playlist)->build();
+            }
+
+            return $playlist;
+        }
+    }
+
+    /**
+     * check playlist user
+     * @param $playlist
+     * @return mixed
+     */
+    private function checkUser($playlist)
+    {
+        if ($playlist && $playlist->user_id != null) {
+            if (isset($this->user) && $this->user->id == $playlist->user_id) {
                 return $playlist;
             }
+            return null;
         }
-        return null;
+        return $playlist;
     }
 }

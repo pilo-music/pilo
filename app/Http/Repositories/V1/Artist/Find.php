@@ -8,6 +8,7 @@ class Find
 {
     protected $name;
     protected $slug;
+    protected $id;
     protected $count;
     protected $page;
     protected $toJson;
@@ -19,6 +20,7 @@ class Find
         $this->count = Artist::DEFAULT_ITEM_COUNT;
         $this->page = 1;
         $this->toJson = false;
+        $this->id = null;
     }
 
 
@@ -87,6 +89,16 @@ class Find
         return $this;
     }
 
+    /**
+     * @param $id
+     * @return Find
+     */
+    public function setId($id): Find
+    {
+        $this->id = $id;
+        return $this;
+    }
+
 
     public function build()
     {
@@ -104,9 +116,23 @@ class Find
             }
 
             return $artists;
+        } elseif (isset($this->id)) {
+            /**
+             * find from id
+             */
+            $artists = Artist::query()->where('status', Artist::STATUS_ACTIVE)
+                ->where('id', $this->id)->first();
+
+
+            if ($this->toJson) {
+                $artists = ArtistRepo::getInstance()->toJson()->setArtist($artists)->build();
+            }
+
+            return $artists;
+
         } else {
             /*
-             * find from id
+             * find from slug
              */
             if (isset($this->slug)) {
                 $artists = Artist::query()->where('status', Artist::STATUS_ACTIVE)
@@ -122,4 +148,5 @@ class Find
         }
         return null;
     }
+
 }

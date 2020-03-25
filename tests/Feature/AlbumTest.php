@@ -4,7 +4,7 @@ namespace Tests\Feature;
 
 use App\Models\Album;
 
-class AlbumTest extends BaseTest
+class AlbumTest extends Base
 {
     public function testAlbum()
     {

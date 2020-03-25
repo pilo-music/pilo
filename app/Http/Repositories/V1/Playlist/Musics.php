@@ -13,7 +13,7 @@ class Musics
 
     public function __construct()
     {
-        $this->album = null;
+        $this->playlist = null;
         $this->toJson = false;
     }
 
@@ -40,7 +40,7 @@ class Musics
     public function build()
     {
         if (isset($playlists)) {
-            return MusicRepo::getInstance()->toJsonArray()->setMusics($playlists->musics()->get())->build;
+            return MusicRepo::getInstance()->toJsonArray()->setMusics($playlists->musics()->get())->build();
         }
         return [];
     }

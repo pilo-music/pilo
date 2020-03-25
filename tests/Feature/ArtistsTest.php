@@ -2,7 +2,7 @@
 
 namespace Tests\Feature;
 
-class ArtistsTest extends BaseTest
+class ArtistsTest extends Base
 {
     public function testArtists()
     {

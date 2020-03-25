@@ -14,6 +14,8 @@ interface Builder
 
     public function random();
 
+    public function updateImage();
+
     public function toJsonArray();
 
     public function toJson();
