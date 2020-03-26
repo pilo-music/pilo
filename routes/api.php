@@ -22,8 +22,8 @@ Route::prefix('v1')->namespace('Api\V1')->group(function () {
     Route::post('/forgot-passport/create', 'ForgotPasswordController@create');
     Route::post('/forgot-passport/reset', 'ForgotPasswordController@reset');
 
-//        Route::get("/version", 'VersionController@get');
-//
+    Route::get("/version", 'VersionController@get');
+
     Route::get('/homes', 'HomeController@index');
     Route::get('/home', 'HomeController@single');
 //        Route::get('/search', 'SearchController@search');
@@ -75,7 +75,7 @@ Route::prefix('v1')->namespace('Api\V1')->group(function () {
 //            Route::post('/history/add', 'PlayHistoryController@add');
 //
 
-//            Route::get('/notifications', 'NotificationController@get');
+        Route::get('/notifications', 'NotificationController@index');
 
     });
 });

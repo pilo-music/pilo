@@ -37,3 +37,15 @@ if (!function_exists('is_past')) {
         return false;
     }
 }
+
+
+if (!function_exists('setting')) {
+    function setting($key, $default = null)
+    {
+        $setting = \App\Models\Setting::query()->where('key', $key)->first();
+        if ($setting) {
+            return $setting->value;
+        }
+        return $default;
+    }
+}

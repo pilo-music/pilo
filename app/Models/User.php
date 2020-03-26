@@ -85,4 +85,9 @@ class User extends Authenticatable
     {
         return $this->hasMany(Follow::class);
     }
+
+    public function notification()
+    {
+        return $this->hasMany(User::class);
+    }
 }
