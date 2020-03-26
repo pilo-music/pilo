@@ -20,6 +20,16 @@ class UserController extends Controller
         ]);
 
         $user = auth()->user();
+
+        if ($request->has('password')) {
+            $request->validate([
+                'password' => 'required|confirmed|min:6',
+            ]);
+            $password = bcrypt($request->password);
+        } else {
+            $password = $user->password;
+        }
+
         if ($request->has('pic')) {
             $img = Image::make($request->get('pic'));
             $img->resize(300, 300);
@@ -30,19 +40,10 @@ class UserController extends Controller
         } else
             $imageUrl = $user->pic;
 
-        if ($request->has('name') && strlen($request->name) > 2)
-            $name = $request->name;
-        else
-            $name = $user->name;
-
-        if ($request->has('password') && strlen($request->name) > 5)
-            $password = bcrypt($request->password);
-        else
-            $password = $user->password;
 
         $user->update([
             'pic' => $imageUrl,
-            'name' => $name,
+            'name' => $request->name,
             'password' => $password
         ]);
 

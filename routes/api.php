@@ -30,7 +30,10 @@ Route::prefix('v1')->namespace('Api\V1')->group(function () {
 //
     Route::get('/musics', 'MusicController@index');
     Route::get('/music', 'MusicController@single');
-//
+
+    Route::get('/videos', 'VideoController@index');
+    Route::get('/video', 'VideoController@single');
+
     Route::get('/artists', 'ArtistController@index');
     Route::get('/artist', 'ArtistController@single');
 
@@ -43,7 +46,7 @@ Route::prefix('v1')->namespace('Api\V1')->group(function () {
 //        Route::post('/playcount/add', 'PlayCountController@add');
 
     Route::group(['middleware' => 'auth:api'], function () {
-//            Route::post("/update", 'UserController@update');
+        Route::post("/update", 'UserController@update');
         Route::post("/me", 'UserController@me');
 //
 //            Route::get('/foryou', 'ForYouController@get');
@@ -53,21 +56,16 @@ Route::prefix('v1')->namespace('Api\V1')->group(function () {
 //
 //            Route::post('/playcount/user/add', 'PlayCountController@add');
 //
-            Route::post('/playlist/create', 'PlaylistController@create');
-            Route::post('/playlist/edit', 'PlaylistController@edit');
-            Route::post('/playlist/delete', 'PlaylistController@delete');
-            Route::post('/playlist/music', 'PlaylistController@music');
-//
-//            Route::get('/likes', 'LikeController@get');
-//            Route::post('/like', 'LikeController@like');
-//
-//            Route::post('/follow', 'FollowController@follow');
-//            Route::get('/follows', 'FollowController@get');
-//
-//            Route::get('/followers', 'FollowController@followers');
-//            Route::get('/follow/artists', 'FollowController@artists');
-//            Route::get('/follow/clients', 'FollowController@clients');
-//            Route::get('/follow/playlists', 'FollowController@playlists');
+        Route::post('/playlist/create', 'PlaylistController@create');
+        Route::post('/playlist/edit', 'PlaylistController@edit');
+        Route::post('/playlist/delete', 'PlaylistController@delete');
+        Route::post('/playlist/music', 'PlaylistController@music');
+
+        Route::get('/likes', 'LikeController@index');
+        Route::post('/like', 'LikeController@like');
+
+        Route::get('/follows', 'FollowController@index');
+        Route::post('/follow', 'FollowController@follow');
 //
 //            Route::get('/sync-musics', 'SyncMusicController@get');
 //            Route::post('/sync-music/add', 'SyncMusicController@add');

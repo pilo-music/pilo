@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Http\Repositories\V1\Music;
+namespace App\Http\Repositories\V1\Video;
 
-use App\Models\Music;
+use App\Models\Video;
 
 class Find
 {
@@ -17,9 +17,9 @@ class Find
 
     public function __construct()
     {
-        $this->count = Music::DEFAULT_ITEM_COUNT;
+        $this->count = Video::DEFAULT_ITEM_COUNT;
         $this->page = 1;
-        $this->sort = Music::DEFAULT_ITEM_SORT;
+        $this->sort = Video::DEFAULT_ITEM_SORT;
         $this->name = null;
         $this->slug = null;
         $this->toJson = false;
@@ -117,7 +117,7 @@ class Find
     }
 
     /**
-     * @return array|null|Music
+     * @return array|null|video
      */
     public function build()
     {
@@ -125,49 +125,49 @@ class Find
             /*
              *  find from name
              */
-            $musics = Music::query()->where('title', 'LIKE', '%' . $this->name . '%')
-                ->where('status', Music::STATUS_ACTIVE);
+            $videos = Video::query()->where('title', 'LIKE', '%' . $this->name . '%')
+                ->where('status', Video::STATUS_ACTIVE);
 
             switch ($this->sort) {
-                case Music::SORT_LATEST:
-                    $musics = $musics->latest();
+                case Video::SORT_LATEST:
+                    $videos = $videos->latest();
                     break;
-                case  Music::SORT_BEST:
-                    $musics = $musics->orderBy('play_count');
+                case  Video::SORT_BEST:
+                    $videos = $videos->orderBy('play_count');
                     break;
             }
 
-            $musics = $musics->skip(($this->page - 1) * $this->count)->take($this->count)->get();
+            $videos = $videos->skip(($this->page - 1) * $this->count)->take($this->count)->get();
 
             if ($this->toJson) {
-                $musics = MusicRepo::getInstance()->toJsonArray()->setMusics($musics)->build();
+                $videos = VideoRepo::getInstance()->toJsonArray()->setVideos($videos)->build();
             }
 
-            return $musics;
+            return $videos;
         } elseif (isset($this->id)) {
             /**
              * find from slug
              */
-            $music = Music::query()->where('status', Music::STATUS_ACTIVE)
+            $video = Video::query()->where('status', Video::STATUS_ACTIVE)
                 ->where('id', $this->id)->first();
 
             if ($this->toJson) {
-                $music = MusicRepo::getInstance()->toJson()->setMusic($music)->build();
+                $video = VideoRepo::getInstance()->toJson()->setVideo($video)->build();
             }
-            return $music;
+            return $video;
         } else {
             /**
              * find from slug
              */
             if (isset($this->slug) && $this->slug != "") {
-                $music = Music::query()->where('status', Music::STATUS_ACTIVE)
+                $video = Video::query()->where('status', Video::STATUS_ACTIVE)
                     ->where('slug', $this->slug)->first();
 
                 if ($this->toJson) {
-                    $music = MusicRepo::getInstance()->toJson()->setMusic($music)->build();
+                    $video = VideoRepo::getInstance()->toJson()->setVideo($video)->build();
                 }
 
-                return $music;
+                return $video;
             }
         }
         return null;

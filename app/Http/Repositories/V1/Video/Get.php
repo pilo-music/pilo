@@ -1,10 +1,11 @@
 <?php
 
-namespace App\Http\Repositories\V1\Music;
+namespace App\Http\Repositories\V1\Video;
 
 use App\Http\Repositories\V1\Artist\ArtistRepo;
 use App\Models\Artist;
 use App\Models\Music;
+use App\Models\Video;
 use Illuminate\Support\Collection;
 
 class Get
@@ -18,9 +19,9 @@ class Get
 
     public function __construct()
     {
-        $this->count = Music::DEFAULT_ITEM_COUNT;
+        $this->count = Video::DEFAULT_ITEM_COUNT;
         $this->page = 1;
-        $this->sort = Music::SORT_LATEST;
+        $this->sort = Video::SORT_LATEST;
         $this->artist = null;
         $this->toJson = false;
     }
@@ -101,26 +102,26 @@ class Get
                 if (!$this->artist)
                     return collect([]);
             }
-            $musics = $this->artist->musics()->where('status', Music::STATUS_ACTIVE);
+            $videos = $this->artist->videos()->where('status', Video::STATUS_ACTIVE);
         } else {
-            $musics = Music::query()->where('status', Music::STATUS_ACTIVE);
+            $videos = Video::query()->where('status', Video::STATUS_ACTIVE);
         }
 
         switch ($this->sort) {
-            case Music::SORT_LATEST:
-                $musics = $musics->latest();
+            case Video::SORT_LATEST:
+                $videos = $videos->latest();
                 break;
-            case  Music::SORT_BEST:
-                $musics = $musics->orderBy('play_count');
+            case  Video::SORT_BEST:
+                $videos = $videos->orderBy('play_count');
                 break;
         }
 
-        $musics = $musics->skip(($this->page - 1) * $this->count)->take($this->count)->get();
+        $videos = $videos->skip(($this->page - 1) * $this->count)->take($this->count)->get();
 
         if ($this->toJson) {
-            $musics = MusicRepo::getInstance()->toJsonArray()->setMusics($musics)->build();
+            $videos = VideoRepo::getInstance()->toJsonArray()->setVideos($videos)->build();
         }
 
-        return $musics;
+        return $videos;
     }
 }

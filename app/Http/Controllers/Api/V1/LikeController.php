@@ -4,33 +4,41 @@ namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Controllers\Api\CustomResponse;
 use App\Http\Controllers\Controller;
-use App\Models\Album;
+use App\Http\Repositories\V1\Album\AlbumRepo;
+use App\Http\Repositories\V1\Music\MusicRepo;
+use App\Http\Repositories\V1\Playlist\PlaylistRepo;
+use App\Http\Repositories\V1\Video\VideoRepo;
 use App\Models\Music;
+use App\Models\Playlist;
 use App\Models\Video;
-use Hekmatinasser\Verta\Verta;
 use Illuminate\Http\Request;
+use Morilog\Jalali\Jalalian;
 
 class LikeController extends Controller
 {
     public function add(Request $request)
     {
         $request->validate([
-            'likeable_id' => 'required',
-            'likeable_type' => 'required',
-            'action' => 'required',
+            'slug' => 'required',
+            'type' => 'required|in:music,album,playlist,video',
+            'action' => 'required|in:add,remove',
         ]);
 
         $user = auth()->user();
-        $type = $this->getLikeType($request->likeable_type);
+        $item = $this->getLikeItem($request->slug, $request->type);
 
-        $like = $user->likes()->where('likeable_id', $request->likeable_id)
-            ->where('likeable_type', $type)
+        if (!$item) {
+            abort(404);
+        }
+
+        $like = $user->likes()->where('likeable_id', $item->id)
+            ->where('likeable_type', get_class($item))
             ->first();
 
         if ($request->action == "add" && !$like) {
             $user->likes()->create([
-                'likeable_id' => $request->likeable_id,
-                "likeable_type" => $type
+                'likeable_id' => $item->id,
+                "likeable_type" => get_class($item)
             ]);
         } elseif ($request->action == "remove" && $like) {
             $like->delete();
@@ -38,7 +46,7 @@ class LikeController extends Controller
         return CustomResponse::create(null, "", true);
     }
 
-    public function list()
+    public function index()
     {
         $user = auth()->user();
         $likes = $user->likes()->latest()->get();
@@ -46,23 +54,28 @@ class LikeController extends Controller
         $return_info = [];
         foreach ($likes as $like) {
             if ($like->likeable_type == get_class(new Music())) {
-                $item = Music::find($like->likeable_id);
+                $item = MusicRepo::getInstance()->find()->setId($like->likeable_id)->build();
                 $type = "music";
             } else if ($like->likeable_type == get_class(new Video())) {
-                $item = Video::find($like->likeable_id);
+                $item = VideoRepo::getInstance()->find()->setId($like->likeable_id)->build();
                 $type = "video";
+            } elseif ($like->likeable_type == get_class(new Playlist())) {
+                $item = PlaylistRepo::getInstance()->find()->setId($like->likeable_id)->build();
+                $type = "playlist";
             } else {
-                $item = Album::find($like->likeable_id);
+                $item = AlbumRepo::getInstance()->find()->setId($like->likeable_id)->build();
                 $type = "album";
             }
-            $date = new Verta($like->created_at);
+            if (!$item){
+                continue;
+            }
             $return_info[] = [
                 'id' => $item->id,
                 'type' => $type,
                 'slug' => $item->slug,
                 'title' => $item->title,
                 'image' => $item->image,
-                'created_at' => $date->formatDifference(),
+                'created_at' => Jalalian::forge($item->created_at)->ago(),
                 'artist' => [
                     'id' => $item->artist->id,
                     'name' => $item->artist->name,
@@ -74,19 +87,22 @@ class LikeController extends Controller
     }
 
 
-    private function getLikeType($param)
+    private function getLikeItem($slug, $type)
     {
-        switch ($param) {
+        switch ($type) {
             case "video":
-                $type = get_class(new Video());
+                $item = VideoRepo::getInstance()->find()->setSlug($slug)->build();
                 break;
             case "album":
-                $type = get_class(new Album());
+                $item = AlbumRepo::getInstance()->find()->setSlug($slug)->build();
+                break;
+            case "playlist":
+                $item = PlaylistRepo::getInstance()->find()->setSlug($slug)->build();
                 break;
             default:
-                $type = get_class(new Music());
+                $item = MusicRepo::getInstance()->find()->setSlug($slug)->build();
                 break;
         }
-        return $type;
+        return $item;
     }
 }

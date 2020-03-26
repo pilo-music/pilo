@@ -167,7 +167,7 @@ class Find
             /*
              *  find from name
              */
-            $playlists = Playlist::query()->where('name', 'LIKE', '%' . $this->name . '%')
+            $playlists = Playlist::query()->where('title', 'LIKE', '%' . $this->name . '%')
                 ->whereNull('user_id')->where('status', Playlist::STATUS_ACTIVE);
 
             if (isset($this->artist)) {
