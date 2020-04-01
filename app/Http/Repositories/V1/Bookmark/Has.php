@@ -8,22 +8,22 @@ use App\Models\Bookmark;
 
 class Has
 {
-    protected $client;
+    protected $user;
     protected $item;
 
     public function __construct()
     {
-        $this->client = null;
+        $this->user = null;
         $this->item = null;
     }
 
     /**
-     * @param null $client
+     * @param null $user
      * @return Has
      */
-    public function setClient($client): Has
+    public function setUser($user): Has
     {
-        $this->client = $client;
+        $this->user = $user;
         return $this;
     }
 
@@ -40,13 +40,14 @@ class Has
 
     public function build()
     {
-        if ($this->client == null)
+        if ($this->user == null)
             return false;
         if ($this->item == null)
             return false;
 
         return Bookmark::query()->where('bookmarkable_id', $this->item->id)
-            ->where('bookmarkable_type')->exists();
+            ->where('bookmarkable_type')
+            ->where('user_id',$this->user->id)->exists();
     }
 
 }

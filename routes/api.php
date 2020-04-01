@@ -22,12 +22,12 @@ Route::prefix('v1')->namespace('Api\V1')->group(function () {
     Route::post('/forgot-passport/create', 'ForgotPasswordController@create');
     Route::post('/forgot-passport/reset', 'ForgotPasswordController@reset');
 
-    Route::get("/version", 'VersionController@get');
+    Route::get("/version", 'VersionController@index');
 
     Route::get('/homes', 'HomeController@index');
     Route::get('/home', 'HomeController@single');
 //        Route::get('/search', 'SearchController@search');
-//
+
     Route::get('/musics', 'MusicController@index');
     Route::get('/music', 'MusicController@single');
 
@@ -48,14 +48,7 @@ Route::prefix('v1')->namespace('Api\V1')->group(function () {
     Route::group(['middleware' => 'auth:api'], function () {
         Route::post("/update", 'UserController@update');
         Route::post("/me", 'UserController@me');
-//
-//            Route::get('/foryou', 'ForYouController@get');
-//            Route::get('/foryou/playlists', 'ForYouController@playlists');
-//            Route::get('/foryou/follows', 'ForYouController@follows');
-//            Route::get('/foryou/likes', 'ForYouController@likes');
-//
-//            Route::post('/playcount/user/add', 'PlayCountController@add');
-//
+
         Route::post('/playlist/create', 'PlaylistController@create');
         Route::post('/playlist/edit', 'PlaylistController@edit');
         Route::post('/playlist/delete', 'PlaylistController@delete');
@@ -66,14 +59,9 @@ Route::prefix('v1')->namespace('Api\V1')->group(function () {
 
         Route::get('/follows', 'FollowController@index');
         Route::post('/follow', 'FollowController@follow');
-//
-//            Route::get('/sync-musics', 'SyncMusicController@get');
-//            Route::post('/sync-music/add', 'SyncMusicController@add');
-//            Route::post('/sync-music/delete', 'SyncMusicController@delete');
-//
-//            Route::get('/histories', 'PlayHistoryController@get');
-//            Route::post('/history/add', 'PlayHistoryController@add');
-//
+
+//        Route::get('/histories', 'PlayHistoryController@get');
+//        Route::post('/history/add', 'PlayHistoryController@add');
 
         Route::get('/notifications', 'NotificationController@index');
 

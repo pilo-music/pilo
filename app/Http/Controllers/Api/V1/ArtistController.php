@@ -6,8 +6,10 @@ use App\Http\Controllers\Api\CustomResponse;
 use App\Http\Controllers\Controller;
 use App\Http\Repositories\V1\Album\AlbumRepo;
 use App\Http\Repositories\V1\Artist\ArtistRepo;
+use App\Http\Repositories\V1\Follow\FollowRepo;
 use App\Http\Repositories\V1\Music\MusicRepo;
 use App\Http\Repositories\V1\Playlist\PlaylistRepo;
+use App\Http\Repositories\V1\Video\VideoRepo;
 use App\Models\Artist;
 use App\Models\Music;
 use Illuminate\Http\Request;
@@ -50,10 +52,12 @@ class ArtistController extends Controller
          */
         return CustomResponse::create([
             'artist' => ArtistRepo::getInstance()->toJson()->setArtist($artist)->build(),
-            'top_songs' => MusicRepo::getInstance()->get()->setArtist($artist)->setSort(Music::SORT_BEST)->setToJson()->build(),
+            'is_follow' => FollowRepo::getInstance()->has()->setArtist($artist)->setUser($request->user())->build(),
+            'best_musics' => MusicRepo::getInstance()->get()->setArtist($artist)->setSort(Music::SORT_BEST)->setToJson()->build(),
             'last_songs' => MusicRepo::getInstance()->get()->setArtist($artist)->setSort(Music::SORT_LATEST)->setToJson()->build(),
             'playlists' => PlaylistRepo::getInstance()->get()->setArtist($artist)->setToJson()->build(),
             'albums' => AlbumRepo::getInstance()->get()->setArtist($artist)->setToJson()->build(),
+            'videos' => VideoRepo::getInstance()->get()->setArtist($artist)->setToJson()->build(),
         ], '', true);
     }
 }

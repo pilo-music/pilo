@@ -56,7 +56,7 @@ class AlbumController extends Controller
             'musics' => AlbumRepo::getInstance()->musics()->setAlbum($album)->setToJson()->build(),
             'related' => $related,
             'has_like' => LikeRepo::getInstance()->has()->setUser($request->user())->setItem($album)->build(),
-            'has_bookmark' => BookmarkRepo::getInstance()->has()->setClient($request->user())->setItem($album)->build(),
+            'has_bookmark' => BookmarkRepo::getInstance()->has()->setUser($request->user())->setItem($album)->build(),
         ], '', true);
     }
 }

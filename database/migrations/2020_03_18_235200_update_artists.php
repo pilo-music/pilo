@@ -18,6 +18,7 @@ class UpdateArtists extends Migration
             $table->unsignedInteger('album_count')->default(0);
             $table->unsignedInteger('followers_count')->default(0);
             $table->unsignedInteger('playlist_count')->default(0);
+            $table->unsignedInteger('video_count')->default(0);
             $table->string('header_image')->nullable();
             $table->string('thumbnail')->nullable();
         });
