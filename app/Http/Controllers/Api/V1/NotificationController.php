@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api\V1;
 use App\Http\Controllers\Api\CustomResponse;
 use App\Http\Controllers\Controller;
 use App\Models\UserNotification;
+use Morilog\Jalali\Jalalian;
 
 class NotificationController extends Controller
 {
@@ -23,7 +24,7 @@ class NotificationController extends Controller
                 'title' => $notification->title ?? "",
                 'url' => $notification->url ?? "",
                 'image' => get_image($notification),
-                'created_at' => $notification->created_at->format("Y-m-d H:i:s"),
+                'created_at' => Jalalian::forge($notification->created_at)->ago(),
                 'is_read' => $notification->is_read,
                 'type' => $this->getType($notification->type),
             ];

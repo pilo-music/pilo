@@ -6,9 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class Message extends Model
 {
-    const TYPE_CONTACTUS = 1;
-    const TYPE_TECHNICAL = 2;
-    const TYPE_COMMENT = 3;
+    const TYPE_TEXT = 1;
+    const TYPE_IMAGE = 2;
 
     const SENDER_ADMIN = 1;
     const SENDER_USER = 2;

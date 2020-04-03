@@ -153,7 +153,7 @@ class Find
             /*
              *  find from name
              */
-            $albums = Album::query()->where('name', 'LIKE', '%' . $this->name . '%')
+            $albums = Album::query()->where('title', 'LIKE', '%' . $this->name . '%')
                 ->where('status', Album::STATUS_ACTIVE);
 
             if (isset($this->artist)) {

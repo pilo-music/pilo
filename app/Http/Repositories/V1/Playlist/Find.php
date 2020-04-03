@@ -192,7 +192,7 @@ class Find
             $playlists = $playlists->skip(($this->page - 1) * $this->count)->take($this->count)->get();
 
             if ($this->toJson) {
-                $playlists = PlaylistRepo::getInstance()->toJsonArray()->setAlbums($playlists)->build();
+                $playlists = PlaylistRepo::getInstance()->toJsonArray()->setPlaylists($playlists)->build();
             }
 
             return $playlists;

@@ -29,18 +29,18 @@ class ToJson
     {
         if ($this->video) {
             return [
-                'slug' => $this->music->slug,
-                'name' => $this->music->title,
-                'cover' => get_image($this->music, 'cover'),
-                'thumbnail' => get_image($this->music, 'thumbnail'),
-                'link128' => preg_replace("/ /", "%20", $music->link128 ?? ""),
-                'link320' => preg_replace("/ /", "%20", $music->link320 ?? ""),
-                'lyric' => $this->music->text ?? "",
-                'like_count' => $this->music->like_count,
-                'play_count' => $this->music->play_count,
-                'created_at' => Carbon::parse($this->music->created_at)->format('D d,Y'),
+                'slug' => $this->video->slug,
+                'title' => $this->video->title,
+                'image' => get_image($this->video, 'image'),
+                'thumbnail' => get_image($this->video, 'thumbnail'),
+                'video480' => preg_replace("/ /", "%20", $this->video->video480 ?? ""),
+                'video720' => preg_replace("/ /", "%20", $this->video->video720 ?? ""),
+                'video1080' => preg_replace("/ /", "%20", $this->video->video1080 ?? ""),
+                'like_count' => $this->video->like_count,
+                'play_count' => $this->video->play_count,
+                'created_at' => Carbon::parse($this->video->created_at)->format('D d,Y'),
                 'type' => 'music',
-                'tags' => ArtistRepo::getInstance()->toJsonArray()->setArtists($this->music->artists()->get())->build()
+                'tags' => ArtistRepo::getInstance()->toJsonArray()->setArtists($this->video->artists()->get())->build()
             ];
         }
         return null;

@@ -26,7 +26,8 @@ Route::prefix('v1')->namespace('Api\V1')->group(function () {
 
     Route::get('/homes', 'HomeController@index');
     Route::get('/home', 'HomeController@single');
-//        Route::get('/search', 'SearchController@search');
+
+    Route::get('/search', 'SearchController@search');
 
     Route::get('/musics', 'MusicController@index');
     Route::get('/music', 'MusicController@single');
@@ -57,8 +58,14 @@ Route::prefix('v1')->namespace('Api\V1')->group(function () {
         Route::get('/likes', 'LikeController@index');
         Route::post('/like', 'LikeController@like');
 
+        Route::get('/bookmarks', 'BookmarkController@index');
+        Route::post('/bookmark', 'BookmarkController@bookmark');
+
         Route::get('/follows', 'FollowController@index');
         Route::post('/follow', 'FollowController@follow');
+
+        Route::get('/messages', 'MessageController@index');
+        Route::post('/message', 'MessageController@message');
 
 //        Route::get('/histories', 'PlayHistoryController@get');
 //        Route::post('/history/add', 'PlayHistoryController@add');

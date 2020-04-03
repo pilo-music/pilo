@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api\V1;
 use App\Http\Controllers\Api\CustomResponse;
 use App\Http\Controllers\Controller;
 use App\Http\Repositories\V1\Album\AlbumRepo;
+use App\Http\Repositories\V1\Artist\ArtistRepo;
 use App\Http\Repositories\V1\Music\MusicRepo;
 use App\Http\Repositories\V1\Playlist\PlaylistRepo;
 use App\Http\Repositories\V1\Video\VideoRepo;
@@ -12,10 +13,11 @@ use App\Models\Music;
 use App\Models\Playlist;
 use App\Models\Video;
 use Illuminate\Http\Request;
+use Morilog\Jalali\Jalalian;
 
-class LikeController extends Controller
+class BookmarkController extends Controller
 {
-    public function like(Request $request)
+    public function bookmark(Request $request)
     {
         $request->validate([
             'slug' => 'required',
@@ -24,23 +26,23 @@ class LikeController extends Controller
         ]);
 
         $user = auth()->user();
-        $item = $this->getLikeItem($request->slug, $request->type);
+        $item = $this->getBookmarkItem($request->slug, $request->type);
 
         if (!$item['item']) {
             abort(404);
         }
 
-        $like = $user->likes()->where('likeable_id', $item['item']->id)
-            ->where('likeable_type', get_class($item['item']))
+        $bookmark = $user->bookmarks()->where('bookmarkable_id', $item['item']->id)
+            ->where('bookmarkable_type', get_class($item['item']))
             ->first();
 
-        if ($request->action == "add" && !$like) {
-            $user->likes()->create([
-                'likeable_id' => $item['item']->id,
-                "likeable_type" => get_class($item['item'])
+        if ($request->action == "add" && !$bookmark) {
+            $user->bookmarks()->create([
+                'bookmarkable_id' => $item['item']->id,
+                "bookmarkable_type" => get_class($item['item'])
             ]);
-        } elseif ($request->action == "remove" && $like) {
-            $like->delete();
+        } elseif ($request->action == "remove" && $bookmark) {
+            $bookmark->delete();
         }
         return CustomResponse::create($item['json'], "", true);
     }
@@ -48,18 +50,18 @@ class LikeController extends Controller
     public function index()
     {
         $user = auth()->user();
-        $likes = $user->likes()->latest()->get();
+        $bookmarks = $user->bookmarks()->latest()->get();
 
         $return_info = [];
-        foreach ($likes as $like) {
-            if ($like->likeable_type == get_class(new Music())) {
-                $item = MusicRepo::getInstance()->find()->setId($like->likeable_id)->setToJson()->build();
-            } else if ($like->likeable_type == get_class(new Video())) {
-                $item = VideoRepo::getInstance()->find()->setId($like->likeable_id)->setToJson()->build();
-            } elseif ($like->likeable_type == get_class(new Playlist())) {
-                $item = PlaylistRepo::getInstance()->find()->setId($like->likeable_id)->setToJson()->build();
+        foreach ($bookmarks as $bookmark) {
+            if ($bookmark->bookmarkable_type == get_class(new Music())) {
+                $item = MusicRepo::getInstance()->find()->setId($bookmark->bookmarkable_id)->setToJson()->build();
+            } else if ($bookmark->bookmarkable_type == get_class(new Video())) {
+                $item = VideoRepo::getInstance()->find()->setId($bookmark->bookmarkable_id)->setToJson()->build();
+            } elseif ($bookmark->bookmarkable_type == get_class(new Playlist())) {
+                $item = PlaylistRepo::getInstance()->find()->setId($bookmark->bookmarkable_id)->setToJson()->build();
             } else {
-                $item = AlbumRepo::getInstance()->find()->setId($like->likeable_id)->setToJson()->build();
+                $item = AlbumRepo::getInstance()->find()->setId($bookmark->bookmarkable_id)->setToJson()->build();
             }
             if (!$item) {
                 continue;
@@ -70,7 +72,7 @@ class LikeController extends Controller
     }
 
 
-    private function getLikeItem($slug, $type)
+    private function getBookmarkItem($slug, $type)
     {
         switch ($type) {
             case "video":
