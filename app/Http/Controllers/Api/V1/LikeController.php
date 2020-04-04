@@ -12,6 +12,7 @@ use App\Models\Music;
 use App\Models\Playlist;
 use App\Models\Video;
 use Illuminate\Http\Request;
+use Morilog\Jalali\Jalalian;
 
 class LikeController extends Controller
 {
@@ -50,7 +51,7 @@ class LikeController extends Controller
         $user = auth()->user();
         $likes = $user->likes()->latest()->get();
 
-        $return_info = [];
+        $data = [];
         foreach ($likes as $like) {
             if ($like->likeable_type == get_class(new Music())) {
                 $item = MusicRepo::getInstance()->find()->setId($like->likeable_id)->setToJson()->build();
@@ -64,9 +65,14 @@ class LikeController extends Controller
             if (!$item) {
                 continue;
             }
-            $return_info[] = $item;
+            $type = explode("\\", $like->bookmarkable_type);
+            $data[] = [
+                'item' => $item,
+                'type' => strtolower($type[count($type) - 1]),
+                'created_at' => Jalalian::forge($like->created_at)->ago()
+            ];
         }
-        return CustomResponse::create($return_info, '', true);
+        return CustomResponse::create($data, '', true);
     }
 
 

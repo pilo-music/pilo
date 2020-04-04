@@ -52,7 +52,7 @@ class BookmarkController extends Controller
         $user = auth()->user();
         $bookmarks = $user->bookmarks()->latest()->get();
 
-        $return_info = [];
+        $data = [];
         foreach ($bookmarks as $bookmark) {
             if ($bookmark->bookmarkable_type == get_class(new Music())) {
                 $item = MusicRepo::getInstance()->find()->setId($bookmark->bookmarkable_id)->setToJson()->build();
@@ -66,9 +66,14 @@ class BookmarkController extends Controller
             if (!$item) {
                 continue;
             }
-            $return_info[] = $item;
+            $type = explode("\\", $bookmark->bookmarkable_type);
+            $data[] = [
+                'item' => $item,
+                'type' => strtolower($type[count($type) - 1]),
+                'created_at' => Jalalian::forge($bookmark->created_at)->ago()
+            ];
         }
-        return CustomResponse::create($return_info, '', true);
+        return CustomResponse::create($data, '', true);
     }
 
 
