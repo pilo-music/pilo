@@ -13,7 +13,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Laravel\Socialite\Facades\Socialite;
-use Tymon\JWTAuth\Facades\JWTAuth;
 
 class AuthController extends Controller
 {
@@ -64,7 +63,7 @@ class AuthController extends Controller
                 Mail::to($user->email)->send(new VerifyMail($code->code));
                 return CustomResponse::create([
                     'status' => 'verify'
-                ], '', true);
+                ], __("messages.verify_code_sent"), true);
             }
         }
 
@@ -83,15 +82,20 @@ class AuthController extends Controller
         $request->validate([
             'email' => 'required|email|max:190',
             'password' => 'required|confirmed|min:6',
-            'name' => 'required|max:190'
+            'name' => 'max:190'
         ]);
 
         if (User::query()->where('email', trim($request->email))->exists()) {
             return CustomResponse::create(null, __("messages.email_exists"), false);
         }
 
+        $name = $request->name;
+        if (!$request->name || $request->name == "") {
+            $name = explode('@', $request->email)[0];
+        }
+
         $user = User::query()->create([
-            'name' => $request->name,
+            'name' => $name,
             'password' => bcrypt($request->password),
             'email' => $request->email
         ]);
