@@ -22,6 +22,7 @@ class Home extends Model
     const TYPE_PLAYLIST_GRID = 8;
     const TYPE_MUSIC_GRID = 9;
     const TYPE_MUSIC_TRENDING = 10;
+    const TYPE_VIDEOS = 10;
 
     const SORT_LATEST = "latest";
     const SORT_BEST = "best";

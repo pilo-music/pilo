@@ -27,3 +27,5 @@ php artisan down
 @endif
 
 php artisan cache:clear
+
+@endtask

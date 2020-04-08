@@ -9,6 +9,7 @@ use App\Http\Repositories\V1\Artist\ArtistRepo;
 use App\Http\Repositories\V1\Music\MusicRepo;
 use App\Http\Repositories\V1\Playlist\PlaylistRepo;
 use App\Http\Repositories\V1\Promotion\PromotionRepo;
+use App\Http\Repositories\V1\Video\VideoRepo;
 use App\Models\Album;
 use App\Models\Home;
 use App\Models\Music;
@@ -75,6 +76,9 @@ class HomeController extends Controller
                 break;
             case Home::TYPE_MUSIC_TRENDING:
                 $return_info = $this->getMusics($item, "trending");
+                break;
+            case Home::TYPE_VIDEOS:
+                $return_info = $this->getVideos($item, "videos");
                 break;
             default:
                 $return_info = [];
@@ -253,6 +257,28 @@ class HomeController extends Controller
             'name' => $home->name,
             'type' => $type,
             'data' => $data
+        ];
+    }
+
+    private function getVideos($home, $type)
+    {
+        $videos = [];
+        if (!$this->checkHomeValue($home)) {
+            $videos = VideoRepo::getInstance()->get()->setSort($home->sort)->setCount($home->count)->setToJson();
+        } else {
+            $items = $this->explodeHomeItems($home);
+            foreach ($items as $item) {
+                $video = VideoRepo::getInstance()->find()->setId($item)->setToJson()->build();
+                if ($video)
+                    $videos[] = $video;
+            }
+        }
+
+        return [
+            'id' => $home->id,
+            'name' => $home->name,
+            'type' => $type,
+            'data' => $videos
         ];
     }
 
