@@ -178,7 +178,7 @@ class HomeController extends Controller
             'id' => $home->id,
             'name' => $home->name,
             'type' => $type,
-            'data' => $playlists
+            'items' => $playlists
         ];
     }
 
