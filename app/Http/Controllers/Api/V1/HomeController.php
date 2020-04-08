@@ -80,6 +80,9 @@ class HomeController extends Controller
             case Home::TYPE_VIDEOS:
                 $return_info = $this->getVideos($item, "videos");
                 break;
+            case Home::TYPE_MUSIC_VERTICAL:
+                $return_info = $this->getMusics($item, "music_vertical");
+                break;
             default:
                 $return_info = [];
                 break;
