@@ -38,8 +38,9 @@ class ToJson
                 'video1080' => preg_replace("/ /", "%20", $this->video->video1080 ?? ""),
                 'like_count' => $this->video->like_count,
                 'play_count' => $this->video->play_count,
+                'artist' => ArtistRepo::getInstance()->toJson()->setArtist($this->video->artist)->build(),
                 'created_at' => Carbon::parse($this->video->created_at)->format('D d,Y'),
-                'type' => 'music',
+                'type' => 'video',
                 'tags' => ArtistRepo::getInstance()->toJsonArray()->setArtists($this->video->artists()->get())->build()
             ];
         }

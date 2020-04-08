@@ -53,6 +53,7 @@ class Artist extends Model
     {
         return $this->morphedByMany(Music::class, 'artistable');
     }
+
     public function tagAlbums()
     {
         return $this->morphedByMany(Album::class, 'artistable');
@@ -63,6 +64,10 @@ class Artist extends Model
         return $this->morphedByMany(Video::class, 'artistable');
     }
 
+    public function tagPlaylist()
+    {
+        return $this->morphedByMany(Playlist::class, 'artistable');
+    }
 
     public function follows()
     {

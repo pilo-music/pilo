@@ -48,10 +48,10 @@ class VideoController extends Controller
          * @todo make better related music
          */
         return CustomResponse::create([
-            'music' => VideoRepo::getInstance()->toJson()->setVideo($video)->build(),
+            'video' => VideoRepo::getInstance()->toJson()->setVideo($video)->build(),
             'related' => VideoRepo::getInstance()->get()->setArtist($video->artist)->setToJson()->build(),
             'has_like' => LikeRepo::getInstance()->has()->setUser($request->user())->setItem($video)->build(),
-            'has_bookmark' => BookmarkRepo::getInstance()->has()->setClient($request->user())->setItem($video)->build(),
+            'has_bookmark' => BookmarkRepo::getInstance()->has()->setUser($request->user())->setItem($video)->build(),
         ], '', true);
     }
 }

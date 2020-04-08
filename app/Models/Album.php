@@ -49,11 +49,6 @@ class Album extends Model
         return $this->morphMany(Comment::class, 'commentable');
     }
 
-    public function tags()
-    {
-        return $this->morphMany(Tag::class, 'tagable');
-    }
-
     public function musics()
     {
         return $this->hasMany(Music::class);
