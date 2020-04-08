@@ -92,7 +92,7 @@ class HomeController extends Controller
     {
         $artists = [];
         if (!$this->checkHomeValue($home)) {
-            $artists = ArtistRepo::getInstance()->get()->setCount($home->count)->setSort($home->sort)->setToJson();
+            $artists = ArtistRepo::getInstance()->get()->setCount($home->count)->setSort($home->sort)->setToJson()->build();
         } else {
             $items = $this->explodeHomeItems($home);
             foreach ($items as $item) {
@@ -115,7 +115,7 @@ class HomeController extends Controller
     {
         $musics = [];
         if (!$this->checkHomeValue($home)) {
-            $musics = MusicRepo::getInstance()->get()->setSort($home->sort)->setCount($home->count)->setToJson();
+            $musics = MusicRepo::getInstance()->get()->setSort($home->sort)->setCount($home->count)->setToJson()->build();
         } else {
             $items = $this->explodeHomeItems($home);
             foreach ($items as $item) {
@@ -264,7 +264,7 @@ class HomeController extends Controller
     {
         $videos = [];
         if (!$this->checkHomeValue($home)) {
-            $videos = VideoRepo::getInstance()->get()->setSort($home->sort)->setCount($home->count)->setToJson();
+            $videos = VideoRepo::getInstance()->get()->setSort($home->sort)->setCount($home->count)->setToJson()->build();
         } else {
             $items = $this->explodeHomeItems($home);
             foreach ($items as $item) {
