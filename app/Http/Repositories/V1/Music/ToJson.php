@@ -38,7 +38,7 @@ class ToJson
                 'lyric' => $this->music->text ?? "",
                 'like_count' => $this->music->like_count,
                 'play_count' => $this->music->play_count,
-                'artist' => ArtistRepo::getInstance()->toJson()->setArtist($this->album->artist)->build(),
+                'artist' => ArtistRepo::getInstance()->toJson()->setArtist($this->music->artist)->build(),
                 'tags' => ArtistRepo::getInstance()->toJsonArray()->setArtists($this->music->artists()->get())->build(),
                 'created_at' => Carbon::parse($this->music->created_at)->format('D d,Y'),
                 'type' => 'music',
