@@ -31,7 +31,7 @@ class ToJson
             return [
                 'slug' => $this->music->slug,
                 'title' => $this->music->title,
-                'image' => get_image($this->music, 'cover'),
+                'image' => get_image($this->music, 'image'),
                 'thumbnail' => get_image($this->music, 'thumbnail'),
                 'link128' => preg_replace("/ /", "%20", $music->link128 ?? ""),
                 'link320' => preg_replace("/ /", "%20", $music->link320 ?? ""),
