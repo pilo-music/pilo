@@ -54,7 +54,7 @@ class ArtistController extends Controller
             'artist' => ArtistRepo::getInstance()->toJson()->setArtist($artist)->build(),
             'is_follow' => FollowRepo::getInstance()->has()->setArtist($artist)->setUser($request->user())->build(),
             'best_musics' => MusicRepo::getInstance()->get()->setArtist($artist)->setSort(Music::SORT_BEST)->setToJson()->build(),
-            'last_songs' => MusicRepo::getInstance()->get()->setArtist($artist)->setSort(Music::SORT_LATEST)->setToJson()->build(),
+            'last_musics' => MusicRepo::getInstance()->get()->setArtist($artist)->setSort(Music::SORT_LATEST)->setToJson()->build(),
             'playlists' => PlaylistRepo::getInstance()->get()->setArtist($artist)->setToJson()->build(),
             'albums' => AlbumRepo::getInstance()->get()->setArtist($artist)->setToJson()->build(),
             'videos' => VideoRepo::getInstance()->get()->setArtist($artist)->setToJson()->build(),
