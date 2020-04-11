@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Repositories\V1\Artist\ArtistRepo;
 use App\Models\Follow;
 use Illuminate\Http\Request;
+use Morilog\Jalali\Jalalian;
 
 class FollowController extends Controller
 {
@@ -50,7 +51,10 @@ class FollowController extends Controller
         foreach ($user->follows()->get() as $item) {
             $artist = ArtistRepo::getInstance()->find()->setId($item->artist_id)->setToJson()->build();
             if ($artist) {
-                $data[] = $artist;
+                $data[] = [
+                    'created_at' => Jalalian::forge($item->created_at)->ago(),
+                    'artist' => $artist
+                ];
             }
         }
 
