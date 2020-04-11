@@ -54,7 +54,7 @@ class AlbumController extends Controller
         return CustomResponse::create([
             'album' => AlbumRepo::getInstance()->toJson()->setAlbum($album)->build(),
             'musics' => AlbumRepo::getInstance()->musics()->setAlbum($album)->setToJson()->build(),
-            'related' => $related,
+            'related' => AlbumRepo::getInstance()->toJsonArray()->setAlbums($related)->build(),
             'has_like' => LikeRepo::getInstance()->has()->setUser($request->user())->setItem($album)->build(),
             'has_bookmark' => BookmarkRepo::getInstance()->has()->setUser($request->user())->setItem($album)->build(),
         ], '', true);
