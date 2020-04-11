@@ -39,8 +39,8 @@ class Musics
 
     public function build()
     {
-        if (isset($album)) {
-            return MusicRepo::getInstance()->toJsonArray()->setMusics($album->musics()->get())->build();
+        if (isset($this->album)) {
+            return MusicRepo::getInstance()->toJsonArray()->setMusics($this->album->musics()->get())->build();
         }
         return [];
     }
