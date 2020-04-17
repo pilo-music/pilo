@@ -65,7 +65,7 @@ class LikeController extends Controller
             if (!$item) {
                 continue;
             }
-            $type = explode("\\", $like->bookmarkable_type);
+            $type = explode("\\", $like->likeable_type);
             $data[] = [
                 'item' => $item,
                 'type' => strtolower($type[count($type) - 1]),
