@@ -17,6 +17,7 @@ use Illuminate\Http\Request;
 
 class HomeController extends Controller
 {
+    protected $page = 1;
 
     public function index()
     {
@@ -38,6 +39,7 @@ class HomeController extends Controller
         $request->validate([
             'id' => 'required|exists:homes'
         ]);
+        $this->page = $request->page ?? 1;
         /**
          * get params
          */
@@ -95,7 +97,7 @@ class HomeController extends Controller
     {
         $artists = [];
         if (!$this->checkHomeValue($home)) {
-            $artists = ArtistRepo::getInstance()->get()->setCount($home->count)->setSort($home->sort)->setToJson()->build();
+            $artists = ArtistRepo::getInstance()->get()->setCount($home->count)->setSort($home->sort)->setPage($this->page)->setToJson()->build();
         } else {
             $items = $this->explodeHomeItems($home);
             foreach ($items as $item) {
@@ -118,7 +120,7 @@ class HomeController extends Controller
     {
         $musics = [];
         if (!$this->checkHomeValue($home)) {
-            $musics = MusicRepo::getInstance()->get()->setSort($home->sort)->setCount($home->count)->setToJson()->build();
+            $musics = MusicRepo::getInstance()->get()->setSort($home->sort)->setCount($home->count)->setPage($this->page)->setToJson()->build();
         } else {
             $items = $this->explodeHomeItems($home);
             foreach ($items as $item) {
@@ -141,7 +143,7 @@ class HomeController extends Controller
     {
         $albums = [];
         if (!$this->checkHomeValue($home)) {
-            $albums = AlbumRepo::getInstance()->get()->setSort($home->sort)->setCount($home->count)->setToJson()->build();
+            $albums = AlbumRepo::getInstance()->get()->setSort($home->sort)->setCount($home->count)->setPage($this->page)->setToJson()->build();
         } else {
             $items = $this->explodeHomeItems($home);
             foreach ($items as $item) {
@@ -167,11 +169,12 @@ class HomeController extends Controller
         if (!$this->checkHomeValue($home)) {
             $playlists = PlaylistRepo::getInstance()->get()->setSort($home->sort)
                 ->setCount($home->count)
+                ->setPage($this->page)
                 ->setToJson()->build();
         } else {
             $items = $this->explodeHomeItems($home);
             foreach ($items as $item) {
-                $playlist = PlaylistRepo::getInstance()->find()->setId($item)->setToJson()->build();
+                $playlist = PlaylistRepo::getInstance()->find()->setId($item)->setPage($this->page)->setToJson()->build();
                 if ($playlist)
                     $playlists[] = $playlist;
             }
@@ -216,19 +219,21 @@ class HomeController extends Controller
             $musics = Music::query()->where('created_at', '>', now()->subDays(7))
                 ->where('status', Music::STATUS_ACTIVE)
                 ->latest()
+                ->skip($this->page)
                 ->take(7)->get();
 
             $albums = Album::query()->where('status', 1)
                 ->where('status', Album::STATUS_ACTIVE)
                 ->where('created_at', '>', now()->subDays(7))
+                ->skip($this->page)
                 ->latest()->get();
 
         } else {
             $limit = 18;
             $musics = MusicRepo::getInstance()->get()->setSort(Music::SORT_LATEST)
-                ->setCount(9)->build();
+                ->setCount(9)->setPage($this->page)->build();
             $albums = AlbumRepo::getInstance()->get()->setSort(Album::SORT_LATEST)
-                ->setCount(9)->build();
+                ->setCount(9)->setPage($this->page)->build();
         }
 
 
@@ -267,7 +272,7 @@ class HomeController extends Controller
     {
         $videos = [];
         if (!$this->checkHomeValue($home)) {
-            $videos = VideoRepo::getInstance()->get()->setSort($home->sort)->setCount($home->count)->setToJson()->build();
+            $videos = VideoRepo::getInstance()->get()->setSort($home->sort)->setCount($home->count)->setPage($this->page)->setToJson()->build();
         } else {
             $items = $this->explodeHomeItems($home);
             foreach ($items as $item) {
