@@ -49,7 +49,10 @@ class LikeController extends Controller
     public function index()
     {
         $user = auth()->user();
-        $likes = $user->likes()->latest()->get();
+        $page = \request()->page ?? 1;
+        $count = \request()->count ?? 15;
+
+        $likes = $user->likes()->skip(($page - 1) * $count)->take($count)->get();
 
         $data = [];
         foreach ($likes as $like) {

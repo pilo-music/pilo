@@ -50,7 +50,9 @@ class BookmarkController extends Controller
     public function index()
     {
         $user = auth()->user();
-        $bookmarks = $user->bookmarks()->latest()->get();
+        $page = \request()->page ?? 1;
+        $count = \request()->count ?? 15;
+        $bookmarks = $user->bookmarks()->skip(($page - 1) * $count)->take($count)->get();
 
         $data = [];
         foreach ($bookmarks as $bookmark) {
