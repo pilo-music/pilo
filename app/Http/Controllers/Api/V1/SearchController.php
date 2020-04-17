@@ -19,18 +19,67 @@ class SearchController extends Controller
             'query' => 'required|max:50|min:1'
         ]);
 
-        $musics = MusicRepo::getInstance()->find()->setName($request->input('query'))->setToJson()->build();
-        $artists = ArtistRepo::getInstance()->find()->setName($request->input('query'))->setToJson()->build();
-        $videos = VideoRepo::getInstance()->find()->setName($request->input('query'))->setToJson()->build();
-        $albums = AlbumRepo::getInstance()->find()->setName($request->input('query'))->setToJson()->build();
-        $playlist = PlaylistRepo::getInstance()->find()->setName($request->input('query'))->setToJson()->build();
+        $page = $request->page ?? 1;
+        $type = $request->type ?? null;
+
+        if ($type) {
+            switch ($type) {
+                case "music":
+                    $musics = MusicRepo::getInstance()->find()->setName($request->input('query'))->setPage($page)->setToJson()->build();
+                    $artists = [];
+                    $videos = [];
+                    $albums = [];
+                    $playlist = [];
+                    break;
+                case "artist":
+                    $artists = ArtistRepo::getInstance()->find()->setName($request->input('query'))->setPage($page)->setToJson()->build();
+                    $musics = [];
+                    $videos = [];
+                    $albums = [];
+                    $playlist = [];
+                    break;
+                case "video":
+                    $videos = VideoRepo::getInstance()->find()->setName($request->input('query'))->setPage($page)->setToJson()->build();
+                    $albums = [];
+                    $playlist = [];
+                    $musics = [];
+                    $artists = [];
+                    break;
+                case "album":
+                    $albums = AlbumRepo::getInstance()->find()->setName($request->input('query'))->setPage($page)->setToJson()->build();
+                    $musics = [];
+                    $artists = [];
+                    $videos = [];
+                    $playlist = [];
+                    break;
+                case "playlist":
+                    $playlist = PlaylistRepo::getInstance()->find()->setName($request->input('query'))->setPage($page)->setToJson()->build();
+                    $musics = [];
+                    $artists = [];
+                    $videos = [];
+                    $albums = [];
+                    break;
+                default:
+                    $musics = [];
+                    $artists = [];
+                    $videos = [];
+                    $albums = [];
+                    $playlist = [];
+            }
+        } else {
+            $musics = MusicRepo::getInstance()->find()->setName($request->input('query'))->setToJson()->build();
+            $artists = ArtistRepo::getInstance()->find()->setName($request->input('query'))->setToJson()->build();
+            $videos = VideoRepo::getInstance()->find()->setName($request->input('query'))->setToJson()->build();
+            $albums = AlbumRepo::getInstance()->find()->setName($request->input('query'))->setToJson()->build();
+            $playlist = PlaylistRepo::getInstance()->find()->setName($request->input('query'))->setToJson()->build();
+        }
 
         return CustomResponse::create([
             "musics" => $musics,
             "artists" => $artists,
             "videos" => $videos,
             "albums" => $albums,
-            'playlist' => $playlist
+            'playlists' => $playlist
         ], "", true);
 
     }
