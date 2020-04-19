@@ -53,7 +53,7 @@ class MusicController extends Controller
             'music' => MusicRepo::getInstance()->toJson()->setMusic($music)->build(),
             'related' => MusicRepo::getInstance()->get()->setArtist($music->artist)->setToJson()->build(),
             'has_like' => LikeRepo::getInstance()->has()->setUser($request->user())->setItem($music)->build(),
-            'has_bookmark' => BookmarkRepo::getInstance()->has()->setClient($request->user())->setItem($music)->build(),
+            'has_bookmark' => BookmarkRepo::getInstance()->has()->setUser($request->user())->setItem($music)->build(),
         ], '', true);
     }
 }

@@ -3,6 +3,8 @@
 namespace App\Http\Repositories\V1\Music;
 
 use App\Http\Repositories\V1\Artist\ArtistRepo;
+use App\Http\Repositories\V1\Bookmark\BookmarkRepo;
+use App\Http\Repositories\V1\Like\LikeRepo;
 use Carbon\Carbon;
 
 class ToJson
@@ -42,7 +44,8 @@ class ToJson
                 'tags' => ArtistRepo::getInstance()->toJsonArray()->setArtists($this->music->artists()->get())->build(),
                 'created_at' => Carbon::parse($this->music->created_at)->format('D d,Y'),
                 'type' => 'music',
-
+                'has_like' => LikeRepo::getInstance()->has()->setUser(auth()->user())->setItem($this->music)->build(),
+                'has_bookmark' => BookmarkRepo::getInstance()->has()->setUser(auth()->user())->setItem($this->music)->build(),
             ];
         }
         return null;
