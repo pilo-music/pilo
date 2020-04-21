@@ -90,32 +90,31 @@ class SearchController extends Controller
     private function getRecommend($q)
     {
         $q = preg_replace("/ /", "+", $q ?? "");
-//        try {
-            $result = Http::get('https://www.google.com/search?q='.$q);
+        try {
+            $result = Http::get('https://www.google.com/search?q=' . $q);
             $result = $result->body();
             $crawler = new Crawler($result);
             $crawler = $crawler->filter('div.MUxGbd');
             $crawler = $crawler->first()->text();
-            echo  $result;
-            die;
-            $crawler = explode("Showing results for", $crawler);
 
-            if (count($crawler) > 0) {
-                $crawler = $crawler[1];
-                $crawler = explode("(function()", $crawler);
-                if (count($crawler) > 0)
-                    return trim($crawler[0]);
+            $rec = explode("Showing results for", $crawler);
+
+            if (count($rec) > 0) {
+                $rec = $rec[1];
+                $rec = explode("(function()", $rec);
+                if (count($rec) > 0)
+                    return trim($rec[0]);
             } else {
-                $crawler = explode(': ', $crawler->first()->text());
-                if (count($crawler) > 0) {
-                    return trim($crawler[1]);
+                $rec = explode(': ', $crawler);
+                if (count($rec) > 0) {
+                    return trim($rec[1]);
                 }
             }
 
             return "";
-//        }catch (\Exception $e){
-//            return "";
-//        }
+        } catch (\Exception $e) {
+            return "";
+        }
     }
 
 }
