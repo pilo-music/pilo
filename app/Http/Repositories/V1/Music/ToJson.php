@@ -42,6 +42,7 @@ class ToJson
                 'play_count' => $this->music->play_count,
                 'artist' => ArtistRepo::getInstance()->toJson()->setArtist($this->music->artist)->build(),
                 'tags' => ArtistRepo::getInstance()->toJsonArray()->setArtists($this->music->artists()->get())->build(),
+                "share_url" => "https://pilo.app/music/".$this->music->slug,
                 'created_at' => Carbon::parse($this->music->created_at)->format('D d,Y'),
                 'type' => 'music',
                 'has_like' => LikeRepo::getInstance()->has()->setUser(auth()->user())->setItem($this->music)->build(),

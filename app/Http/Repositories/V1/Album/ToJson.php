@@ -40,6 +40,7 @@ class ToJson
                 'like_count' => $this->album->like_count,
                 'play_count' => $this->album->play_count,
                 'artist' => ArtistRepo::getInstance()->toJson()->setArtist($this->album->artist)->build(),
+                "share_url" => "https://pilo.app/album/".$this->album->slug,
                 'created_at' => Carbon::parse($this->album->created_at)->format('D d,Y'),
                 'type' => 'album',
             ];

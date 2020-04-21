@@ -42,6 +42,7 @@ class ToJson
                 'music_count' => $this->playlist->music_count,
                 'like_count' => $this->playlist->like_count,
                 'play_count' => $this->playlist->play_count,
+                "share_url" => "https://pilo.app/playlist/".$this->playlist->slug,
                 'created_at' => Carbon::parse($this->playlist->created_at)->format('D d,Y'),
                 'type' => 'playlist'
             ];

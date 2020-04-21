@@ -39,6 +39,7 @@ class ToJson
                 'like_count' => $this->video->like_count,
                 'play_count' => $this->video->play_count,
                 'artist' => ArtistRepo::getInstance()->toJson()->setArtist($this->video->artist)->build(),
+                "share_url" => "https://pilo.app/playlist/".$this->video->slug,
                 'created_at' => Carbon::parse($this->video->created_at)->format('D d,Y'),
                 'type' => 'video',
                 'tags' => ArtistRepo::getInstance()->toJsonArray()->setArtists($this->video->artists()->get())->build()

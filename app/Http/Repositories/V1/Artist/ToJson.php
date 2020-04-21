@@ -37,6 +37,7 @@ class ToJson
                 'video_count' => $this->artist->music_count,
                 'followers_count' => $this->artist->followers_count,
                 'playlist_count' => $this->artist->playlist_count,
+                "share_url" => "https://pilo.app/artist/".$this->artist->slug,
                 'created_at' => date('Y-m-d', strtotime($this->artist->created_at)),
                 'type' => 'artist',
             ];
