@@ -89,32 +89,13 @@ class SearchController extends Controller
 
     private function getRecommend($q)
     {
-        $q = preg_replace("/ /", "+", $q ?? "");
-//        try {
-            $result = Http::get("https://www.google.com/search?client=ubuntu&channel=fs&q=$q&ie=utf-8&oe=utf-8");
-            $result = $result->body();
-            dd($result);
-            $crawler = new Crawler($result);
-            $crawler = $crawler->filter('div.MUxGbd');
-            $crawler = $crawler->first()->text();
-            $rec = explode("Showing results for", $crawler);
-
-            if (count($rec) > 0) {
-                $rec = $rec[1];
-                $rec = explode("(function()", $rec);
-                if (count($rec) > 0)
-                    return trim($rec[0]);
-            } else {
-                $rec = explode(': ', $crawler);
-                if (count($rec) > 0) {
-                    return trim($rec[1]);
-                }
-            }
-
+        try {
+            $result = Http::get("https://www.googleapis.com/customsearch/v1?key=AIzaSyCx6JQt1pez7jr9euWMfJQU40QtTxdkjO0&cx=017576662512468239146:omuauf_lfve&q=" . $q);
+            $result = json_decode($result->body());
+            return ($result->spelling->correctedQuery);
+        } catch (\Exception $e) {
             return "";
-//        } catch (\Exception $e) {
-//            return "";
-//        }
+        }
     }
 
 }
