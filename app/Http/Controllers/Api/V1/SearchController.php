@@ -89,13 +89,13 @@ class SearchController extends Controller
 
     private function getRecommend($q)
     {
-        try {
+//        try {
             $result = Http::get("https://www.googleapis.com/customsearch/v1?key=AIzaSyCx6JQt1pez7jr9euWMfJQU40QtTxdkjO0&cx=017576662512468239146:omuauf_lfve&q=" . $q);
             $result = json_decode($result->body());
             return ($result->spelling->correctedQuery);
-        } catch (\Exception $e) {
-            return "";
-        }
+//        } catch (\Exception $e) {
+//            return "";
+//        }
     }
 
 }
