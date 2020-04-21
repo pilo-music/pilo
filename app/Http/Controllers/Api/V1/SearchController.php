@@ -90,7 +90,7 @@ class SearchController extends Controller
     private function getRecommend($q)
     {
         $q = preg_replace("/ /", "+", $q ?? "");
-        try {
+//        try {
             $result = Http::get('https://www.google.com/search?q=بهنام+بنی');
             $result = $result->body();
             $crawler = new Crawler($result);
@@ -112,9 +112,9 @@ class SearchController extends Controller
             }
 
             return "";
-        }catch (\Exception $e){
-            return "";
-        }
+//        }catch (\Exception $e){
+//            return "";
+//        }
     }
 
 }
