@@ -10,6 +10,8 @@ use App\Http\Repositories\V1\Music\MusicRepo;
 use App\Http\Repositories\V1\Playlist\PlaylistRepo;
 use App\Http\Repositories\V1\Video\VideoRepo;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Http;
+use Symfony\Component\DomCrawler\Crawler;
 
 class SearchController extends Controller
 {
@@ -75,6 +77,7 @@ class SearchController extends Controller
         }
 
         return CustomResponse::create([
+            "recommend" => $this->getRecommend($request->input("query")),
             "musics" => $musics,
             "artists" => $artists,
             "videos" => $videos,
@@ -82,6 +85,36 @@ class SearchController extends Controller
             'playlists' => $playlist
         ], "", true);
 
+    }
+
+    private function getRecommend($q)
+    {
+        $q = preg_replace("/ /", "+", $q ?? "");
+        try {
+            $result = Http::get('https://www.google.com/search?q=بهنام+بنی');
+            $result = $result->body();
+            $crawler = new Crawler($result);
+            $crawler = $crawler->filter('div.MUxGbd');
+            $crawler = $crawler->first()->text();
+
+            $crawler = explode("Showing results for", $crawler);
+
+            if (count($crawler) > 0) {
+                $crawler = $crawler[1];
+                $crawler = explode("(function()", $crawler);
+                if (count($crawler) > 0)
+                    return trim($crawler[0]);
+            } else {
+                $crawler = explode(': ', $crawler->first()->text());
+                if (count($crawler) > 0) {
+                    return trim($crawler[1]);
+                }
+            }
+
+            return "";
+        }catch (\Exception $e){
+            return "";
+        }
     }
 
 }
