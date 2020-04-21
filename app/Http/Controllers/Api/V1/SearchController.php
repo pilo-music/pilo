@@ -93,6 +93,8 @@ class SearchController extends Controller
 //        try {
             $result = Http::get('https://www.google.com/search?q=' . $q);
             $result = $result->body();
+            dd($result);
+
             $crawler = new Crawler($result);
             $crawler = $crawler->filter('div.MUxGbd');
             $crawler = $crawler->first()->text();
