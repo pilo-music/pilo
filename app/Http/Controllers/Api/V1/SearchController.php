@@ -96,7 +96,7 @@ class SearchController extends Controller
             $crawler = new Crawler($result);
             $crawler = $crawler->filter('div.MUxGbd');
             $crawler = $crawler->first()->text();
-            echo  $crawler;
+            echo  $result;
             die;
             $crawler = explode("Showing results for", $crawler);
 
