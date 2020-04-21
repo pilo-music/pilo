@@ -91,7 +91,7 @@ class SearchController extends Controller
     {
         $q = preg_replace("/ /", "+", $q ?? "");
 //        try {
-            $result = Http::get('https://www.google.com/search?q=بهنام+بنی');
+            $result = Http::get('https://www.google.com/search?q='.$q);
             $result = $result->body();
             $crawler = new Crawler($result);
             $crawler = $crawler->filter('div.MUxGbd');
