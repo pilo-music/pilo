@@ -11,8 +11,4 @@
 |
 */
 
-use mikehaertl\shellcommand\Command;
-
 Route::get('/', "HomeController@index");
-
-Route::get('/test', "HomeController@test");
