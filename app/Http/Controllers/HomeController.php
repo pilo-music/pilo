@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Jobs\TestJob;
 use Illuminate\Http\Request;
 use mikehaertl\shellcommand\Command;
 
@@ -9,14 +10,7 @@ class HomeController extends Controller
 {
     public function index()
     {
-        echo 'ok';
-        $command = "/usr/local/bin/deez-dw -l https://open.spotify.com/track/0SxjNrhMwarsbcgEy0pavJ -o /home/1587560780507190 /home/deezloader/setting.ini";
-        $command = new Command($command);
-        if (!$command->execute()) {
-            echo  "error";
-            dd($command->getError());
-        }
-        dd($command->getOutput());
+       TestJob::dispatch();
     }
 
     public function test()
