@@ -14,7 +14,7 @@ class HomeController extends Controller
         $command = new Command($command);
         if (!$command->execute()) {
             echo  "error";
-            dd($command->getOutput());
+            dd($command->getError());
         }
         dd($command->getOutput());
     }
