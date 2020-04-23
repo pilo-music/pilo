@@ -21,4 +21,5 @@ Route::get('/test',function(){
     if (!$command->execute()) {
         dd($command->getOutput());
     }
+    dd($command->getOutput());
 });
