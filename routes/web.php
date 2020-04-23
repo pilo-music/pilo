@@ -11,4 +11,14 @@
 |
 */
 
+use mikehaertl\shellcommand\Command;
+
 Route::get('/', "HomeController@index");
+
+Route::get('test',function(){
+    $command = "deez-dw -l https://open.spotify.com/track/0SxjNrhMwarsbcgEy0pavJ -o /home /home/deezloader/setting.ini";
+    $command = new Command($command);
+    if (!$command->execute()) {
+        dd($command->getOutput());
+    }
+});

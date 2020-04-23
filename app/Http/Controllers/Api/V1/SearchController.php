@@ -89,6 +89,7 @@ class SearchController extends Controller
 
     private function getRecommend($q)
     {
+//        m.parsijoo.ir/mobile-arbiter/MobileArbiter/webservlet?utm-source=cafebazaar&type=result&Version=1&nrpp=10&co=0&query=بهنام بانی
         try {
             $result = Http::get("https://www.googleapis.com/customsearch/v1?key=AIzaSyCx6JQt1pez7jr9euWMfJQU40QtTxdkjO0&cx=017576662512468239146:omuauf_lfve&q=" . $q);
             $result = json_decode($result->body());
