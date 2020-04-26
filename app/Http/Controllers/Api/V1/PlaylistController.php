@@ -58,8 +58,8 @@ class PlaylistController extends Controller
         return CustomResponse::create([
             'playlist' => PlaylistRepo::getInstance()->toJson()->setPlaylist($playlist)->build(),
             'musics' => PlaylistRepo::getInstance()->musics()->setPlaylist($playlist)->setToJson()->build(),
-            'has_like' => LikeRepo::getInstance()->has()->setUser($request->user())->setItem($playlist)->build(),
-            'has_bookmark' => BookmarkRepo::getInstance()->has()->setUser($request->user())->setItem($playlist)->build(),
+            'has_like' => LikeRepo::getInstance()->has()->setUser($request->user("api"))->setItem($playlist)->build(),
+            'has_bookmark' => BookmarkRepo::getInstance()->has()->setUser($request->user("api"))->setItem($playlist)->build(),
         ], '', true);
     }
 

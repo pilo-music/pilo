@@ -50,8 +50,8 @@ class VideoController extends Controller
         return CustomResponse::create([
             'video' => VideoRepo::getInstance()->toJson()->setVideo($video)->build(),
             'related' => VideoRepo::getInstance()->get()->setArtist($video->artist)->setToJson()->build(),
-            'has_like' => LikeRepo::getInstance()->has()->setUser($request->user())->setItem($video)->build(),
-            'has_bookmark' => BookmarkRepo::getInstance()->has()->setUser($request->user())->setItem($video)->build(),
+            'has_like' => LikeRepo::getInstance()->has()->setUser($request->user("api"))->setItem($video)->build(),
+            'has_bookmark' => BookmarkRepo::getInstance()->has()->setUser($request->user("api"))->setItem($video)->build(),
         ], '', true);
     }
 }

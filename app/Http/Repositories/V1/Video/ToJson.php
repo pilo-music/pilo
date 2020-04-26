@@ -25,7 +25,7 @@ class ToJson
     }
 
 
-    public function build(): array
+    public function build()
     {
         if ($this->video) {
             return [

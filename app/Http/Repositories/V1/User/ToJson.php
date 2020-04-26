@@ -26,7 +26,7 @@ class ToJson
         return $this;
     }
 
-    public function build(): array
+    public function build()
     {
         if ($this->user) {
             return [

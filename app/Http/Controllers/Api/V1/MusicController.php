@@ -52,8 +52,8 @@ class MusicController extends Controller
         return CustomResponse::create([
             'music' => MusicRepo::getInstance()->toJson()->setMusic($music)->build(),
             'related' => MusicRepo::getInstance()->get()->setArtist($music->artist)->setToJson()->build(),
-            'has_like' => LikeRepo::getInstance()->has()->setUser($request->user())->setItem($music)->build(),
-            'has_bookmark' => BookmarkRepo::getInstance()->has()->setUser($request->user())->setItem($music)->build(),
+            'has_like' => LikeRepo::getInstance()->has()->setUser($request->user("api"))->setItem($music)->build(),
+            'has_bookmark' => BookmarkRepo::getInstance()->has()->setUser($request->user("api"))->setItem($music)->build(),
         ], '', true);
     }
 }
