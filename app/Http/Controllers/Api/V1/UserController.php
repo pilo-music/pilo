@@ -43,7 +43,7 @@ class UserController extends Controller
 
         $user->update([
             'pic' => $imageUrl,
-            'name' => $request->name,
+            'name' => $request->name ?? $user->name,
             'password' => $password,
             'global_notification' => $request->global_notification,
             'music_notification' => $request->music_notification,
