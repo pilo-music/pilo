@@ -9,6 +9,7 @@ use Laravel\Passport\HasApiTokens;
 class User extends Authenticatable
 {
     use Notifiable, HasApiTokens;
+
     const  Administrator = 1;
 
     const USER_STATUS_DEACTIVE = 0;
@@ -23,6 +24,12 @@ class User extends Authenticatable
         'id', 'level'
     ];
 
+    protected $casts = [
+        'global_notification' => 'boolean',
+        'music_notification' => 'boolean',
+        'album_notification' => 'boolean',
+        'video_notification' => 'boolean',
+    ];
     /**
      * The attributes that should be hidden for arrays.
      *
