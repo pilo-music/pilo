@@ -45,10 +45,10 @@ class UserController extends Controller
             'pic' => $imageUrl,
             'name' => $request->name ?? $user->name,
             'password' => $password,
-            'global_notification' => $request->global_notification,
-            'music_notification' => $request->music_notification,
-            'album_notification' => $request->album_notification,
-            'video_notification' => $request->video_notification,
+            'global_notification' => $request->global_notification ?? $user->global_notification,
+            'music_notification' => $request->music_notification ?? $user->music_notification,
+            'album_notification' => $request->album_notification ?? $user->album_notification,
+            'video_notification' => $request->video_notification ?? $user->video_notification,
         ]);
 
         return CustomResponse::create(UserRepo::getInstance()->toJson()->setUser($user)->build(), __('messages.profile_update_successfully'), true);
