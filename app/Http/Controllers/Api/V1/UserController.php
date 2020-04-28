@@ -34,7 +34,7 @@ class UserController extends Controller
             $img = Image::make($request->get('pic'));
             $img->resize(300, 300);
             $img->encode('jpg');
-            $fileName = now()->timestamp . '_' . uniqid() . '.' . explode('/', explode(':', substr($request->get('pic'), 0, strpos($request->get('pic'), ';')))[1])[1];
+            $fileName = now()->timestamp . '_' . uniqid('', true) . '.' . explode('/', explode(':', substr($request->get('pic'), 0, strpos($request->get('pic'), ';')))[1])[1];
             Storage::disk('custom-ftp')->put('public_html/profile/' . $fileName, $img);
             $imageUrl = env('APP_URL', 'https://pilo.app') . '/profile/' . $fileName;
         } else
@@ -44,7 +44,11 @@ class UserController extends Controller
         $user->update([
             'pic' => $imageUrl,
             'name' => $request->name,
-            'password' => $password
+            'password' => $password,
+            'global_notification' => (boolean)$request->global_notification,
+            'music_notification' => (boolean)$request->music_notification,
+            'album_notification' => (boolean)$request->album_notification,
+            'video_notification' => (boolean)$request->video_notification,
         ]);
 
         return CustomResponse::create(UserRepo::getInstance()->toJson()->setUser($user)->build(), __('messages.profile_update_successfully'), true);
