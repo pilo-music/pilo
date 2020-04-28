@@ -30,12 +30,16 @@ class ToJson
     {
         if ($this->user) {
             return [
-                "name" => $this->user->name ?? "",
-                "email" => $this->user->email ?? "",
-                "phone" => $this->user->phone ?? "",
-                "birth" => $this->user->birth ?? "",
-                "gender" => $this->user->gender ?? "",
-                "pic" => get_image($this->user,'pic') ?? "",
+                'name' => $this->user->name ?? "",
+                'email' => $this->user->email ?? "",
+                'phone' => $this->user->phone ?? "",
+                'birth' => $this->user->birth ?? "",
+                'gender' => $this->user->gender ?? "",
+                'pic' => get_image($this->user,'pic') ?? "",
+                'global_notification' => $this->user->global_notification,
+                'music_notification' => $this->user->music_notification,
+                'album_notification' => $this->user->album_notification,
+                'video_notification' => $this->user->video_notification,
             ];
         }
         return  null;
