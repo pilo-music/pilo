@@ -4,10 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Home extends Model
+class Browse extends Model
 {
-    protected $guarded = ['id'];
-
     const STATUS_ACTIVE = 1;
     const STATUS_DRAFT = 0;
     const STATUS_JUST_IN_APP = 2;
@@ -32,5 +30,4 @@ class Home extends Model
     const SORT_LATEST = "latest";
     const SORT_BEST = "best";
     const SORT_OLDEST = "oldest";
-
 }
