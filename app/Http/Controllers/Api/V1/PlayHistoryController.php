@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api\V1;
 
+use App\Http\Controllers\Api\CustomResponse;
 use App\Http\Controllers\Controller;
 use App\Http\Repositories\V1\Album\AlbumRepo;
 use App\Http\Repositories\V1\Music\MusicRepo;
@@ -47,5 +48,7 @@ class PlayHistoryController extends Controller
                 'agent' => $request->header('User-Agent')
             ]);
         }
+
+        return CustomResponse::create(null, '', true);
     }
 }
