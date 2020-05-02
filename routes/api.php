@@ -55,6 +55,9 @@ Route::prefix('v1')->namespace('Api\V1')->group(function () {
         Route::post('/playlist/delete', 'PlaylistController@delete');
         Route::post('/playlist/music', 'PlaylistController@music');
 
+
+        Route::post('/play-history', 'PlayHistoryController@create');
+
         Route::get('/likes', 'LikeController@index');
         Route::post('/like', 'LikeController@like');
 
