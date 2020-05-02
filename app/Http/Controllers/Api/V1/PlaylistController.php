@@ -26,7 +26,7 @@ class PlaylistController extends Controller
         $sort = request()->has('sort') ? request()->sort : Playlist::SORT_LATEST;
         $page = request()->has('page') ? request()->page : 1;
         $count = request()->has('count') ? request()->count : Playlist::DEFAULT_ITEM_COUNT;
-        $user = request()->has("client") ? $request->user() : null;
+        $user = request()->has("user") ? $request->user() : null;
 
         $data = PlaylistRepo::getInstance()->get()
             ->setUser(auth()->guard('api')->user())
