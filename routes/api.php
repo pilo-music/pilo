@@ -27,6 +27,9 @@ Route::prefix('v1')->namespace('Api\V1')->group(function () {
     Route::get('/homes', 'HomeController@index');
     Route::get('/home', 'HomeController@single');
 
+    Route::get('/browses', 'BrowseController@index');
+    Route::get('/browse', 'BrowseController@single');
+
     Route::get('/search', 'SearchController@search');
 
     Route::get('/musics', 'MusicController@index');
