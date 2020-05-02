@@ -124,8 +124,7 @@ class Get
 //        }
 
         if (isset($this->user)) {
-            $playlists = Playlist::query()->whereNull('user_id')
-                ->orWhere('user_id', $this->user->id)->where('status', Playlist::STATUS_ACTIVE);
+            $playlists = Playlist::query()->Where('user_id', $this->user->id)->where('status', Playlist::STATUS_ACTIVE);
         } else {
             $playlists = Playlist::query()->whereNull('user_id')->where('status', Playlist::STATUS_ACTIVE);
         }

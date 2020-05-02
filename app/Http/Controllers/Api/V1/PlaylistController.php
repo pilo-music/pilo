@@ -26,14 +26,12 @@ class PlaylistController extends Controller
         $sort = request()->has('sort') ? request()->sort : Playlist::SORT_LATEST;
         $page = request()->has('page') ? request()->page : 1;
         $count = request()->has('count') ? request()->count : Playlist::DEFAULT_ITEM_COUNT;
-        $user = request()->has("user") ? $request->user() : null;
 
         $data = PlaylistRepo::getInstance()->get()
             ->setUser(auth()->guard('api')->user())
             ->setPage($page)
             ->setCount($count)
             ->setSort($sort)
-            ->setUser($user)
             ->setToJson()
             ->build();
 
@@ -82,8 +80,9 @@ class PlaylistController extends Controller
             $fileName = now()->timestamp . '_' . uniqid('', true) . '.' . explode('/', explode(':', substr($request->get('image'), 0, strpos($request->get('image'), ';')))[1])[1];
             Storage::disk('custom-ftp')->put('public_html/cover/' . $fileName, $img);
             $image = env('APP_URL', 'https://pilo.app') . '/cover/' . $fileName;
-        } else $image = null;
-
+        } else {
+            $image = null;
+        }
 
         $user = $request->user();
         $playlist = $user->playlists()->create([
@@ -95,6 +94,20 @@ class PlaylistController extends Controller
             'play_count' => 0,
             'status' => Playlist::STATUS_ACTIVE,
         ]);
+
+        if ($request->has('music_slug')) {
+            $music = MusicRepo::getInstance()->find()->setSlug($request->slug)->build();
+            if ($music) {
+                DB::table('playlistables')->insert([
+                    'playlistable_id' => $music->id,
+                    'playlistable_type' => Music::class,
+                    'playlist_id' => $playlist->id
+                ]);
+            }
+            $playlist->update([
+                'music_count' => 1
+            ]);
+        }
 
         PlaylistRepo::getInstance()->updateImage()->setPlaylist($playlist)->build();
         $data = PlaylistRepo::getInstance()->toJson()->setPlaylist($playlist)->build();
@@ -138,18 +151,6 @@ class PlaylistController extends Controller
             'title' => $request->title,
             'image' => $image,
         ]);
-
-
-        if ($request->has('music_slug')) {
-            $music = MusicRepo::getInstance()->find()->setSlug($request->slug)->build();
-            if ($music) {
-                DB::table('playlistables')->insert([
-                    'playlistable_id' => $music->id,
-                    'playlistable_type' => Music::class,
-                    'playlist_id' => $playlist->id
-                ]);
-            }
-        }
 
         PlaylistRepo::getInstance()->updateImage()->setPlaylist($playlist)->build();
         $data = PlaylistRepo::getInstance()->toJson()->setPlaylist($playlist)->build();
