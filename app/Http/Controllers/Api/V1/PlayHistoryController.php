@@ -45,7 +45,7 @@ class PlayHistoryController extends Controller
             $history = PlayHistory::query()->where("user_id", $user->id)
                 ->where("historyable_id", $item->id)
                 ->where("historyable_type", get_class($item))
-                ->where('created_at', '<=', now()->subMinutes(15))->latest()->first();
+                ->where('created_at', '>=', now()->subMinutes(15))->latest()->first();
 
             if (!$history) {
                 $user->histories()->create([
