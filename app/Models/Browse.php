@@ -26,6 +26,7 @@ class Browse extends Model
     const TYPE_PLAY_HISTORY = 13;
     const TYPE_PLAY_FOLLOWS = 14;
     const TYPE_BROWSE_DOCK = 15;
+    const TYPE_CLIENT_PLAYLISTS = 16;
 
     const SORT_LATEST = "latest";
     const SORT_BEST = "best";

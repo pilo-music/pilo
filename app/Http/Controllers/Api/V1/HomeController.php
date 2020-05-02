@@ -91,7 +91,7 @@ class HomeController extends Controller
             case Home::TYPE_PLAY_HISTORY:
                 $return_info = $this->getStaticItem($item, "play_history");
                 break;
-            case Home::TYPE_MUSIC_FOLLOWS:
+            case Home::TYPE_PLAY_FOLLOWS:
                 $return_info = $this->getMusicFollows($item, "music_follows");
                 break;
             case Home::TYPE_BROWSE_DOCK:

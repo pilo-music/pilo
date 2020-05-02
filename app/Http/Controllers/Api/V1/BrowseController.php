@@ -91,7 +91,7 @@ class BrowseController extends Controller
             case Browse::TYPE_PLAY_HISTORY:
                 $return_info = $this->getStaticItem($item, "play_history");
                 break;
-            case Browse::TYPE_MUSIC_FOLLOWS:
+            case Browse::TYPE_PLAY_FOLLOWS:
                 $return_info = $this->getMusicFollows($item, "music_follows");
                 break;
             case Browse::TYPE_BROWSE_DOCK:

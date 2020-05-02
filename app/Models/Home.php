@@ -26,7 +26,7 @@ class Home extends Model
     const TYPE_MUSIC_VERTICAL = 11;
     const TYPE_FOR_YOU = 12;
     const TYPE_PLAY_HISTORY = 13;
-    const TYPE_MUSIC_FOLLOWS = 14;
+    const TYPE_PLAY_FOLLOWS = 14;
     const TYPE_BROWSE_DOCK = 15;
     const TYPE_CLIENT_PLAYLISTS = 16;
 
