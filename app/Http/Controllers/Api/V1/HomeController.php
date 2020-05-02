@@ -85,6 +85,21 @@ class HomeController extends Controller
             case Home::TYPE_MUSIC_VERTICAL:
                 $return_info = $this->getMusics($item, "music_vertical");
                 break;
+            case Home::TYPE_FOR_YOU:
+                $return_info = $this->getForYou($item, "for_you");
+                break;
+            case Home::TYPE_PLAY_HISTORY:
+                $return_info = $this->getStaticItem($item, "play_history");
+                break;
+            case Home::TYPE_MUSIC_FOLLOWS:
+                $return_info = $this->getMusicFollows($item, "music_follows");
+                break;
+            case Home::TYPE_BROWSE_DOCK:
+                $return_info = $this->getStaticItem($item, "browse_dock");
+                break;
+            case Home::TYPE_CLIENT_PLAYLISTS:
+                $return_info = $this->getClientPlaylists($item, "playlists");
+                break;
             default:
                 $return_info = [];
                 break;
@@ -290,17 +305,34 @@ class HomeController extends Controller
         ];
     }
 
+    private function getForYou($item, $type)
+    {
+        //todo
+    }
+
+    private function getStaticItem($item, $type)
+    {
+        //todo
+    }
+
+    private function getMusicFollows($item, $type)
+    {
+        //todo
+    }
+
+    private function getClientPlaylists($item, $type)
+    {
+        //todo
+    }
+
     private function explodeHomeItems($item)
     {
         return $item->value != null ? explode('-', $item->value) : $item->value;
     }
 
 
-    private function checkHomeValue($home)
+    private function checkHomeValue($home): bool
     {
-        if (!isset($home->value) || $home->value == "" || $home->value == "-") {
-            return false;
-        }
-        return true;
+        return !(!isset($home->value) || $home->value == "" || $home->value == "-");
     }
 }

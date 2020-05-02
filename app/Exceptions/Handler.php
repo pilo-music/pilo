@@ -2,9 +2,11 @@
 
 namespace App\Exceptions;
 
+use App\Http\Controllers\Api\CustomResponse;
 use Exception;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Illuminate\Http\Request;
+use Illuminate\Validation\ValidationException;
 use Symfony\Component\HttpFoundation\Response;
 use Throwable;
 
@@ -53,6 +55,18 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Throwable $exception)
     {
+        if ($exception instanceof ValidationException) {
+            $message = "";
+            foreach ($exception->errors() as $item) {
+                foreach ($item as $error) {
+                    $message .= $error;
+                    break;
+                }
+                break;
+            }
+
+            return CustomResponse::create(null, $message, false);
+        }
         return parent::render($request, $exception);
     }
 }
