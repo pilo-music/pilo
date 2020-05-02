@@ -292,8 +292,9 @@ class HomeController extends Controller
             $items = $this->explodeHomeItems($home);
             foreach ($items as $item) {
                 $video = VideoRepo::getInstance()->find()->setId($item)->setToJson()->build();
-                if ($video)
+                if ($video) {
                     $videos[] = $video;
+                }
             }
         }
 
@@ -310,19 +311,32 @@ class HomeController extends Controller
         //todo
     }
 
-    private function getStaticItem($item, $type)
-    {
-        //todo
-    }
 
     private function getMusicFollows($item, $type)
     {
         //todo
     }
 
-    private function getClientPlaylists($item, $type)
+    private function getClientPlaylists($home, $type)
     {
-        //todo
+        $data = PlaylistRepo::getInstance()->get()->setSort($home->sort)->setCount($home->count)->setPage($this->page)->setToJson()->build();
+
+        return [
+            'id' => $home->id,
+            'name' => $home->name,
+            'type' => $type,
+            'data' => $data
+        ];
+    }
+
+    private function getStaticItem($home, $type)
+    {
+        return [
+            'id' => $home->id,
+            'name' => $home->name,
+            'type' => $type,
+            'data' => []
+        ];
     }
 
     private function explodeHomeItems($item)
