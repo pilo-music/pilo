@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateSearchHistoriesTable extends Migration
+class CreatePlayHistoriesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,12 +13,12 @@ class CreateSearchHistoriesTable extends Migration
      */
     public function up()
     {
-        Schema::create('search_histories', function (Blueprint $table) {
+        Schema::create('play_histories', function (Blueprint $table) {
             $table->increments("id");
             $table->unsignedInteger("user_id")->nullable();
             $table->foreign("user_id")->on("users")->references("id");
-            $table->string("query");
-            $table->string("current_spell")->nullable();
+            $table->string("historyable_id");
+            $table->string("historyable_type");
             $table->string("ip")->nullable();
             $table->string("agent")->nullable();
             $table->timestamps();
@@ -32,6 +32,6 @@ class CreateSearchHistoriesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('search_histories');
+        Schema::dropIfExists('play_histories');
     }
 }

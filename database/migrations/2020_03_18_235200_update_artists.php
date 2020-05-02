@@ -31,11 +31,12 @@ class UpdateArtists extends Migration
      */
     public function down()
     {
-        Schema::table('musics', function (Blueprint $table) {
+        Schema::table('artists', function (Blueprint $table) {
             $table->dropColumn('music_count');
             $table->dropColumn('album_count');
             $table->dropColumn('followers_count');
             $table->dropColumn('playlist_count');
+            $table->dropColumn('video_count');
             $table->dropColumn('header_image');
             $table->dropColumn('thumbnail');
         });

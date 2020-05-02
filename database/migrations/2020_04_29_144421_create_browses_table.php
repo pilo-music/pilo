@@ -14,7 +14,14 @@ class CreateBrowsesTable extends Migration
     public function up()
     {
         Schema::create('browses', function (Blueprint $table) {
-            $table->id();
+            $table->increments("id");
+            $table->string('name');
+            $table->integer('type');
+            $table->string('sort', 50);
+            $table->tinyInteger('row_number');
+            $table->tinyInteger('count');
+            $table->string('value')->nullable();
+            $table->tinyInteger('status')->default(1);
             $table->timestamps();
         });
     }

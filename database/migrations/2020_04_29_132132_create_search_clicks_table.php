@@ -14,7 +14,11 @@ class CreateSearchClicksTable extends Migration
     public function up()
     {
         Schema::create('search_clicks', function (Blueprint $table) {
-            $table->id();
+            $table->increments("id");
+            $table->unsignedInteger("search_history_id");
+            $table->foreign("search_history_id")->on("search_histories")->references("id");
+            $table->string("clickable_id");
+            $table->string("clickable_type");
             $table->timestamps();
         });
     }

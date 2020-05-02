@@ -97,4 +97,9 @@ class User extends Authenticatable
     {
         return $this->hasMany(User::class);
     }
+
+    public function histories()
+    {
+        return $this->hasMany(PlayHistory::class);
+    }
 }
