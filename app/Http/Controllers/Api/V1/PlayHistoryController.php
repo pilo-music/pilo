@@ -8,6 +8,7 @@ use App\Http\Repositories\V1\Album\AlbumRepo;
 use App\Http\Repositories\V1\Music\MusicRepo;
 use App\Http\Repositories\V1\Playlist\PlaylistRepo;
 use App\Http\Repositories\V1\Video\VideoRepo;
+use App\Models\PlayHistory;
 use Illuminate\Http\Request;
 
 class PlayHistoryController extends Controller
@@ -41,12 +42,19 @@ class PlayHistoryController extends Controller
         }
 
         if ($item) {
-            $user->histories()->create([
-                'historyable_id' => $item->id,
-                'historyable_type' => get_class($item),
-                'ip' => get_ip(),
-                'agent' => $request->header('User-Agent')
-            ]);
+            $history = PlayHistory::query()->where("user_id", $user->id)
+                ->where("historyable_id", $item->id)
+                ->where("historyable_type", get_class($item))
+                ->where('created_at', '<=', now()->subMinutes(15))->latest()->first();
+
+            if (!$history) {
+                $user->histories()->create([
+                    'historyable_id' => $item->id,
+                    'historyable_type' => get_class($item),
+                    'ip' => get_ip(),
+                    'agent' => $request->header('User-Agent')
+                ]);
+            }
         }
 
         return CustomResponse::create(null, '', true);
