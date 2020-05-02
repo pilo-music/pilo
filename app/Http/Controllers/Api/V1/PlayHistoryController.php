@@ -44,10 +44,15 @@ class PlayHistoryController extends Controller
         if ($item) {
             $history = PlayHistory::query()->where("user_id", $user->id)
                 ->where("historyable_id", $item->id)
-                ->where("historyable_type", get_class($item))
-                ->where('created_at', '>=', now()->subMinutes(15))->latest()->first();
-
-            if (!$history) {
+                ->where("historyable_type", get_class($item))->latest()->first();
+            if ($history && is_past("15", $history->created_at)) {
+                $user->histories()->create([
+                    'historyable_id' => $item->id,
+                    'historyable_type' => get_class($item),
+                    'ip' => get_ip(),
+                    'agent' => $request->header('User-Agent')
+                ]);
+            } elseif (!$history) {
                 $user->histories()->create([
                     'historyable_id' => $item->id,
                     'historyable_type' => get_class($item),
@@ -55,6 +60,7 @@ class PlayHistoryController extends Controller
                     'agent' => $request->header('User-Agent')
                 ]);
             }
+
         }
 
         return CustomResponse::create(null, '', true);
