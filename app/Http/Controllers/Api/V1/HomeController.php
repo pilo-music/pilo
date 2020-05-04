@@ -319,7 +319,12 @@ class HomeController extends Controller
 
     private function getClientPlaylists($home, $type)
     {
-        $data = PlaylistRepo::getInstance()->get()->setSort($home->sort)->setCount($home->count)->setPage($this->page)->setToJson()->build();
+        $data = PlaylistRepo::getInstance()->get()
+            ->setUser(auth()->guard('api')->user())
+            ->setSort($home->sort)
+            ->setCount($home->count)
+            ->setPage($this->page)
+            ->setToJson()->build();
 
         return [
             'id' => $home->id,
