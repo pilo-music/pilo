@@ -37,7 +37,7 @@ class BrowseController extends Controller
     public function single(Request $request)
     {
         $request->validate([
-            'id' => 'required|exists:homes'
+            'id' => 'required|exists:browses'
         ]);
         $this->page = $request->page ?? 1;
         /**
