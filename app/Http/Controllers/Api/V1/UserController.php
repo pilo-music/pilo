@@ -15,10 +15,6 @@ class UserController extends Controller
 
     public function update(Request $request)
     {
-        $request->validate([
-            'pic' => 'is_image'
-        ]);
-
         $user = auth()->user();
 
         if ($request->has('password')) {
@@ -32,11 +28,15 @@ class UserController extends Controller
 
         if ($request->has('pic')) {
             $img = Image::make($request->get('pic'));
-            $img->resize(300, 300);
-            $img->encode('jpg');
-            $fileName = now()->timestamp . '_' . uniqid('', true) . '.' . explode('/', explode(':', substr($request->get('pic'), 0, strpos($request->get('pic'), ';')))[1])[1];
-            Storage::disk('custom-ftp')->put('public_html/profile/' . $fileName, $img);
-            $imageUrl = env('APP_URL', 'https://pilo.app') . '/profile/' . $fileName;
+            if ($img){
+                $img->resize(300, 300);
+                $img->encode('jpg');
+                $fileName = now()->timestamp . '_' . uniqid('', true) . '.' . explode('/', explode(':', substr($request->get('pic'), 0, strpos($request->get('pic'), ';')))[1])[1];
+                Storage::disk('custom-ftp')->put('public_html/profile/' . $fileName, $img);
+                $imageUrl = env('APP_URL', 'https://pilo.app') . '/profile/' . $fileName;
+            }else{
+                $imageUrl = $user->pic;
+            }
         } else
             $imageUrl = $user->pic;
 
