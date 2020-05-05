@@ -4,6 +4,7 @@
 namespace App\Http\Repositories\V1\Playlist;
 
 use App\Http\Repositories\V1\Artist\ArtistRepo;
+use App\Http\Repositories\V1\User\UserRepo;
 use Illuminate\Support\Carbon;
 
 class ToJson
@@ -42,12 +43,13 @@ class ToJson
                 'music_count' => $this->playlist->music_count,
                 'like_count' => $this->playlist->like_count,
                 'play_count' => $this->playlist->play_count,
-                "share_url" => "https://pilo.app/playlist/".$this->playlist->slug,
+                "share_url" => "https://pilo.app/playlist/" . $this->playlist->slug,
                 'created_at' => Carbon::parse($this->playlist->created_at)->format('D d,Y'),
+                'user' => $this->playlist->user_id ? UserRepo::getInstance()->toJson()->setUser($this->playlist->user)->build() : "",
                 'type' => 'playlist'
             ];
         }
 
-        return  null;
+        return null;
     }
 }
