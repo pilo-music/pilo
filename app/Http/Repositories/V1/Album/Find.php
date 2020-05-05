@@ -171,7 +171,10 @@ class Find
                     $albums = $albums->latest();
                     break;
                 case  Album::SORT_BEST:
-                    return $albums->skip(($this->page - 1) * $this->count)->take($this->count)->get()->sortBy('play_count');
+                    $albums = $albums->orderBy('play_count');
+                    break;
+                case  Album::SORT_SEARCH:
+                    $albums = $albums->orderBy('search_count');
                     break;
             }
 

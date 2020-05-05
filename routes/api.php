@@ -31,6 +31,7 @@ Route::prefix('v1')->namespace('Api\V1')->group(function () {
     Route::get('/browse', 'BrowseController@single');
 
     Route::get('/search', 'SearchController@search');
+    Route::post('/search/click', 'SearchController@click');
 
     Route::get('/musics', 'MusicController@index');
     Route::get('/music', 'MusicController@single');
@@ -46,8 +47,6 @@ Route::prefix('v1')->namespace('Api\V1')->group(function () {
 
     Route::get('/albums', 'AlbumController@index');
     Route::get('/album', 'AlbumController@single');
-
-//        Route::post('/playcount/add', 'PlayCountController@add');
 
     Route::group(['middleware' => 'auth:api'], function () {
         Route::post("/update", 'UserController@update');
@@ -73,8 +72,6 @@ Route::prefix('v1')->namespace('Api\V1')->group(function () {
         Route::get('/messages', 'MessageController@index');
         Route::post('/message', 'MessageController@message');
 
-//        Route::get('/histories', 'PlayHistoryController@get');
-//        Route::post('/history/add', 'PlayHistoryController@add');
 
         Route::get('/notifications', 'NotificationController@index');
 

@@ -135,6 +135,9 @@ class Find
                 case  Music::SORT_BEST:
                     $musics = $musics->orderBy('play_count');
                     break;
+                case Music::SORT_SEARCH:
+                    $musics = $musics->orderBy('search_count');
+                    break;
             }
 
             $musics = $musics->skip(($this->page - 1) * $this->count)->take($this->count)->get();
@@ -144,7 +147,9 @@ class Find
             }
 
             return $musics;
-        } elseif (isset($this->id)) {
+        }
+
+        if (isset($this->id)) {
             /**
              * find from slug
              */
@@ -155,20 +160,17 @@ class Find
                 $music = MusicRepo::getInstance()->toJson()->setMusic($music)->build();
             }
             return $music;
-        } else {
-            /**
-             * find from slug
-             */
-            if (isset($this->slug) && $this->slug != "") {
-                $music = Music::query()->where('status', Music::STATUS_ACTIVE)
-                    ->where('slug', $this->slug)->first();
+        }
 
-                if ($this->toJson) {
-                    $music = MusicRepo::getInstance()->toJson()->setMusic($music)->build();
-                }
+        if (isset($this->slug) && $this->slug != "") {
+            $music = Music::query()->where('status', Music::STATUS_ACTIVE)
+                ->where('slug', $this->slug)->first();
 
-                return $music;
+            if ($this->toJson) {
+                $music = MusicRepo::getInstance()->toJson()->setMusic($music)->build();
             }
+
+            return $music;
         }
         return null;
     }

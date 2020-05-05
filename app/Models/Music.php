@@ -17,6 +17,7 @@ class Music extends Model
     const SORT_LATEST = "latest";
     const SORT_BEST = "best";
     const SORT_OLDEST = "oldest";
+    const SORT_SEARCH = "search";
 
     const DEFAULT_ITEM_COUNT = 12;
     const DEFAULT_ITEM_SORT = self::SORT_LATEST;

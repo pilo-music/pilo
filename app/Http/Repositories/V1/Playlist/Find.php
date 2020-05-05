@@ -185,7 +185,10 @@ class Find
                     $playlists = $playlists->latest();
                     break;
                 case  Playlist::SORT_BEST:
-                    return $playlists->skip(($this->page - 1) * $this->count)->take($this->count)->get()->sortBy('play_count');
+                    $playlists = $playlists->orderBy('play_count');
+                    break;
+                case  Playlist::SORT_SEARCH:
+                    $playlists = $playlists->orderBy('search_count');
                     break;
             }
 

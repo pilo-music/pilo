@@ -10,6 +10,7 @@ class Find
     protected $slug;
     protected $id;
     protected $count;
+    protected $sort;
     protected $page;
     protected $toJson;
 
@@ -77,6 +78,16 @@ class Find
     }
 
     /**
+     * @param mixed $sort
+     * @return Find
+     */
+    public function setSort($sort): Find
+    {
+        $this->sort = $sort;
+        return $this;
+    }
+
+    /**
      * Set the value of toJson
      *
      * @param bool $toJson
@@ -106,17 +117,32 @@ class Find
             /**
              *  find from name
              */
-            $this->name = strval($this->name);
+            $this->name = (string)$this->name;
             $artists = Artist::query()->where('name', 'LIKE', '%' . $this->name . '%')
-                ->where('status', Artist::STATUS_ACTIVE)
-                ->skip(($this->page - 1) * $this->count)->take($this->count)->get();
+                ->where('status', Artist::STATUS_ACTIVE);
+
+            switch ($this->sort) {
+                case Artist::SORT_LATEST:
+                    $artists = $artists->latest();
+                    break;
+                case  Artist::SORT_BEST:
+                    $artists = $artists->orderBy('play_count');
+                    break;
+                case Artist::SORT_SEARCH:
+                    $artists = $artists->orderBy('search_count');
+                    break;
+            }
+
+            $artists = $artists->skip(($this->page - 1) * $this->count)->take($this->count)->get();
 
             if ($this->toJson) {
                 $artists = ArtistRepo::getInstance()->toJsonArray()->setArtists($artists)->build();
             }
 
             return $artists;
-        } elseif (isset($this->id)) {
+        }
+
+        if (isset($this->id)) {
             /**
              * find from id
              */
@@ -130,21 +156,21 @@ class Find
 
             return $artists;
 
-        } else {
-            /*
-             * find from slug
-             */
-            if (isset($this->slug)) {
-                $artists = Artist::query()->where('status', Artist::STATUS_ACTIVE)
-                    ->where('slug', $this->slug)->first();
+        }
+
+        /*
+                 * find from slug
+                 */
+        if (isset($this->slug)) {
+            $artists = Artist::query()->where('status', Artist::STATUS_ACTIVE)
+                ->where('slug', $this->slug)->first();
 
 
-                if ($this->toJson) {
-                    $artists = ArtistRepo::getInstance()->toJson()->setArtist($artists)->build();
-                }
-
-                return $artists;
+            if ($this->toJson) {
+                $artists = ArtistRepo::getInstance()->toJson()->setArtist($artists)->build();
             }
+
+            return $artists;
         }
         return null;
     }

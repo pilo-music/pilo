@@ -135,6 +135,9 @@ class Find
                 case  Video::SORT_BEST:
                     $videos = $videos->orderBy('play_count');
                     break;
+                case  Video::SORT_SEARCH:
+                    $videos = $videos->orderBy('search_count');
+                    break;
             }
 
             $videos = $videos->skip(($this->page - 1) * $this->count)->take($this->count)->get();
