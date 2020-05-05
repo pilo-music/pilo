@@ -33,7 +33,7 @@ class UserController extends Controller
                 $img->encode('jpg');
                 $fileName = now()->timestamp . '_' . uniqid('', true) . '.' . 'jpg';
                 Storage::disk('custom-ftp')->put('public_html/profile/' . $fileName, $img);
-                $imageUrl = env('APP_URL', 'https://pilo.app') . '/profile/' . $fileName;
+                $imageUrl = 'https://dl.pilo.app' . '/profile/' . $fileName;
             } else {
                 $imageUrl = $user->pic;
             }
