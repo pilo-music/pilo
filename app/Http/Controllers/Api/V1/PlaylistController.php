@@ -28,7 +28,7 @@ class PlaylistController extends Controller
         $count = request()->has('count') ? request()->count : Playlist::DEFAULT_ITEM_COUNT;
 
         $data = PlaylistRepo::getInstance()->get()
-            ->setUser(auth()->guard('api')->user())
+            ->setUser($request->has('user') ? auth()->guard('api')->user() : null)
             ->setPage($page)
             ->setCount($count)
             ->setSort($sort)
@@ -45,7 +45,7 @@ class PlaylistController extends Controller
         ]);
 
         $playlist = PlaylistRepo::getInstance()->find()->setSlug($request->slug)
-            ->setUser($request->user('api'))->build();
+            ->setUser($request->has('user') ? auth()->guard('api')->user() : null)->build();
 
         if (!$playlist) {
             return abort(404);
