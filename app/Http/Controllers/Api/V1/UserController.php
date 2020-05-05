@@ -28,13 +28,13 @@ class UserController extends Controller
 
         if ($request->has('pic')) {
             $img = Image::make($request->get('pic'));
-            if ($img){
+            if ($img) {
                 $img->resize(300, 300);
                 $img->encode('jpg');
-                $fileName = now()->timestamp . '_' . uniqid('', true) . '.' . explode('/', explode(':', substr($request->get('pic'), 0, strpos($request->get('pic'), ';')))[1])[1];
+                $fileName = now()->timestamp . '_' . uniqid('', true) . '.' . 'jpg';
                 Storage::disk('custom-ftp')->put('public_html/profile/' . $fileName, $img);
                 $imageUrl = env('APP_URL', 'https://pilo.app') . '/profile/' . $fileName;
-            }else{
+            } else {
                 $imageUrl = $user->pic;
             }
         } else
