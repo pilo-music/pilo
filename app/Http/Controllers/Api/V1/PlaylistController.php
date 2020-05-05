@@ -96,7 +96,7 @@ class PlaylistController extends Controller
         ]);
 
         if ($request->has('music_slug')) {
-            $music = MusicRepo::getInstance()->find()->setSlug($request->slug)->build();
+            $music = MusicRepo::getInstance()->find()->setSlug($request->music_slug)->build();
             if ($music) {
                 DB::table('playlistables')->insert([
                     'playlistable_id' => $music->id,
