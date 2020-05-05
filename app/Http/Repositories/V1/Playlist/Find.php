@@ -196,7 +196,9 @@ class Find
             }
 
             return $playlists;
-        } elseif (isset($this->id)) {
+        }
+
+        if (isset($this->id)) {
 
             $playlist = Playlist::query()->where('status', Playlist::STATUS_ACTIVE)
                 ->where('id', $this->id)->first();
@@ -209,19 +211,18 @@ class Find
 
             return $playlist;
 
-        } else {
-
-            $playlist = Playlist::query()->where('status', Playlist::STATUS_ACTIVE)
-                ->where('slug', $this->slug)->first();
-
-            $playlist = $this->checkUser($playlist);
-
-            if ($this->toJson) {
-                $playlist = PlaylistRepo::getInstance()->toJson()->setPlaylist($playlist)->build();
-            }
-
-            return $playlist;
         }
+
+        $playlist = Playlist::query()->where('status', Playlist::STATUS_ACTIVE)
+            ->where('slug', $this->slug)->first();
+
+        $playlist = $this->checkUser($playlist);
+
+        if ($this->toJson) {
+            $playlist = PlaylistRepo::getInstance()->toJson()->setPlaylist($playlist)->build();
+        }
+
+        return $playlist;
     }
 
     /**

@@ -48,7 +48,7 @@ class PlaylistController extends Controller
             ->setUser($request->user('api'))->build();
 
         if (!$playlist) {
-            abort(404);
+            return abort(404);
         }
 
         /**
