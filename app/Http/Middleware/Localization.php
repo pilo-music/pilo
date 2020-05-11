@@ -36,11 +36,11 @@ class Localization
         // if the header is missed
         if(!$locale){
             // take the default local language
-            $locale = $this->app->config->get('app.locale');
+            $locale = config()->get('app.locale');
         }
 
         // set the local language
-        $this->app->setLocale($locale);
+        app()->setLocale($locale);
 
         // get the response after the request is done
         $response = $next($request);
