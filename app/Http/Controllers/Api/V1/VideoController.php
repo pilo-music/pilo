@@ -36,7 +36,7 @@ class VideoController extends Controller
     public function single(Request $request)
     {
         $request->validate([
-            'slug' => 'required|exists:musics,slug'
+            'slug' => 'required|exists:videos,slug'
         ]);
 
         $video = VideoRepo::getInstance()->find()->setSlug($request->slug)->build();
