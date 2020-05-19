@@ -14,7 +14,13 @@ class VideoObserver
      */
     public function created(Video $video)
     {
-        //
+        $artist = $video->artist();
+        $artists = $video->artists();
+
+        $artist->increment('video_count');
+        foreach ($artists as $item) {
+            $item->increment('video_count');
+        }
     }
 
     /**
@@ -36,7 +42,13 @@ class VideoObserver
      */
     public function deleted(Video $video)
     {
-        //
+        $artist = $video->artist();
+        $artists = $video->artists();
+
+        $artist->decrement('video_count');
+        foreach ($artists as $item) {
+            $item->decrement('video_count');
+        }
     }
 
     /**

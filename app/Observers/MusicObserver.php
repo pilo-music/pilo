@@ -14,7 +14,13 @@ class MusicObserver
      */
     public function created(Music $music)
     {
-        //
+        $artist = $music->artist();
+        $artists = $music->artists();
+
+        $artist->increment('music_count');
+        foreach ($artists as $item) {
+            $item->increment('music_count');
+        }
     }
 
     /**
@@ -36,7 +42,13 @@ class MusicObserver
      */
     public function deleted(Music $music)
     {
-        //
+        $artist = $music->artist();
+        $artists = $music->artists();
+
+        $artist->decrement('music_count');
+        foreach ($artists as $item) {
+            $item->decrement('music_count');
+        }
     }
 
     /**
