@@ -39,7 +39,7 @@ class UpdateArtistStatics extends Command
     public function handle()
     {
         $artists = Artist::all();
-        $bar = $this->output->createProgressBar($artist->count());
+        $bar = $this->output->createProgressBar($artists->count());
         $bar->start();
 
         foreach ($artists as $artist) {
