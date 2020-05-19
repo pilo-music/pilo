@@ -34,7 +34,7 @@ class ToJson
                 'thumbnail' => get_image($this->artist, 'thumbnail'),
                 'music_count' => $this->artist->music_count,
                 'album_count' => $this->artist->album_count,
-                'video_count' => $this->artist->music_count,
+                'video_count' => $this->artist->video_count,
                 'followers_count' => $this->artist->followers_count,
                 'playlist_count' => $this->artist->playlist_count,
                 "share_url" => "https://pilo.app/artist/".$this->artist->slug,
