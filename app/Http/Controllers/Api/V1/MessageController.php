@@ -15,7 +15,10 @@ class MessageController extends Controller
     public function index()
     {
         $user = auth()->user();
-        $messages = $user->messages()->latest()->get();
+        $page = \request()->page ?? 1;
+        $count = \request()->count ?? 15;
+
+        $messages = $user->messages()->skip(($page - 1) * $count)->take($count)->get();
 
         $return_info = [];
         foreach ($messages as $item) {
