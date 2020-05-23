@@ -23,8 +23,8 @@ class CreateMusicsTable extends Migration
             $table->foreign('artist_id')->references('id')->on('artists')->onDelete('cascade');
             $table->unsignedInteger('album_id')->nullable();
             $table->foreign('album_id')->references('id')->on('albums')->onDelete('cascade');
-            $table->string('title', 50);
-            $table->string('title_en', 50)->nullable();
+            $table->string('title', 191);
+            $table->string('title_en', 191)->nullable();
             $table->string('slug')->unique();
             $table->text('image');
             $table->text('text')->nullable();

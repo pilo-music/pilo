@@ -13,6 +13,7 @@ use App\Http\Repositories\V1\Video\VideoRepo;
 use App\Models\Album;
 use App\Models\Browse;
 use App\Models\Music;
+use App\Models\PlayHistory;
 use Illuminate\Http\Request;
 
 class BrowseController extends Controller
@@ -308,13 +309,47 @@ class BrowseController extends Controller
 
     private function getForYou($item, $type)
     {
-        //todo
+        if (auth()->guard('api')->check()) {
+//            $user = request()->user('api');
+//            $histories = PlayHistory::query()->where('user_id', $user->id)->where('historyable_type', Music::class)->limit(3)->get();
+//            $data = [];
+//            foreach ($histories as $history) {
+//
+//            }
+
+            $data [] = [
+                "title" => "آخرین موزیک ها",
+                "image" => "",
+                "music_count" => "",
+                "musics" => MusicRepo::getInstance()->get()->setSort(Music::SORT_LATEST)->setCount(5)->setPage(1)->setToJson()->build(),
+            ];
+
+            $data [] = [
+                "title" => "قدیمی ترین موزیک ها",
+                "image" => "",
+                "music_count" => "",
+                "musics" => MusicRepo::getInstance()->get()->setSort(Music::SORT_OLDEST)->setCount(5)->setPage(1)->setToJson()->build(),
+            ];
+
+            $data [] = [
+                "title" => "بهترین موزیک ها",
+                "image" => "",
+                "music_count" => "",
+                "musics" => MusicRepo::getInstance()->get()->setSort(Music::SORT_BEST)->setCount(5)->setPage(1)->setToJson()->build(),
+            ];
+        }
+        return [
+            'id' => $item->id,
+            'name' => $item->name,
+            'type' => $type,
+            'data' => []
+        ];
     }
 
 
     private function getMusicFollows($item, $type)
     {
-        //todo
+        return [];
     }
 
     private function getClientPlaylists($home, $type)

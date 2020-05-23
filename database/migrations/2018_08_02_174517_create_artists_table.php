@@ -19,8 +19,8 @@ class CreateArtistsTable extends Migration
             $table->increments('id');
             $table->unsignedInteger('user_id');
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
-            $table->string('name', 50);
-            $table->string('name_en', 50);
+            $table->string('name', 191);
+            $table->string('name_en', 191);
             $table->string('slug')->unique();
             $table->text('image');
             $table->boolean("isbest")->default(false);
