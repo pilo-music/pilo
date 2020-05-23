@@ -85,7 +85,25 @@ class AuthController extends Controller
             'name' => 'max:190'
         ]);
 
-        if (User::query()->where('email', trim($request->email))->exists()) {
+        $user = User::query()->where('email', trim($request->email))->first();
+
+        if ($user) {
+            if ($user->status != User::USER_STATUS_ACTIVE) {
+                if ($user->status == User::USER_STATUS_DEACTIVE) {
+                    return CustomResponse::create(null, __("messages.account_ban"), false);
+                }
+
+                if ($user->status == User::USER_STATUS_NOT_VERIFY) {
+                    $code = VerifyCode::create([
+                        'email' => $user->email,
+                        'code' => mt_rand(100000, 999999),
+                    ]);
+                    Mail::to($user->email)->send(new VerifyMail($code->code));
+                    return CustomResponse::create([
+                        'status' => 'verify'
+                    ], __("messages.verify_code_sent"), true);
+                }
+            }
             return CustomResponse::create(null, __("messages.email_exists"), false);
         }
 
