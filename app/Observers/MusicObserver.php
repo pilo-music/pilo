@@ -14,13 +14,20 @@ class MusicObserver
      */
     public function created(Music $music)
     {
-        $artist = $music->artist();
-        $artists = $music->artists();
+        $artist = $music->artist;
+        $artists = $music->artists()->get();
 
-        $artist->increment('music_count');
+
+        $artist->update([
+            'music_count' => $artist->musics()->count() + $artist->tagMusics()->count()
+        ]);
+
         foreach ($artists as $item) {
-            $item->increment('music_count');
+            $artist->update([
+                'music_count' => $item->musics()->count() + $item->tagMusics()->count()
+            ]);
         }
+        $music->stored_at = now();
     }
 
     /**
@@ -31,7 +38,19 @@ class MusicObserver
      */
     public function updated(Music $music)
     {
-        //
+        $artist = $music->artist;
+        $artists = $music->artists()->get();
+
+
+        $artist->update([
+            'music_count' => $artist->musics()->count() + $artist->tagMusics()->count()
+        ]);
+
+        foreach ($artists as $item) {
+            $artist->update([
+                'music_count' => $item->musics()->count() + $item->tagMusics()->count()
+            ]);
+        }
     }
 
     /**
@@ -42,12 +61,18 @@ class MusicObserver
      */
     public function deleted(Music $music)
     {
-        $artist = $music->artist();
-        $artists = $music->artists();
+        $artist = $music->artist;
+        $artists = $music->artists()->get();
 
-        $artist->decrement('music_count');
+
+        $artist->update([
+            'music_count' => $artist->musics()->count() + $artist->tagMusics()->count()
+        ]);
+
         foreach ($artists as $item) {
-            $item->decrement('music_count');
+            $artist->update([
+                'music_count' => $item->musics()->count() + $item->tagMusics()->count()
+            ]);
         }
     }
 

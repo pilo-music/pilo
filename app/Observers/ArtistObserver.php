@@ -14,7 +14,7 @@ class ArtistObserver
      */
     public function created(Artist $artist)
     {
-        //
+        $artist->stored_at = now();
     }
 
     /**

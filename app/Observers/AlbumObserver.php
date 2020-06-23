@@ -14,13 +14,22 @@ class AlbumObserver
      */
     public function created(Album $album)
     {
-        $artist = $album->artist();
-        $artists = $album->artists();
 
-        $artist->increment('album_count');
+        $artist = $album->artist;
+        $artists = $album->artists()->get();
+
+
+        $artist->update([
+            'album_count' => $artist->albums()->count() + $artist->tagAlbums()->count()
+        ]);
+
         foreach ($artists as $item) {
-            $item->increment('album_count');
+            $artist->update([
+                'album_count' => $item->albums()->count() + $item->tagAlbums()->count()
+            ]);
         }
+
+        $album->stored_at = now();
     }
 
     /**
@@ -31,7 +40,19 @@ class AlbumObserver
      */
     public function updated(Album $album)
     {
-        //
+        $artist = $album->artist;
+        $artists = $album->artists()->get();
+
+
+        $artist->update([
+            'album_count' => $artist->albums()->count() + $artist->tagAlbums()->count()
+        ]);
+
+        foreach ($artists as $item) {
+            $artist->update([
+                'album_count' => $item->albums()->count() + $item->tagAlbums()->count()
+            ]);
+        }
     }
 
     /**
@@ -42,12 +63,18 @@ class AlbumObserver
      */
     public function deleted(Album $album)
     {
-        $artist = $album->artist();
-        $artists = $album->artists();
+        $artist = $album->artist;
+        $artists = $album->artists()->get();
 
-        $artist->decrement('album_count');
+
+        $artist->update([
+            'album_count' => $artist->albums()->count() + $artist->tagAlbums()->count()
+        ]);
+
         foreach ($artists as $item) {
-            $item->increment('album_count');
+            $artist->update([
+                'album_count' => $item->albums()->count() + $item->tagAlbums()->count()
+            ]);
         }
     }
 
@@ -72,4 +99,6 @@ class AlbumObserver
     {
         //
     }
+
+
 }

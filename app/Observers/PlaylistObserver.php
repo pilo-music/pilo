@@ -25,6 +25,8 @@ class PlaylistObserver
                 $item->increment('playlist_count');
             }
         }
+
+        $playlist->stored_at = now();
     }
 
     /**
