@@ -32,6 +32,12 @@ class Playlist extends Model
         return $this->morphedByMany(Music::class, 'playlistable');
     }
 
+    public function sources()
+    {
+        return $this->morphMany(Source::class, 'sourceable');
+    }
+
+
     public function artists()
     {
         return $this->morphToMany(Artist::class, 'artistable');

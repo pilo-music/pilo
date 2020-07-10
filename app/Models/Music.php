@@ -57,6 +57,12 @@ class Music extends Model
         return $this->morphMany(Comment::class, 'commentable');
     }
 
+    public function sources()
+    {
+        return $this->morphMany(Source::class, 'sourceable');
+    }
+
+
     public function bookmarks()
     {
         return $this->morphMany(Bookmark::class, "bookmarkable");

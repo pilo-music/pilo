@@ -70,6 +70,11 @@ class Artist extends Model
         return $this->morphedByMany(Playlist::class, 'artistable');
     }
 
+    public function sources()
+    {
+        return $this->morphMany(Source::class, 'sourceable');
+    }
+
     public function follows()
     {
         return $this->hasMany(Follow::class);

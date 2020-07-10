@@ -48,6 +48,12 @@ class Video extends Model
         return $this->morphMany(Comment::class, 'commentable');
     }
 
+    public function sources()
+    {
+        return $this->morphMany(Source::class, 'sourceable');
+    }
+
+
     public function tags()
     {
         return $this->morphMany(Tag::class, 'tagable');

@@ -50,6 +50,11 @@ class Album extends Model
         return $this->morphMany(Comment::class, 'commentable');
     }
 
+    public function sources()
+    {
+        return $this->morphMany(Source::class, 'sourceable');
+    }
+
     public function musics()
     {
         return $this->hasMany(Music::class);
