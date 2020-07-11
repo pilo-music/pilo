@@ -11,6 +11,7 @@
         "php": "^7.2",
         "ext-fileinfo": "*",
         "ext-json": "*",
+        "doctrine/dbal": "^2.10",
         "falahati/php-mp3": "^0.9.5@alpha",
         "fideloper/proxy": "^4.0",
         "intervention/image": "^2.5",
