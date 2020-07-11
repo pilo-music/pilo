@@ -32,7 +32,7 @@ class ToJson
         if ($this->music) {
             return [
                 'slug' => $this->music->slug,
-                'title' => $this->music->title,
+                'title' => $this->music->title_en,
                 'image' => get_image($this->music, 'image'),
                 'thumbnail' => get_image($this->music, 'thumbnail'),
                 'link128' => preg_replace("/ /", "%20", $this->music->link128 ?? ""),

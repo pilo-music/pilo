@@ -29,7 +29,7 @@ class ToJson
         if (isset($this->artist)) {
             return [
                 'slug' => $this->artist->slug,
-                'name' => $this->artist->name ?? "",
+                'name' => $this->artist->name_en ?? "",
                 'image' => get_image($this->artist, 'image'),
                 'thumbnail' => get_image($this->artist, 'thumbnail'),
                 'music_count' => $this->artist->music_count,

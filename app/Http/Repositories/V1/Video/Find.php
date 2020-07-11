@@ -125,7 +125,9 @@ class Find
             /*
              *  find from name
              */
-            $videos = Video::query()->where('title', 'LIKE', '%' . $this->name . '%')
+            $videos = Video::query()
+                ->where('title_en', 'LIKE', '%' . $this->name . '%')
+                ->where('title', 'LIKE', '%' . $this->name . '%')
                 ->where('status', Video::STATUS_ACTIVE);
 
             switch ($this->sort) {

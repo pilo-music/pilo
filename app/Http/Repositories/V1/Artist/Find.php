@@ -118,7 +118,8 @@ class Find
              *  find from name
              */
             $this->name = (string)$this->name;
-            $artists = Artist::query()->where('name', 'LIKE', '%' . $this->name . '%')
+            $artists = Artist::query()->where('name_en', 'LIKE', '%' . $this->name . '%')
+                ->orWhere('name', 'LIKE', '%' . $this->name . '%')
                 ->where('status', Artist::STATUS_ACTIVE);
 
             switch ($this->sort) {

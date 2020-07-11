@@ -34,7 +34,7 @@ class ToJson
         if ($this->playlist) {
             return [
                 'slug' => $this->playlist->slug,
-                'title' => $this->playlist->title == null ? "" : $this->playlist->title,
+                'title' => $this->playlist->title_en == null ? "" : $this->playlist->title_en,
                 'image' => get_image($this->playlist, 'image'),
                 'image_one' => get_image($this->playlist, 'image_one'),
                 'image_two' => get_image($this->playlist, 'image_two'),

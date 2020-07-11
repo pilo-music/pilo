@@ -30,7 +30,7 @@ class ToJson
         if ($this->video) {
             return [
                 'slug' => $this->video->slug,
-                'title' => $this->video->title,
+                'title' => $this->video->title_en,
                 'image' => get_image($this->video, 'image'),
                 'thumbnail' => get_image($this->video, 'thumbnail'),
                 'video480' => preg_replace("/ /", "%20", $this->video->video480 ?? ""),

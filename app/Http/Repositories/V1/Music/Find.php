@@ -125,7 +125,9 @@ class Find
             /*
              *  find from name
              */
-            $musics = Music::query()->where('title', 'LIKE', '%' . $this->name . '%')
+            $musics = Music::query()
+                ->where('title_en', 'LIKE', '%' . $this->name . '%')
+                ->where('title', 'LIKE', '%' . $this->name . '%')
                 ->where('status', Music::STATUS_ACTIVE);
 
             switch ($this->sort) {

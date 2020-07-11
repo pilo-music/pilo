@@ -33,7 +33,7 @@ class ToJson
         if ($this->album) {
             return [
                 'slug' => $this->album->slug,
-                'title' => $this->album->title == null ? "" : $this->album->title,
+                'title' => $this->album->title_en == null ? "" : $this->album->title_en,
                 'image' => get_image($this->album, 'image'),
                 'thumbnail' => get_image($this->album, 'thumbnail'),
                 'music_count' => $this->album->music_count == null ? 0 : $this->album->music_count,
