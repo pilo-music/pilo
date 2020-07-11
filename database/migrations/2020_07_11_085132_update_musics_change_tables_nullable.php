@@ -14,29 +14,25 @@ class UpdateMusicsChangeTablesNullable extends Migration
     public function up()
     {
         Schema::table('musics', function (Blueprint $table) {
-            $table->string('title_en')->change();
+            $table->string('title_en')->nullable(false)->change();
             $table->string('title')->nullable()->change();
         });
 
         Schema::table('artists', function (Blueprint $table) {
-            $table->string('name_en')->change();
+            $table->string('name_en')->nullable(false)->change();
             $table->string('name')->nullable()->change();
         });
 
         Schema::table('albums', function (Blueprint $table) {
-            $table->string('title_en')->change();
+            $table->string('title_en')->nullable(false)->change();
             $table->string('title')->nullable()->change();
         });
 
         Schema::table('videos', function (Blueprint $table) {
-            $table->string('title_en')->change();
+            $table->string('title_en')->nullable(false)->change();
             $table->string('title')->nullable()->change();
         });
 
-        Schema::table('playlists', function (Blueprint $table) {
-            $table->string('title_en')->change();
-            $table->string('title')->nullable()->change();
-        });
     }
 
     /**
