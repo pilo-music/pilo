@@ -62,9 +62,5 @@ class UpdateMusicsChangeTablesNullable extends Migration
             $table->string('title')->change();
         });
 
-        Schema::table('playlists', function (Blueprint $table) {
-            $table->string('title_en')->nullable()->change();
-            $table->string('title')->change();
-        });
     }
 }
