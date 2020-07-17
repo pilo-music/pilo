@@ -11,4 +11,11 @@
 |
 */
 
+use Illuminate\Support\Facades\Route;
+
 Route::get('/', "HomeController@index");
+
+
+Route::namespace('Admin')->group(static function (){
+    Route::get('/','IndexController')->name('admin.index');
+});

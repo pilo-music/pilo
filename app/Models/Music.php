@@ -9,6 +9,8 @@ class Music extends Model
 {
     use Notifiable;
 
+    protected $table = "musics";
+
     const STATUS_ACTIVE = 1;
     const STATUS_DRAFT = 0;
     const STATUS_JUST_IN_APP = 2;
