@@ -52,10 +52,4 @@ class Video extends Model
     {
         return $this->morphMany(Source::class, 'sourceable');
     }
-
-
-    public function tags()
-    {
-        return $this->morphMany(Tag::class, 'tagable');
-    }
 }
