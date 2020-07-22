@@ -85,7 +85,7 @@ class Get
                 $items = TopMusic::query()->skip(($this->page - 1) * $this->count)->take($this->count)->get();
                 $artists = [];
                 foreach ($items as $item) {
-                    if (substr_count($item->artist->name, ',') > 0) {
+                    if (substr_count($item->artist->name_en, ',') > 0) {
                         $artist = $item->artist;
                     } else {
                         $artist = $item->artists()->get()[0];
