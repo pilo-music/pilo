@@ -90,15 +90,14 @@ class Get
                     } else {
                         $artist = $item->music->artists()->get()[0];
                     }
-
-                    if ($this->toJson) {
-                        $artists[] = ArtistRepo::getInstance()->toJson()->setArtist($artist)->build();
-                    } else {
+                    if (!in_array($artist, $artists, true)) {
                         $artists[] = $artist;
                     }
                 }
+                if ($this->toJson) {
+                    return ArtistRepo::getInstance()->toJsonArray()->setArtists(collect($artist))->build();
+                }
                 return $artists;
-
 //                $artists = $artists->where('isbest', true)->latest();
                 break;
             default:
