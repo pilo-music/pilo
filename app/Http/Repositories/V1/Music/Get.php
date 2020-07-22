@@ -6,6 +6,7 @@ use App\Http\Repositories\V1\Artist\ArtistRepo;
 use App\Models\Artist;
 use App\Models\Music;
 use App\Models\TopMusic;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Collection;
 
 class Get
@@ -92,9 +93,9 @@ class Get
     }
 
     /**
-     * @return Collection
+     * @return array|\Illuminate\Database\Eloquent\Builder|HasMany
      */
-    public function build(): Collection
+    public function build()
     {
         if (isset($this->artist)) {
             if (!$this->artist instanceof Artist) {
@@ -123,7 +124,7 @@ class Get
                         $musics[] = $item->music;
                     }
                 }
-
+                return $musics;
                 break;
         }
 
