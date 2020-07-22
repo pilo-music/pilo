@@ -5,6 +5,7 @@ namespace App\Http\Repositories\V1\Music;
 use App\Http\Repositories\V1\Artist\ArtistRepo;
 use App\Models\Artist;
 use App\Models\Music;
+use App\Models\TopMusic;
 use Illuminate\Support\Collection;
 
 class Get
@@ -98,8 +99,9 @@ class Get
         if (isset($this->artist)) {
             if (!$this->artist instanceof Artist) {
                 $this->artist = ArtistRepo::getInstance()->find()->setSlug($this->artist)->build();
-                if (!$this->artist)
+                if (!$this->artist) {
                     return collect([]);
+                }
             }
             $musics = $this->artist->musics()->where('status', Music::STATUS_ACTIVE);
         } else {
@@ -111,7 +113,19 @@ class Get
                 $musics = $musics->latest();
                 break;
             case  Music::SORT_BEST:
-                $musics = $musics->orderBy('play_count');
+//                $musics = $musics->orderBy('play_count');
+                $toJson = $this->toJson;
+                $musics = TopMusic::query()->skip(($this->page - 1) * $this->count)->take($this->count)->get()->map(static function ($item) use ($toJson) {
+                    if ($toJson) {
+                        $item = MusicRepo::getInstance()->toJsonArray()->setMusics($item->music)->build();
+                    } else {
+                        $item = $item->music;
+                    }
+                    return $item;
+                });
+
+                return $musics;
+
                 break;
         }
 

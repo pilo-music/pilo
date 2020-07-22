@@ -52,7 +52,6 @@ class PlayHistoryController extends Controller
                     'ip' => get_ip(),
                     'agent' => $request->header('User-Agent')
                 ]);
-                $item->increment("play_count");
             } elseif (!$history) {
                 $user->histories()->create([
                     'historyable_id' => $item->id,
@@ -60,9 +59,9 @@ class PlayHistoryController extends Controller
                     'ip' => get_ip(),
                     'agent' => $request->header('User-Agent')
                 ]);
-                $item->increment("play_count");
             }
 
+            $item->increment("play_count");
         }
 
         return CustomResponse::create(null, '', true);

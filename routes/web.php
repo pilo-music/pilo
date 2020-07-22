@@ -15,6 +15,10 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', "HomeController@index");
 
+Route::get('/login/google', 'Panel\UserController@redirectToProvider');
+Route::get('/login/google/callback', 'Panel\UserController@handleProviderCallback');
+
+
 
 Route::prefix('admin')->namespace('Admin')->group(static function () {
     Route::get('/', 'IndexController')->name('admin.index');
