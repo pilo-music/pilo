@@ -118,12 +118,15 @@ class Get
                 $items = TopMusic::query()->skip(($this->page - 1) * $this->count)->take($this->count)->get();
                 $musics = [];
                 foreach ($items as $item) {
-                    if ($this->toJson) {
-                        $musics[] = MusicRepo::getInstance()->toJson()->setMusic($item->music)->build();
-                    } else {
+                    if (!in_array($item->item, $musics, true)) {
                         $musics[] = $item->music;
                     }
                 }
+
+                if ($this->toJson) {
+                    return MusicRepo::getInstance()->toJsonArray()->setMusics(collect($musics))->build();
+                }
+
                 return $musics;
                 break;
         }
