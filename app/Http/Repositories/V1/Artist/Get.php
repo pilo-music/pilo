@@ -84,14 +84,17 @@ class Get
             case  Artist::SORT_BEST:
                 $items = TopMusic::query()->skip(($this->page - 1) * $this->count)->take($this->count)->get();
                 $artists = [];
+                $artists_id = [];
                 foreach ($items as $item) {
                     if (substr_count($item->music->artist->name_en, ',') == 0) {
                         $artist = $item->music->artist;
                     } else {
                         $artist = $item->music->artists()->get()[0];
                     }
-                    if (!in_array($artist, $artists, true)) {
+
+                    if (!in_array($artist->id, $artists_id)) {
                         $artists[] = $artist;
+                        $artists_id[] = $artist->id;
                     }
                 }
                 if ($this->toJson) {
