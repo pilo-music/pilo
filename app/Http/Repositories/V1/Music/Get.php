@@ -114,17 +114,20 @@ class Get
                 $musics = $musics->latest();
                 break;
             case  Music::SORT_BEST:
-//                $musics = $musics->orderBy('play_count');
-                $items = TopMusic::query()->skip(($this->page - 1) * $this->count)->take($this->count)->get();
-                $musics = [];
-                foreach ($items as $item) {
-                    if ($this->toJson) {
-                        $musics[] = MusicRepo::getInstance()->toJson()->setMusic($item->music)->build();
-                    } else {
-                        $musics[] = $item->music;
+                if (isset($this->artist)) {
+                    $musics = $musics->orderBy('play_count');
+                } else {
+                    $items = TopMusic::query()->skip(($this->page - 1) * $this->count)->take($this->count)->get();
+                    $musics = [];
+                    foreach ($items as $item) {
+                        if ($this->toJson) {
+                            $musics[] = MusicRepo::getInstance()->toJson()->setMusic($item->music)->build();
+                        } else {
+                            $musics[] = $item->music;
+                        }
                     }
+                    return $musics;
                 }
-                return $musics;
                 break;
         }
 
