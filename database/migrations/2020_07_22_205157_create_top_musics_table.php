@@ -15,8 +15,8 @@ class CreateTopMusicsTable extends Migration
     {
         Schema::create('top_musics', static function (Blueprint $table) {
             $table->id();
-            $table->foreignId('music_id')->constrained('musics');
-            $table->string('type')->default('trending');
+            $table->unsignedInteger("music_id");
+            $table->foreign("music_id")->on("musics")->references("id");            $table->string('type')->default('trending');
             $table->boolean('is_active')->default(true);
             $table->timestamps();
         });
