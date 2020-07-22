@@ -88,6 +88,7 @@ class Get
                     if (substr_count($item->music->artist->name_en, ',') > 0) {
                         $artist = $item->music->artist;
                     } else {
+                        dd($item->music->artists()->get());
                         $artist = $item->music->artists()->get()[0];
                     }
 
