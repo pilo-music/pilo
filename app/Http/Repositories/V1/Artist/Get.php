@@ -95,7 +95,7 @@ class Get
                     }
                 }
                 if ($this->toJson) {
-                    return ArtistRepo::getInstance()->toJsonArray()->setArtists(collect($artist))->build();
+                    return ArtistRepo::getInstance()->toJsonArray()->setArtists(collect($artists))->build();
                 }
                 return $artists;
 //                $artists = $artists->where('isbest', true)->latest();
