@@ -82,26 +82,7 @@ class Get
                 $artists = $artists->latest();
                 break;
             case  Artist::SORT_BEST:
-                $items = TopMusic::query()->latest()->take($this->count)->get();
-                $artists = [];
-                $artists_id = [];
-                foreach ($items as $item) {
-                    if (substr_count($item->music->artist->name_en, ',') == 0) {
-                        $artist = $item->music->artist;
-                    } else {
-                        $artist = $item->music->artists()->get()[0];
-                    }
-
-                    if (!in_array($artist->id, $artists_id)) {
-                        $artists[] = $artist;
-                        $artists_id[] = $artist->id;
-                    }
-                }
-                if ($this->toJson) {
-                    return ArtistRepo::getInstance()->toJsonArray()->setArtists(collect($artists))->build();
-                }
-                return $artists;
-//                $artists = $artists->where('isbest', true)->latest();
+                $artists = $artists->where('isbest', true)->latest();
                 break;
             default:
                 break;
