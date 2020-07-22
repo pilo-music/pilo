@@ -66,11 +66,6 @@ class ForgotPasswordController extends Controller
         $user->password = bcrypt($request->password);
         $user->save();
 
-        auth()->login($user);
-        $token = $user->createToken('Client token')->accessToken;
-        return CustomResponse::create([
-            'access_token' => $token,
-            'user' => UserRepo::getInstance()->toJson()->setUser($user)->build(),
-        ], '', true);
+        return CustomResponse::create(UserRepo::getInstance()->toJson()->setUser($user)->build(), '', true);
     }
 }
