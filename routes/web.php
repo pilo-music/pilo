@@ -16,6 +16,10 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', "HomeController@index");
 
 
-Route::namespace('Admin')->group(static function (){
-    Route::get('/','IndexController')->name('admin.index');
+Route::prefix('admin')->namespace('Admin')->group(static function () {
+    Route::get('/', 'IndexController')->name('admin.index');
+    Route::resource('artists','ArtistController');
+    Route::resource('musics','MusicController');
+    Route::resource('albums','AlbumController');
+    Route::resource('videos','VideoController');
 });

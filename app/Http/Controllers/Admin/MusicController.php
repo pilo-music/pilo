@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Music;
 use Illuminate\Http\Request;
 
 class MusicController extends Controller
@@ -14,7 +15,8 @@ class MusicController extends Controller
      */
     public function index()
     {
-        //
+        $data = Music::query()->latest()->paginate(20);
+        return  view('admin.pages.browse',compact('data'));
     }
 
     /**

@@ -17,9 +17,9 @@
     <link rel="icon" href="./favicon.ico" type="image/x-icon"/>
     <link rel="shortcut icon" href="./favicon.ico" type="image/x-icon"/>
     <!-- CSS files -->
-    <link href="/admin/libs/jqvmap/dist/jqvmap.min.css" rel="stylesheet"/>
-    <link href="/admin/css/tabler.min.css" rel="stylesheet"/>
-    <link href="/admin/css/demo.min.css" rel="stylesheet"/>
+    <link href="/resources/admin/libs/jqvmap/dist/jqvmap.min.css" rel="stylesheet"/>
+    <link href="/resources/admin/css/tabler.min.css" rel="stylesheet"/>
+    <link href="/resources/admin/css/demo.min.css" rel="stylesheet"/>
     <style>
         body {
             display: none;
@@ -37,9 +37,9 @@
     </div>
 </div>
 <!-- Libs JS -->
-<script src="/admin/libs/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-<script src="/admin/libs/jquery/dist/jquery.slim.min.js"></script>
-<script src="/admin/libs/peity/jquery.peity.min.js"></script>
+<script src="/resources/admin/libs/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+<script src="/resources/admin/libs/jquery/dist/jquery.slim.min.js"></script>
+<script src="/resources/admin/libs/peity/jquery.peity.min.js"></script>
 <!-- Tabler Core -->
 <script src="./dist/js/tabler.min.js"></script>
 <script>
