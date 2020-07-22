@@ -119,7 +119,7 @@ class Get
                 $musics = [];
                 foreach ($items as $item) {
                     if ($this->toJson) {
-                        $musics[] = MusicRepo::getInstance()->toJsonArray()->setMusics($item->music)->build();
+                        $musics[] = MusicRepo::getInstance()->toJson()->setMusic($item->music)->build();
                     } else {
                         $musics[] = $item->music;
                     }
