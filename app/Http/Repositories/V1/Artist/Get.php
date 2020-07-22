@@ -82,7 +82,7 @@ class Get
                 $artists = $artists->latest();
                 break;
             case  Artist::SORT_BEST:
-                $items = TopMusic::query()->skip(($this->page - 1) * $this->count)->take($this->count)->get();
+                $items = TopMusic::query()->latest()->take($this->count)->get();
                 $artists = [];
                 $artists_id = [];
                 foreach ($items as $item) {
