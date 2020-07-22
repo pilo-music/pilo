@@ -115,7 +115,7 @@ class Get
             case  Music::SORT_BEST:
 //                $musics = $musics->orderBy('play_count');
                 $toJson = $this->toJson;
-                $musics = TopMusic::query()->skip(($this->page - 1) * $this->count)->take($this->count)->get()->map(static function ($item) use ($toJson) {
+                $musics = TopMusic::query()->where('is_active', true)->limit($this->count)->get()->map(static function ($item) use ($toJson) {
                     if ($toJson) {
                         $item = MusicRepo::getInstance()->toJsonArray()->setMusics($item->music)->build();
                     } else {
