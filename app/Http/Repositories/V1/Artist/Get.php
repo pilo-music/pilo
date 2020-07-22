@@ -3,6 +3,7 @@
 namespace App\Http\Repositories\V1\Artist;
 
 use App\Models\Artist;
+use App\Models\TopArtist;
 use App\Models\TopMusic;
 
 class Get
@@ -82,7 +83,17 @@ class Get
                 $artists = $artists->latest();
                 break;
             case  Artist::SORT_BEST:
-                $artists = $artists->where('isbest', true)->latest();
+//                $artists = $artists->where('isbest', true)->latest();
+                $items = TopArtist::query()->skip(($this->page - 1) * $this->count)->take($this->count)->get();
+                $musics = [];
+                foreach ($items as $item) {
+                    if ($this->toJson) {
+                        $musics[] = ArtistRepo::getInstance()->toJson()->setArtist($item->artist)->build();
+                    } else {
+                        $musics[] = $item->music;
+                    }
+                }
+                return $musics;
                 break;
             default:
                 break;
