@@ -4,10 +4,11 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Notifications\Notifiable;
+use Laravel\Scout\Searchable;
 
 class Music extends Model
 {
-    use Notifiable;
+    use Notifiable, Searchable;
 
     protected $table = "musics";
 
