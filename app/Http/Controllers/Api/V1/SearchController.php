@@ -29,39 +29,40 @@ class SearchController extends Controller
 
         $page = $request->page ?? 1;
         $type = $request->type ?? null;
+        $count = $request->has('type') ? Music::SORT_SEARCH : 4;
 
         if ($type) {
             switch ($type) {
                 case "music":
-                    $musics = MusicRepo::getInstance()->find()->setName($request->input('query'))->setPage($page)->setSort(Music::SORT_SEARCH)->setToJson()->build();
+                    $musics = MusicRepo::getInstance()->find()->setName($request->input('query'))->setPage($page)->setSort($count)->setToJson()->build();
                     $artists = [];
                     $videos = [];
                     $albums = [];
                     $playlist = [];
                     break;
                 case "artist":
-                    $artists = ArtistRepo::getInstance()->find()->setName($request->input('query'))->setPage($page)->setSort(Artist::SORT_SEARCH)->setToJson()->build();
+                    $artists = ArtistRepo::getInstance()->find()->setName($request->input('query'))->setPage($page)->setSort($count)->setToJson()->build();
                     $musics = [];
                     $videos = [];
                     $albums = [];
                     $playlist = [];
                     break;
                 case "video":
-                    $videos = VideoRepo::getInstance()->find()->setName($request->input('query'))->setPage($page)->setSort(Video::SORT_SEARCH)->setToJson()->build();
+                    $videos = VideoRepo::getInstance()->find()->setName($request->input('query'))->setPage($page)->setSort($count)->setToJson()->build();
                     $albums = [];
                     $playlist = [];
                     $musics = [];
                     $artists = [];
                     break;
                 case "album":
-                    $albums = AlbumRepo::getInstance()->find()->setName($request->input('query'))->setPage($page)->setSort(Album::SORT_SEARCH)->setToJson()->build();
+                    $albums = AlbumRepo::getInstance()->find()->setName($request->input('query'))->setPage($page)->setSort($count)->setToJson()->build();
                     $musics = [];
                     $artists = [];
                     $videos = [];
                     $playlist = [];
                     break;
                 case "playlist":
-                    $playlist = PlaylistRepo::getInstance()->find()->setName($request->input('query'))->setPage($page)->setSort(Playlist::SORT_SEARCH)->setToJson()->build();
+                    $playlist = PlaylistRepo::getInstance()->find()->setName($request->input('query'))->setPage($page)->setSort($count)->setToJson()->build();
                     $musics = [];
                     $artists = [];
                     $videos = [];

@@ -125,24 +125,14 @@ class Find
             /*
              *  find from name
              */
-            $musics = Music::query()
-                ->where('title_en', 'LIKE', '%' . $this->name . '%')
-                ->where('title', 'LIKE', '%' . $this->name . '%')
-                ->where('status', Music::STATUS_ACTIVE);
-
-            switch ($this->sort) {
-                case Music::SORT_LATEST:
-                    $musics = $musics->latest();
-                    break;
-                case  Music::SORT_BEST:
-                    $musics = $musics->orderBy('play_count');
-                    break;
-                case Music::SORT_SEARCH:
-                    $musics = $musics->orderBy('search_count');
-                    break;
-            }
-
-            $musics = $musics->skip(($this->page - 1) * $this->count)->take($this->count)->get();
+            $musics = Music::searchByQuery([
+                'multi_match' => [
+                    'query' => $this->name,
+                    'fields' => [
+                        'title_en', 'title'
+                    ]
+                ],
+            ], null, null, $this->count, ($this->page - 1) * $this->count)->where('status', Music::STATUS_ACTIVE);
 
             if ($this->toJson) {
                 $musics = MusicRepo::getInstance()->toJsonArray()->setMusics($musics)->build();

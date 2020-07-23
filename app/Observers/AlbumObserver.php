@@ -9,7 +9,7 @@ class AlbumObserver
     /**
      * Handle the album "created" event.
      *
-     * @param \App\Models\Album $album
+     * @param Album $album
      * @return void
      */
     public function created(Album $album)
@@ -30,12 +30,17 @@ class AlbumObserver
         }
 
         $album->stored_at = now();
+
+        try {
+            $album->addToIndex();
+        } catch (\Exception $e) {
+        }
     }
 
     /**
      * Handle the album "updated" event.
      *
-     * @param \App\Models\Album $album
+     * @param Album $album
      * @return void
      */
     public function updated(Album $album)
@@ -53,12 +58,17 @@ class AlbumObserver
                 'album_count' => $item->albums()->count() + $item->tagAlbums()->count()
             ]);
         }
+
+        try {
+            $album->update();
+        } catch (\Exception $e) {
+        }
     }
 
     /**
      * Handle the album "deleted" event.
      *
-     * @param \App\Models\Album $album
+     * @param Album $album
      * @return void
      */
     public function deleted(Album $album)
@@ -76,29 +86,35 @@ class AlbumObserver
                 'album_count' => $item->albums()->count() + $item->tagAlbums()->count()
             ]);
         }
+
+        try {
+            $album->removeFromIndex();
+        } catch (\Exception $e) {
+        }
     }
 
     /**
      * Handle the album "restored" event.
      *
-     * @param \App\Models\Album $album
+     * @param Album $album
      * @return void
      */
     public function restored(Album $album)
     {
-        //
+        try {
+            $album->addToIndex();
+        } catch (\Exception $e) {
+        }
     }
 
     /**
      * Handle the album "force deleted" event.
      *
-     * @param \App\Models\Album $album
+     * @param Album $album
      * @return void
      */
     public function forceDeleted(Album $album)
     {
-        //
+
     }
-
-
 }

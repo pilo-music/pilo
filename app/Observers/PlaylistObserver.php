@@ -27,6 +27,11 @@ class PlaylistObserver
         }
 
         $playlist->stored_at = now();
+
+        try {
+            $playlist->addToIndex();
+        } catch (\Exception $e) {
+        }
     }
 
     /**
@@ -37,7 +42,10 @@ class PlaylistObserver
      */
     public function updated(Playlist $playlist)
     {
-        //
+        try {
+            $playlist->updateIndex();
+        } catch (\Exception $e) {
+        }
     }
 
     /**
@@ -59,6 +67,11 @@ class PlaylistObserver
                 $item->decrement('playlist_count');
             }
         }
+
+        try {
+            $playlist->removeFromIndex();
+        } catch (\Exception $e) {
+        }
     }
 
     /**
@@ -69,7 +82,10 @@ class PlaylistObserver
      */
     public function restored(Playlist $playlist)
     {
-        //
+        try {
+            $playlist->addToIndex();
+        } catch (\Exception $e) {
+        }
     }
 
     /**

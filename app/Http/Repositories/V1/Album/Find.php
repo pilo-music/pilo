@@ -145,49 +145,32 @@ class Find
                 $this->artist = ArtistRepo::getInstance()->find()->setSlug($this->artist)->build();
             }
 
-            if (!$this->artist)
+            if (!$this->artist) {
                 return null;
+            }
         }
 
         if (isset($this->name) && !empty($this->name)) {
             /*
-             *  find from name
-             */
-            $albums = Album::query()
-                ->where('title_en','LIKE', '%' . $this->name . '%')
-                ->where('title', 'LIKE', '%' . $this->name . '%')
-                ->where('status', Album::STATUS_ACTIVE);
-
-            if (isset($this->artist)) {
-                $albums = $albums->where('artist_id', $this->artist->id);
-
-                $tagAlbums = $this->artist->tagAlbums()->get();
-
-                if (count($tagAlbums) > 0) {
-                    $albums = $albums->merge($tagAlbums);
-                }
-            }
-
-            switch ($this->sort) {
-                case Album::SORT_LATEST:
-                    $albums = $albums->latest();
-                    break;
-                case  Album::SORT_BEST:
-                    $albums = $albums->orderBy('play_count');
-                    break;
-                case  Album::SORT_SEARCH:
-                    $albums = $albums->orderBy('search_count');
-                    break;
-            }
-
-            $albums = $albums->skip(($this->page - 1) * $this->count)->take($this->count)->get();
+            *  find from name
+            */
+            $albums = Album::searchByQuery([
+                'multi_match' => [
+                    'query' => $this->name,
+                    'fields' => [
+                        'title_en', 'title'
+                    ]
+                ],
+            ], null, null, $this->count, ($this->page - 1) * $this->count)->where('status', Album::STATUS_ACTIVE);
 
             if ($this->toJson) {
                 $albums = AlbumRepo::getInstance()->toJsonArray()->setAlbums($albums)->build();
             }
 
             return $albums;
-        } elseif (isset($this->id)) {
+        }
+
+        if (isset($this->id)) {
 
             $album = Album::query()->where('status', Album::STATUS_ACTIVE)
                 ->where('id', $this->id)->first();
@@ -198,20 +181,20 @@ class Find
 
             return $album;
 
-        } else {
-            /*
-             * find from slug
-             */
-            if (isset($this->slug) && $this->slug != "") {
-                $album = Album::query()->where('status', Album::STATUS_ACTIVE)
-                    ->where('slug', $this->slug)->first();
+        }
 
-                if ($this->toJson) {
-                    $album = AlbumRepo::getInstance()->toJson()->setAlbum($album)->build();
-                }
+        /*
+                 * find from slug
+                 */
+        if (isset($this->slug) && $this->slug != "") {
+            $album = Album::query()->where('status', Album::STATUS_ACTIVE)
+                ->where('slug', $this->slug)->first();
 
-                return $album;
+            if ($this->toJson) {
+                $album = AlbumRepo::getInstance()->toJson()->setAlbum($album)->build();
             }
+
+            return $album;
         }
         return null;
     }

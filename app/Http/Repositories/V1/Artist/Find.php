@@ -114,27 +114,17 @@ class Find
     public function build()
     {
         if (isset($this->name) && !empty($this->name)) {
-            /**
-             *  find from name
-             */
-            $this->name = (string)$this->name;
-            $artists = Artist::query()->where('name_en', 'LIKE', '%' . $this->name . '%')
-                ->orWhere('name', 'LIKE', '%' . $this->name . '%')
-                ->where('status', Artist::STATUS_ACTIVE);
-
-            switch ($this->sort) {
-                case Artist::SORT_LATEST:
-                    $artists = $artists->latest();
-                    break;
-                case  Artist::SORT_BEST:
-                    $artists = $artists->orderBy('play_count');
-                    break;
-                case Artist::SORT_SEARCH:
-                    $artists = $artists->orderBy('search_count');
-                    break;
-            }
-
-            $artists = $artists->skip(($this->page - 1) * $this->count)->take($this->count)->get();
+            /*
+         *  find from name
+         */
+            $artists = Artist::searchByQuery([
+                'multi_match' => [
+                    'query' => $this->name,
+                    'fields' => [
+                        'name_en', 'name'
+                    ]
+                ],
+            ], null, null, $this->count, ($this->page - 1) * $this->count)->where('status', Artist::STATUS_ACTIVE);
 
             if ($this->toJson) {
                 $artists = ArtistRepo::getInstance()->toJsonArray()->setArtists($artists)->build();

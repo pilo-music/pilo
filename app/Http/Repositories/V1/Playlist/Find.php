@@ -160,46 +160,28 @@ class Find
 //                return null;
 //        }
 
-        if (!isset($this->id) && !isset($this->slug) && !isset($this->name))
+        if (!isset($this->id) && !isset($this->slug) && !isset($this->name)) {
             return null;
+        }
 
         if (isset($this->name)) {
-            /*
+            /**
              *  find from name
              */
-            $playlists = Playlist::query()
-                ->where('title', 'LIKE', '%' . $this->name . '%')
-                ->whereNull('user_id')->where('status', Playlist::STATUS_ACTIVE);
-
-            if (isset($this->artist)) {
-                $playlists = $playlists->where('artist_id', $this->artist->id);
-
-                $tagAlbums = $this->artist->tagAlbums()->get();
-
-                if (count($tagAlbums) > 0) {
-                    $playlists = $playlists->merge($tagAlbums);
-                }
-            }
-
-            switch ($this->sort) {
-                case Playlist::SORT_LATEST:
-                    $playlists = $playlists->latest();
-                    break;
-                case  Playlist::SORT_BEST:
-                    $playlists = $playlists->orderBy('play_count');
-                    break;
-                case  Playlist::SORT_SEARCH:
-                    $playlists = $playlists->orderBy('search_count');
-                    break;
-            }
-
-            $playlists = $playlists->skip(($this->page - 1) * $this->count)->take($this->count)->get();
+            $playlist = Playlist::searchByQuery([
+                'multi_match' => [
+                    'query' => $this->name,
+                    'fields' => [
+                        'title'
+                    ]
+                ],
+            ], null, null, $this->count, ($this->page - 1) * $this->count)->where('status', Playlist::STATUS_ACTIVE);
 
             if ($this->toJson) {
-                $playlists = PlaylistRepo::getInstance()->toJsonArray()->setPlaylists($playlists)->build();
+                $playlist = PlaylistRepo::getInstance()->toJsonArray()->setPlaylists($playlist)->build();
             }
 
-            return $playlists;
+            return $playlist;
         }
 
         if (isset($this->id)) {

@@ -9,7 +9,7 @@ class MusicObserver
     /**
      * Handle the music "created" event.
      *
-     * @param  \App\Models\Music  $music
+     * @param \App\Models\Music $music
      * @return void
      */
     public function created(Music $music)
@@ -28,12 +28,17 @@ class MusicObserver
             ]);
         }
         $music->stored_at = now();
+
+        try {
+            $music->addToIndex();
+        } catch (\Exception $e) {
+        }
     }
 
     /**
      * Handle the music "updated" event.
      *
-     * @param  \App\Models\Music  $music
+     * @param \App\Models\Music $music
      * @return void
      */
     public function updated(Music $music)
@@ -51,12 +56,17 @@ class MusicObserver
                 'music_count' => $item->musics()->count() + $item->tagMusics()->count()
             ]);
         }
+
+        try {
+            $music->updateIndex();
+        } catch (\Exception $e) {
+        }
     }
 
     /**
      * Handle the music "deleted" event.
      *
-     * @param  \App\Models\Music  $music
+     * @param \App\Models\Music $music
      * @return void
      */
     public function deleted(Music $music)
@@ -74,23 +84,31 @@ class MusicObserver
                 'music_count' => $item->musics()->count() + $item->tagMusics()->count()
             ]);
         }
+
+        try {
+            $music->removeFromIndex();
+        } catch (\Exception $e) {
+        }
     }
 
     /**
      * Handle the music "restored" event.
      *
-     * @param  \App\Models\Music  $music
+     * @param \App\Models\Music $music
      * @return void
      */
     public function restored(Music $music)
     {
-        //
+        try {
+            $music->addToIndex();
+        } catch (\Exception $e) {
+        }
     }
 
     /**
      * Handle the music "force deleted" event.
      *
-     * @param  \App\Models\Music  $music
+     * @param \App\Models\Music $music
      * @return void
      */
     public function forceDeleted(Music $music)

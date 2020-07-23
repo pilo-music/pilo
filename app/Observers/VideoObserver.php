@@ -29,6 +29,11 @@ class VideoObserver
         }
 
         $video->stored_at = now();
+
+        try {
+            $video->addToIndex();
+        } catch (\Exception $e) {
+        }
     }
 
     /**
@@ -51,6 +56,11 @@ class VideoObserver
             $artist->update([
                 'video_count' => $item->videos()->count() + $item->tagVideos()->count()
             ]);
+        }
+
+        try {
+            $video->updateIndex();
+        } catch (\Exception $e) {
         }
     }
 
@@ -75,6 +85,11 @@ class VideoObserver
                 'video_count' => $item->videos()->count() + $item->tagVideos()->count()
             ]);
         }
+
+        try {
+            $video->removeFromIndex();
+        } catch (\Exception $e) {
+        }
     }
 
     /**
@@ -85,7 +100,10 @@ class VideoObserver
      */
     public function restored(Video $video)
     {
-        //
+        try {
+            $video->addToIndex();
+        } catch (\Exception $e) {
+        }
     }
 
     /**

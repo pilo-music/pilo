@@ -123,33 +123,26 @@ class Find
     {
         if (isset($this->name) && !empty($this->name)) {
             /*
-             *  find from name
-             */
-            $videos = Video::query()
-                ->where('title_en', 'LIKE', '%' . $this->name . '%')
-                ->where('title', 'LIKE', '%' . $this->name . '%')
-                ->where('status', Video::STATUS_ACTIVE);
-
-            switch ($this->sort) {
-                case Video::SORT_LATEST:
-                    $videos = $videos->latest();
-                    break;
-                case  Video::SORT_BEST:
-                    $videos = $videos->orderBy('play_count');
-                    break;
-                case  Video::SORT_SEARCH:
-                    $videos = $videos->orderBy('search_count');
-                    break;
-            }
-
-            $videos = $videos->skip(($this->page - 1) * $this->count)->take($this->count)->get();
+          *  find from name
+          */
+            $video = Video::searchByQuery([
+                'multi_match' => [
+                    'query' => $this->name,
+                    'fields' => [
+                        'title_en', 'title'
+                    ]
+                ],
+            ], null, null, $this->count, ($this->page - 1) * $this->count)->where('status', Video::STATUS_ACTIVE);
 
             if ($this->toJson) {
-                $videos = VideoRepo::getInstance()->toJsonArray()->setVideos($videos)->build();
+                $video = VideoRepo::getInstance()->toJsonArray()->setVideos($video)->build();
             }
 
-            return $videos;
-        } elseif (isset($this->id)) {
+            return $video;
+
+        }
+
+        if (isset($this->id)) {
             /**
              * find from slug
              */
@@ -160,20 +153,20 @@ class Find
                 $video = VideoRepo::getInstance()->toJson()->setVideo($video)->build();
             }
             return $video;
-        } else {
-            /**
-             * find from slug
-             */
-            if (isset($this->slug) && $this->slug != "") {
-                $video = Video::query()->where('status', Video::STATUS_ACTIVE)
-                    ->where('slug', $this->slug)->first();
+        }
 
-                if ($this->toJson) {
-                    $video = VideoRepo::getInstance()->toJson()->setVideo($video)->build();
-                }
+        /**
+         * find from slug
+         */
+        if (isset($this->slug) && $this->slug != "") {
+            $video = Video::query()->where('status', Video::STATUS_ACTIVE)
+                ->where('slug', $this->slug)->first();
 
-                return $video;
+            if ($this->toJson) {
+                $video = VideoRepo::getInstance()->toJson()->setVideo($video)->build();
             }
+
+            return $video;
         }
         return null;
     }
