@@ -70,4 +70,18 @@ class Music extends Model
     {
         return $this->morphMany(Bookmark::class, "bookmarkable");
     }
+
+
+    /* Get the indexable data array for the model.
+    *
+    * @return array
+    */
+    public function toSearchableArray()
+    {
+        $array = $this->toArray();
+
+        // Customize array...
+
+        return $array;
+    }
 }
