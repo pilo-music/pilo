@@ -4,7 +4,7 @@
     <meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
     <meta http-equiv="X-UA-Compatible" content="ie=edge"/>
-    <title>Pilo</title>
+    <title>Sign in</title>
     <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin>
     <meta name="msapplication-TileColor" content="#206bc4"/>
     <meta name="theme-color" content="#206bc4"/>
@@ -26,32 +26,29 @@
             display: none;
         }
     </style>
-    @yield('styles')
 </head>
-<body class="antialiased">
-<div class="page">
-    @include('admin.partials.header')
-    @if (flash()->message)
-        <div class="alert alert-{{ flash()->class }}">
-            {{ flash()->message }}
+<body class="antialiased border-top-wide border-primary d-flex flex-column">
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            @if ($errors->any())
+                <div class="alert alert-danger">
+                    <ul>
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+            @endif
         </div>
-    @endif
-    <div class="content">
-        <div class="container-xl">
-            @yield('content')
-        </div>
-        @include('admin.partials.footer')
-    </div>
-</div>
-<!-- Libs JS -->
-<script src="/resources/admin/libs/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-<script src="/resources/admin/libs/jquery/dist/jquery.slim.min.js"></script>
-<!-- Tabler Core -->
-<script src="./dist/js/tabler.min.js"></script>
-<script>
-    document.body.style.display = "block"
-</script>
+    @yield('content')
 
-@yield('scripts')
+    <!-- Libs JS -->
+        <script src="/resources/admin/libs/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+        <!-- Tabler Core -->
+        <script src="/resources/admin/js/tabler.min.js"></script>
+        <script>
+            document.body.style.display = "block"
+        </script>
 </body>
 </html>

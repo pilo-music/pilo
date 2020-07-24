@@ -40,38 +40,52 @@
                     </svg>
                 </a>
             </div>
-            <div class="mt-4">
-                <div class="box">
-                    <div class="card">
-                        <div class="table-responsive">
-                            <table class="table table-vcenter card-table">
-                                <thead>
-                                <tr>
-                                    <th>Id</th>
-                                    <th>Image</th>
-                                    <th>Name</th>
-                                    <th>Artist</th>
-                                    <th class="w-1"></th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                @foreach($data as $item)
-                                    <tr>
-                                        <td>{{$item->id}}</td>
-                                        <td><img src="{{get_image($item,'image')}}" alt="" width="50" height="50"
-                                                 class="rounded img-fluid"></td>
-                                        <td class="text-muted">{{$item->title_en}}</td>
-                                        <td class="text-muted">{{$item->artist->name_en}}</td>
-                                        <td>
-                                            <a href="#">Edit</a>
-                                        </td>
-                                    </tr>
-                                @endforeach
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
+        </div>
+    </div>
+    <div class="mt-4">
+        <div class="box">
+            <div class="card">
+                <div class="table-responsive">
+                    <table class="table table-vcenter card-table">
+                        <thead>
+                        <tr>
+                            <th>Id</th>
+                            <th>Image</th>
+                            <th>Name</th>
+                            <th>Status</th>
+                            <th class="w-1"></th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        @foreach($data as $item)
+                            <tr>
+                                <td>{{$item->id}}</td>
+                                <td>
+                                    <img src="{{get_image($item,'image')}}" alt="" width="50" height="50"
+                                         class="rounded img-fluid">
+                                </td>
+                                <td class="text-muted">{{$item->name_en}}</td>
+                                @if($item->status == 1)
+                                    <td>
+                                       <span class="badge badge-success">Active</span>
+                                    </td>
+                                @else
+                                    <span class="badge badge-danger">Draft</span>
+                                @endif
+                                <td>
+                                    <a href="{{route('artists.edit',['artist'=>$item->id])}}">Edit</a>
+                                </td>
+                            </tr>
+                        @endforeach
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
+    </div>
+
+    <div>
+        {{$data->render()}}
+    </div>
+
 @endsection

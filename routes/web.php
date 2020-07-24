@@ -11,19 +11,24 @@
 |
 */
 
-use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Auth;
 
 Route::get('/', "HomeController@index");
 
-Route::get('/login/google', 'Panel\UserController@redirectToProvider');
-Route::get('/login/google/callback', 'Panel\UserController@handleProviderCallback');
+//Route::get('/login/google', 'Panel\UserController@redirectToProvider');
+//Route::get('/login/google/callback', 'Panel\UserController@handleProviderCallback');
+//
 
 
-
-Route::prefix('admin')->namespace('Admin')->group(static function () {
+Route::prefix('admin')->middleware('auth')->namespace('Admin')->group(static function () {
     Route::get('/', 'IndexController')->name('admin.index');
-    Route::resource('artists','ArtistController');
-    Route::resource('musics','MusicController');
-    Route::resource('albums','AlbumController');
-    Route::resource('videos','VideoController');
+    Route::get('/home', 'IndexController')->name('home');
+    Route::resource('artists', 'ArtistController');
+    Route::resource('musics', 'MusicController');
+    Route::resource('albums', 'AlbumController');
+    Route::resource('videos', 'VideoController');
 });
+
+
+Auth::routes(['reset' => false, 'register' => false, 'forgot' => false, 'confirm' => false]);
+
