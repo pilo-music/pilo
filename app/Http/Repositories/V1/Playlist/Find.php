@@ -171,6 +171,9 @@ class Find
             $playlist = Playlist::searchByQuery([
                 'multi_match' => [
                     'query' => $this->name,
+                    "fuzziness" => "AUTO",
+                    "operator" => "AND",
+                    "lenient" => "true",
                     'fields' => [
                         'title'
                     ]

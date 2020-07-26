@@ -120,6 +120,9 @@ class Find
             $artists = Artist::searchByQuery([
                 'multi_match' => [
                     'query' => $this->name,
+                    "fuzziness" => "AUTO",
+                    "operator" => "AND",
+                    "lenient" => "true",
                     'fields' => [
                         'name_en', 'name'
                     ]

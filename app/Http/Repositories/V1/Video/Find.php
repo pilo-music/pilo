@@ -128,6 +128,9 @@ class Find
             $video = Video::searchByQuery([
                 'multi_match' => [
                     'query' => $this->name,
+                    "fuzziness" => "AUTO",
+                    "operator" => "AND",
+                    "lenient" => "true",
                     'fields' => [
                         'title_en', 'title'
                     ]

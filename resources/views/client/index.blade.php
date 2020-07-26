@@ -7,19 +7,25 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Pilo</title>
     <link rel="stylesheet" href="/resources/client/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/resources/client/css/styles.css">
 </head>
 <body>
 
 <div class="container">
     <div class="row">
         <div class="col-12 header">
-            <div>
-                <img src="/resources/client/img/logo.svg" alt="pilo" width="50">
-            </div>
-
-            <div class="download">
-                <a href="#">Download</a>
-            </div>
+            <ul class="list-inline">
+                <li class="list-inline-item">
+                    <div class="logo">
+                        <img src="/resources/client/img/logo.svg" alt="pilo" width="50">
+                    </div>
+                </li>
+                <li class="list-inline-item">
+                    <div class="download">
+                        <a href="#">Download</a>
+                    </div>
+                </li>
+            </ul clas>
         </div>
     </div>
 
@@ -38,7 +44,15 @@
                 <span></span>
             </div>
 
+            <h2>Discover how <br>you listen</h2>
+            <h3>Explore your music taste profile and <br> create awesome playlists.</h3>
 
+            <a href="#">
+                <div>
+                    <img src="" alt="">
+                    Continue with Pilo
+                </div>
+            </a>
         </div>
         <div class="col-4">
 

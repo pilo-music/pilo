@@ -157,6 +157,9 @@ class Find
             $albums = Album::searchByQuery([
                 'multi_match' => [
                     'query' => $this->name,
+                    "fuzziness" => "AUTO",
+                    "operator" => "AND",
+                    "lenient" => "true",
                     'fields' => [
                         'title_en', 'title'
                     ]
