@@ -117,7 +117,6 @@ class Find
             /**
              *  find from name
              */
-            dd($this->count,$this->page);
             $artists = Artist::searchByQuery([
                 'multi_match' => [
                     'query' => $this->name,

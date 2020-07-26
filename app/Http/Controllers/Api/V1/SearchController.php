@@ -29,7 +29,7 @@ class SearchController extends Controller
 
         $page = $request->page ?? 1;
         $type = $request->type ?? null;
-        $count = $request->has('type') ? Music::SORT_SEARCH : 4;
+        $count = $request->has('type') ? Music::DEFAULT_ITEM_COUNT : 4;
 
         if ($type) {
             switch ($type) {
