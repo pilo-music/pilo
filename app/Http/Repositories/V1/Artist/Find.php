@@ -114,9 +114,10 @@ class Find
     public function build()
     {
         if (isset($this->name) && !empty($this->name)) {
-            /*
-         *  find from name
-         */
+            /**
+             *  find from name
+             */
+            dd($this->count,$this->page);
             $artists = Artist::searchByQuery([
                 'multi_match' => [
                     'query' => $this->name,
