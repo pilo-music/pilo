@@ -13,7 +13,8 @@
 
 use Illuminate\Support\Facades\Auth;
 
-Route::get('/', "Client\IndexController");
+Route::get('/', "Client\IndexController@index");
+Route::get('/policy', "Client\IndexController@policy");
 
 //Route::get('/login/google', 'Panel\UserController@redirectToProvider');
 //Route::get('/login/google/callback', 'Panel\UserController@handleProviderCallback');

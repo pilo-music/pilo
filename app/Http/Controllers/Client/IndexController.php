@@ -7,8 +7,13 @@ use Illuminate\Http\Request;
 
 class IndexController extends Controller
 {
-    public function __invoke()
+    public function index()
     {
         return view('client.index');
+    }
+
+    public function policy()
+    {
+        return view('client.policy');
     }
 }
