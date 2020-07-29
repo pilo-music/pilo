@@ -157,10 +157,16 @@ class Get
                 return collect([]);
             }
 
-            $musics = $musics->get()->toArray();
-            $musics = array_merge($musics, $this->artist->tagMusics()->get()->toArray());
+            $newMusicArray = [];
 
-            $musics = collect($musics)->unique();
+            foreach ($musics->get() as $item){
+                $newMusicArray[] = $item;
+            }
+            foreach ($this->artist->tagMusics()->get() as $item){
+                $newMusicArray[] = $item;
+            }
+
+            $musics = collect($newMusicArray)->unique();
         } else {
             $musics = $musics->skip(($this->page - 1) * $this->count)->take($this->count)->get();
         }
