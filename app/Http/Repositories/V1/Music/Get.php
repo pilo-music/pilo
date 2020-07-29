@@ -143,7 +143,11 @@ class Get
                 $musics = $musics->latest();
                 break;
             case  Music::SORT_BEST:
-                return $this->getBestMusics($musics);
+                if (isset($this->artist)) {
+                    $musics = $this->getBestMusics($musics);
+                } else {
+                    return $this->getBestMusics($musics);
+                }
                 break;
         }
 
@@ -154,10 +158,9 @@ class Get
             }
 
             $musics = $musics->get()->toArray();
-            $musics = array_merge($musics,$this->artist->tagMusics()->get()->toArray());
+            $musics = array_merge($musics, $this->artist->tagMusics()->get()->toArray());
 
             $musics = collect($musics)->unique();
-
         } else {
             $musics = $musics->skip(($this->page - 1) * $this->count)->take($this->count)->get();
         }
@@ -165,6 +168,7 @@ class Get
         if ($this->toJson) {
             $musics = MusicRepo::getInstance()->toJsonArray()->setMusics($musics)->build();
         }
+
 
         return $musics;
     }

@@ -25,10 +25,11 @@ class ToJson
     public function setMusic($music): ToJson
     {
         if (is_array($music)) {
-            $this->music = Artist::query()->where('slug', $music['slug'])->first();
+            $this->music = Music::query()->where('slug', $music['slug'])->first();
         } else {
             $this->music = $music;
         }
+
         return $this;
     }
 
