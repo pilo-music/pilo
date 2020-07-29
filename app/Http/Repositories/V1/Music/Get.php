@@ -15,6 +15,8 @@ class Get
     protected $page;
     protected $sort;
     protected $artist;
+    protected $withAlbum;
+    protected $withTags;
     protected $toJson;
 
 
@@ -25,6 +27,8 @@ class Get
         $this->sort = Music::SORT_LATEST;
         $this->artist = null;
         $this->toJson = false;
+        $this->withAlbum = true;
+        $this->withTags = false;
     }
 
     /**
@@ -33,7 +37,7 @@ class Get
      * @param $count
      * @return  self
      */
-    public function setCount($count)
+    public function setCount($count): self
     {
         $this->count = $count;
 
@@ -46,7 +50,7 @@ class Get
      * @param $page
      * @return  self
      */
-    public function setPage($page)
+    public function setPage($page): self
     {
         $this->page = $page;
 
@@ -59,7 +63,7 @@ class Get
      * @param $sort
      * @return  self
      */
-    public function setSort($sort)
+    public function setSort($sort): self
     {
         $this->sort = $sort;
 
@@ -72,7 +76,7 @@ class Get
      * @param $artist
      * @return  self
      */
-    public function setArtist($artist)
+    public function setArtist($artist): self
     {
         $this->artist = $artist;
 
@@ -85,10 +89,30 @@ class Get
      * @param bool $toJson
      * @return  self
      */
-    public function setToJson(bool $toJson = true)
+    public function setToJson(bool $toJson = true): self
     {
         $this->toJson = $toJson;
 
+        return $this;
+    }
+
+    /**
+     * @param bool $withAlbum
+     * @return Get
+     */
+    public function setWithAlbum(bool $withAlbum = true): Get
+    {
+        $this->withAlbum = $withAlbum;
+        return $this;
+    }
+
+    /**
+     * @param bool $withTags
+     * @return Get
+     */
+    public function setWithTags(bool $withTags = true): Get
+    {
+        $this->withTags = $withTags;
         return $this;
     }
 
@@ -109,32 +133,57 @@ class Get
             $musics = Music::query()->where('status', Music::STATUS_ACTIVE);
         }
 
+        if (!$this->withAlbum) {
+            $musics = $musics->whereNull('album_id');
+        }
+
+
         switch ($this->sort) {
             case Music::SORT_LATEST:
                 $musics = $musics->latest();
                 break;
             case  Music::SORT_BEST:
-                if (isset($this->artist)) {
-                    $musics = $musics->orderBy('play_count');
-                } else {
-                    $items = TopMusic::query()->skip(($this->page - 1) * $this->count)->take($this->count)->get();
-                    $musics = [];
-                    foreach ($items as $item) {
-                        if ($this->toJson) {
-                            $musics[] = MusicRepo::getInstance()->toJson()->setMusic($item->music)->build();
-                        } else {
-                            $musics[] = $item->music;
-                        }
-                    }
-                    return $musics;
-                }
+                return $this->getBestMusics($musics);
                 break;
         }
 
-        $musics = $musics->skip(($this->page - 1) * $this->count)->take($this->count)->get();
+
+        if ($this->withTags && $this->artist) {
+            if ($this->page > 1) {
+                return collect([]);
+            }
+
+            $musics = $musics->get();
+            $musics = array_merge($musics,$this->artist->tagMusics()->get());
+
+            $musics = collect($musics)->unique();
+
+        } else {
+            $musics = $musics->skip(($this->page - 1) * $this->count)->take($this->count)->get();
+        }
 
         if ($this->toJson) {
             $musics = MusicRepo::getInstance()->toJsonArray()->setMusics($musics)->build();
+        }
+
+        return $musics;
+    }
+
+    private function getBestMusics($musics): array
+    {
+        if (isset($this->artist)) {
+            $musics = $musics->orderBy('play_count');
+        } else {
+            $items = TopMusic::query()->skip(($this->page - 1) * $this->count)->take($this->count)->get();
+            $musics = [];
+            foreach ($items as $item) {
+                if ($this->toJson) {
+                    $musics[] = MusicRepo::getInstance()->toJson()->setMusic($item->music)->build();
+                } else {
+                    $musics[] = $item->music;
+                }
+            }
+            return $musics;
         }
 
         return $musics;

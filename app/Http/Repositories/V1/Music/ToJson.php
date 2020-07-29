@@ -5,6 +5,7 @@ namespace App\Http\Repositories\V1\Music;
 use App\Http\Repositories\V1\Artist\ArtistRepo;
 use App\Http\Repositories\V1\Bookmark\BookmarkRepo;
 use App\Http\Repositories\V1\Like\LikeRepo;
+use App\Models\Music;
 use Carbon\Carbon;
 
 class ToJson
@@ -31,7 +32,6 @@ class ToJson
     {
         if ($this->music) {
             return [
-                "id" => $this->music->id,
                 'slug' => $this->music->slug,
                 'title' => $this->music->title_en,
                 'image' => get_image($this->music, 'image'),
