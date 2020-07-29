@@ -31,7 +31,7 @@ class ToJson
     {
         if ($this->music) {
             return [
-                "id" => $this->id,
+                "id" => $this->music->id,
                 'slug' => $this->music->slug,
                 'title' => $this->music->title_en,
                 'image' => get_image($this->music, 'image'),
