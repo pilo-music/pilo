@@ -153,8 +153,8 @@ class Get
                 return collect([]);
             }
 
-            $musics = $musics->get();
-            $musics = array_merge($musics,$this->artist->tagMusics()->get());
+            $musics = $musics->get()->toArray();
+            $musics = array_merge($musics,$this->artist->tagMusics()->get()->toArray());
 
             $musics = collect($musics)->unique();
 
@@ -169,7 +169,7 @@ class Get
         return $musics;
     }
 
-    private function getBestMusics($musics): array
+    private function getBestMusics($musics)
     {
         if (isset($this->artist)) {
             $musics = $musics->orderBy('play_count');

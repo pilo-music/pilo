@@ -5,6 +5,7 @@ namespace App\Http\Repositories\V1\Music;
 use App\Http\Repositories\V1\Artist\ArtistRepo;
 use App\Http\Repositories\V1\Bookmark\BookmarkRepo;
 use App\Http\Repositories\V1\Like\LikeRepo;
+use App\Models\Artist;
 use App\Models\Music;
 use Carbon\Carbon;
 
@@ -23,7 +24,11 @@ class ToJson
      */
     public function setMusic($music): ToJson
     {
-        $this->music = $music;
+        if (is_array($music)) {
+            $this->music = Artist::query()->where('slug', $music['slug'])->first();
+        } else {
+            $this->music = $music;
+        }
         return $this;
     }
 
