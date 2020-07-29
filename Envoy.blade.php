@@ -26,7 +26,7 @@ php artisan down
     php artisan migrate
 @endif
 
-php artisan cache:clear
+php artisan optimize
 
 php artisan up
 
