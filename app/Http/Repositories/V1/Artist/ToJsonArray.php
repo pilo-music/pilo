@@ -29,6 +29,6 @@ class ToJsonArray
     {
         return $this->artists->map(function ($item) {
             return ArtistRepo::getInstance()->toJson()->setArtist($item)->build();
-        });
+        })->unique();
     }
 }

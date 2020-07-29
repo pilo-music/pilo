@@ -29,6 +29,6 @@ class ToJsonArray
     {
         return $this->musics->map(function ($item) {
             return MusicRepo::getInstance()->toJson()->setMusic($item)->build();
-        });
+        })->unique();
     }
 }

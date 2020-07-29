@@ -31,6 +31,6 @@ class ToJsonArray
     {
         return $this->albums->map(function ($item) {
             return AlbumRepo::getInstance()->toJson()->setAlbum($item)->build();
-        });
+        })->unique();
     }
 }

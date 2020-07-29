@@ -31,6 +31,6 @@ class ToJsonArray
     {
         return $this->playlists->map(function ($item) {
             return PlaylistRepo::getInstance()->toJson()->setPlaylist($item)->build();
-        });
+        })->unique();
     }
 }
