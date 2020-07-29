@@ -53,8 +53,8 @@ class ArtistController extends Controller
         return CustomResponse::create([
             'artist' => ArtistRepo::getInstance()->toJson()->setArtist($artist)->build(),
             'is_follow' => FollowRepo::getInstance()->has()->setArtist($artist)->setUser($request->user())->build(),
-            'best_musics' => MusicRepo::getInstance()->get()->setArtist($artist)->setSort(Music::SORT_BEST)->setWithAlbum(false)->setWithTags(true)->setToJson()->build(),
-            'last_musics' => MusicRepo::getInstance()->get()->setArtist($artist)->setSort(Music::SORT_LATEST)->setWithTags(true)->setWithAlbum(false)->setToJson()->build(),
+            'best_musics' => MusicRepo::getInstance()->get()->setArtist($artist)->setSort(Music::SORT_BEST)->setWithTags(true)->setToJson()->build(),
+            'last_musics' => MusicRepo::getInstance()->get()->setArtist($artist)->setSort(Music::SORT_LATEST)->setWithTags(true)->setToJson()->build(),
             'playlists' => PlaylistRepo::getInstance()->get()->setArtist($artist)->setToJson()->build(),
             'albums' => AlbumRepo::getInstance()->get()->setArtist($artist)->setToJson()->build(),
             'videos' => VideoRepo::getInstance()->get()->setArtist($artist)->setToJson()->build(),

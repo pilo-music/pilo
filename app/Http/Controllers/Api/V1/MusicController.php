@@ -29,6 +29,7 @@ class MusicController extends Controller
             ->setCount($count)
             ->setArtist($artist)
             ->setSort($sort)
+            ->setWithTags(true)
             ->setToJson()
             ->build();
 
