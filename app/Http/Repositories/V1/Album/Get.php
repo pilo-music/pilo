@@ -100,8 +100,9 @@ class Get
         if (isset($this->artist)) {
             if (!$this->artist instanceof Artist) {
                 $this->artist = ArtistRepo::getInstance()->find()->setSlug($this->artist)->build();
-                if (!$this->artist)
+                if (!$this->artist) {
                     return collect([]);
+                }
             }
             $album = $this->artist->albums()->where('status', Album::STATUS_ACTIVE);
         } else {
@@ -118,6 +119,18 @@ class Get
         }
 
         $album = $album->skip(($this->page - 1) * $this->count)->take($this->count)->get();
+
+        if ($album->count() < $this->count){
+            $newAlbumArray = [];
+            foreach ($album as $item){
+                $newAlbumArray[] = $item;
+            }
+            foreach ($this->artist->tagAlbums()->get() as $item){
+                $newAlbumArray[] = $item;
+            }
+
+            $album = collect($newAlbumArray)->unique();
+        }
 
         if ($this->toJson) {
             $album = AlbumRepo::getInstance()->toJsonArray()->setAlbums($album)->build();
