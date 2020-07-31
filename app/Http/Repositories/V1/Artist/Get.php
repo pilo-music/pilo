@@ -84,7 +84,7 @@ class Get
                 break;
             case  Artist::SORT_BEST:
 //                $artists = $artists->where('isbest', true)->latest();
-                $items = TopArtist::query()->skip(($this->page - 1) * $this->count)->take($this->count)->get();
+                $items = TopArtist::query()->latest()->skip(($this->page - 1) * $this->count)->take($this->count)->get();
                 $musics = [];
                 foreach ($items as $item) {
                     if ($this->toJson) {

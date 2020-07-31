@@ -184,7 +184,7 @@ class Get
         if (isset($this->artist)) {
             $musics = $musics->orderBy('play_count');
         } else {
-            $items = TopMusic::query()->skip(($this->page - 1) * $this->count)->take($this->count)->get();
+            $items = TopMusic::query()->latest()->skip(($this->page - 1) * $this->count)->take($this->count)->get();
             $musics = [];
             foreach ($items as $item) {
                 if ($this->toJson) {
