@@ -47,14 +47,24 @@ class ArtistController extends Controller
             abort(404);
         }
 
+        $bestMusics = MusicRepo::getInstance()->get()->setArtist($artist)->setSort(Music::SORT_BEST)->setCount(5)->setWithTags(false)->setToJson()->build();
+        if (count($bestMusics) == 0) {
+            $bestMusics = MusicRepo::getInstance()->get()->setArtist($artist)->setSort(Music::SORT_BEST)->setCount(5)->setWithTags(true)->setToJson()->build();
+        }
+
+        $lastMusics = MusicRepo::getInstance()->get()->setArtist($artist)->setSort(Music::SORT_LATEST)->setCount(8)->setWithTags(false)->setToJson()->build();
+        if (count($bestMusics) == 0) {
+            $lastMusics = MusicRepo::getInstance()->get()->setArtist($artist)->setSort(Music::SORT_LATEST)->setCount(8)->setWithTags(true)->setToJson()->build();
+        }
+
         /**
          * @todo add related artist
          */
         return CustomResponse::create([
             'artist' => ArtistRepo::getInstance()->toJson()->setArtist($artist)->build(),
             'is_follow' => FollowRepo::getInstance()->has()->setArtist($artist)->setUser($request->user())->build(),
-            'best_musics' => MusicRepo::getInstance()->get()->setArtist($artist)->setSort(Music::SORT_BEST)->setCount(5)->setWithTags(false)->setToJson()->build(),
-            'last_musics' => MusicRepo::getInstance()->get()->setArtist($artist)->setSort(Music::SORT_LATEST)->setCount(8)->setWithTags(false)->setToJson()->build(),
+            'best_musics' => $bestMusics,
+            'last_musics' => $lastMusics,
             'playlists' => PlaylistRepo::getInstance()->get()->setArtist($artist)->setToJson()->build(),
             'albums' => AlbumRepo::getInstance()->get()->setArtist($artist)->setToJson()->build(),
             'videos' => VideoRepo::getInstance()->get()->setArtist($artist)->setToJson()->build(),
