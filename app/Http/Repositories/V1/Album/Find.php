@@ -186,9 +186,9 @@ class Find
 
         }
 
-        /*
-                 * find from slug
-                 */
+        /**
+         * find from slug
+         */
         if (isset($this->slug) && $this->slug != "") {
             $album = Album::query()->where('status', Album::STATUS_ACTIVE)
                 ->where('slug', $this->slug)->first();

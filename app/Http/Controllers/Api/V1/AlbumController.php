@@ -45,15 +45,18 @@ class AlbumController extends Controller
             abort(404);
         }
 
-        $related = AlbumRepo::getInstance()->get()->setArtist($album->artist)->build();
-        if (count($related) < 12) {
-            $dbRelated = AlbumRepo::getInstance()->random()->setCount(12 - count($related));
-            $related = $related->merge($dbRelated);
-        }
+//        $related = AlbumRepo::getInstance()->get()->setArtist($album->artist)->build();
+//        if (count($related) < 12) {
+//            $dbRelated = AlbumRepo::getInstance()->random()->setCount(12 - count($related));
+//            $related = $related->merge($dbRelated);
+//        }
+
+        $related = [];
         return CustomResponse::create([
             'album' => AlbumRepo::getInstance()->toJson()->setAlbum($album)->build(),
             'musics' => AlbumRepo::getInstance()->musics()->setAlbum($album)->setToJson()->build(),
-            'related' => AlbumRepo::getInstance()->toJsonArray()->setAlbums($related)->build(),
+//            'related' => AlbumRepo::getInstance()->toJsonArray()->setAlbums($related)->build(),
+            'related' => [],
             'has_like' => LikeRepo::getInstance()->has()->setUser($request->user("api"))->setItem($album)->build(),
             'has_bookmark' => BookmarkRepo::getInstance()->has()->setUser($request->user("api"))->setItem($album)->build(),
         ], '', true);
