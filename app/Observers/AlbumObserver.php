@@ -29,7 +29,9 @@ class AlbumObserver
             ]);
         }
 
-        $album->stored_at = now();
+        $album->update([
+            'stored_at' => now()
+        ]);
 
         try {
             $album->addToIndex();

@@ -14,7 +14,9 @@ class ArtistObserver
      */
     public function created(Artist $artist)
     {
-        $artist->stored_at = now();
+        $artist->update([
+            'stored_at' => now()
+        ]);
 
         try {
             $artist->addToIndex();

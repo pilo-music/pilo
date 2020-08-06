@@ -26,7 +26,9 @@ class PlaylistObserver
             }
         }
 
-        $playlist->stored_at = now();
+        $playlist->update([
+            'stored_at' => now()
+        ]);
 
         try {
             $playlist->addToIndex();

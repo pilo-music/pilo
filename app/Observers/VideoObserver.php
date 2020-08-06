@@ -28,7 +28,9 @@ class VideoObserver
             ]);
         }
 
-        $video->stored_at = now();
+        $video->update([
+            'stored_at' => now()
+        ]);
 
         try {
             $video->addToIndex();

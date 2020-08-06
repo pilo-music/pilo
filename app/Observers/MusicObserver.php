@@ -27,7 +27,10 @@ class MusicObserver
                 'music_count' => $item->musics()->count() + $item->tagMusics()->count()
             ]);
         }
-        $music->stored_at = now();
+
+        $music->update([
+            'stored_at' => now()
+        ]);
 
         try {
             $music->addToIndex();
