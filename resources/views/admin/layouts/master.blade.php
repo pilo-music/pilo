@@ -47,7 +47,7 @@
 <script src="/resources/admin/libs/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
 <script src="/resources/admin/libs/jquery/dist/jquery.slim.min.js"></script>
 <!-- Tabler Core -->
-<script src="./dist/js/tabler.min.js"></script>
+<script src="/resources/admin/js/tabler.min.js"></script>
 <script>
     document.body.style.display = "block"
 </script>

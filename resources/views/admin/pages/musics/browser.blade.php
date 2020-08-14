@@ -13,7 +13,7 @@
             </div>
             <!-- Page title actions -->
             <div class="col-auto ml-auto d-print-none">
-                <a href="{{route('artists.create')}}" class="btn btn-primary ml-3 d-none d-sm-inline-block">
+                <a href="{{route('musics.create')}}" class="btn btn-primary ml-3 d-none d-sm-inline-block">
                     <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24"
                          stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round"
                          stroke-linejoin="round">
@@ -50,7 +50,7 @@
                                     <img src="{{get_image($item,'image')}}" alt="" width="50" height="50"
                                          class="rounded img-fluid">
                                 </td>
-                                <td class="text-muted">{{$item->name_en}}</td>
+                                <td class="text-muted">{{$item->title_en}}</td>
                                 @if($item->status == 1)
                                     <td>
                                         <span class="badge badge-success">Active</span>
@@ -65,7 +65,7 @@
                                 </td>
                                 <td>
                                     <a class="btn btn-dark"
-                                       href="{{route('artists.edit',['artist'=>$item->id])}}">Edit</a>
+                                       href="{{route('musics.edit',['music'=>$item->id])}}">Edit</a>
                                 </td>
                                 <td>
                                     <a href="#" class="btn btn-danger" data-toggle="modal"
@@ -91,12 +91,12 @@
                 <div class="modal-content">
                     <div class="modal-body">
                         <div class="modal-title">Are you sure?</div>
-                        <div>Are you sure, you want delete <span class="text-danger">{{$item->name_en}}</span>.</div>
+                        <div>Are you sure, you want delete <span class="text-danger">{{$item->title_en}}</span>.</div>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-link link-secondary mr-auto" data-dismiss="modal">Cancel
                         </button>
-                        <form action="{{route('artists.destroy',['artist'=>$item->id])}}" method="post">
+                        <form action="{{route('musics.destroy',['music'=>$item->id])}}" method="post">
                             @csrf
                             @method('DELETE')
                             <button type="submit" class="btn btn-danger">Yes, delete all my data

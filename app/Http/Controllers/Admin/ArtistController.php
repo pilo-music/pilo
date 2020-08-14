@@ -9,6 +9,7 @@ use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\View\View;
 
 class ArtistController extends Controller
@@ -16,7 +17,7 @@ class ArtistController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function index()
     {
@@ -27,29 +28,47 @@ class ArtistController extends Controller
     /**
      * Show the form for creating a new resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function create()
     {
-        //
+        return \view('admin.pages.artists.create');
     }
 
     /**
      * Store a newly created resource in storage.
      *
      * @param Request $request
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function store(Request $request)
     {
-        //
+        if ($request->has('image')) {
+            $image = self::uploadFile($request->file('image'), 'artist', 'jpg');
+        } else {
+            $image = null;
+        }
+
+        $extra = [
+            'image' => $image,
+            'user_id' => auth()->user()->id,
+            'slug'=> generate_slug($request->get('name'))
+        ];
+
+        $data = array_merge($request->all(), $extra);
+
+        Artist::query()->create($data);
+
+        flash(__('messages.operation_done'), 'success');
+
+        return redirect()->route('artists.index');
     }
 
     /**
      * Display the specified resource.
      *
      * @param int $id
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function show($id)
     {
@@ -82,7 +101,7 @@ class ArtistController extends Controller
             $image = $artist->image;
         }
 
-        if ($request->has('image_null') && $request->image_null == 1){
+        if ($request->has('image_null') && $request->image_null == 1) {
             $image = null;
             unset($request['image_null']);
         }
@@ -101,10 +120,14 @@ class ArtistController extends Controller
      * Remove the specified resource from storage.
      *
      * @param int $id
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
-    public function destroy($id)
+    public function destroy(Artist  $artist)
     {
-        //
+        $artist->delete();
+
+        flash(__('messages.operation_done'), 'success');
+
+        return redirect()->route('artists.index');
     }
 }

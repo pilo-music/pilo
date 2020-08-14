@@ -105,6 +105,7 @@
                             <th>Image</th>
                             <th>Name</th>
                             <th>Artist</th>
+                            <th>Stored at</th>
                             <th class="w-1"></th>
                         </tr>
                         </thead>
@@ -116,6 +117,7 @@
                                          class="rounded img-fluid"></td>
                                 <td class="text-muted">{{$item->title_en}}</td>
                                 <td class="text-muted">{{$item->artist->name_en}}</td>
+                                <td class="text-muted">{{$item->stored_at}}</td>
                                 <td>
                                     <a href="#">Edit</a>
                                 </td>
@@ -139,6 +141,7 @@
                             <th>Id</th>
                             <th>Image</th>
                             <th>Name</th>
+                            <th>Stored at</th>
                             <th class="w-1"></th>
                         </tr>
                         </thead>
@@ -149,8 +152,9 @@
                                 <td><img src="{{get_image($item,'image')}}" alt="" width="50" height="50"
                                          class="rounded img-fluid"></td>
                                 <td class="text-muted">{{$item->name_en}}</td>
+                                <td class="text-muted">{{$item->stored_at}}</td>
                                 <td>
-                                    <a href="#">Edit</a>
+                                    <a href="{{route('artists.edit',['artist'=>$item->id])}}">Edit</a>
                                 </td>
                             </tr>
                         @endforeach
@@ -173,6 +177,7 @@
                             <th>Image</th>
                             <th>Name</th>
                             <th>Artist</th>
+                            <th>Stored at</th>
                             <th class="w-1"></th>
                         </tr>
                         </thead>
@@ -184,6 +189,7 @@
                                          class="rounded img-fluid"></td>
                                 <td class="text-muted">{{$item->title_en}}</td>
                                 <td class="text-muted">{{$item->artist->name_en}}</td>
+                                <td class="text-muted">{{$item->stored_at}}</td>
                                 <td>
                                     <a href="#">Edit</a>
                                 </td>
@@ -208,6 +214,7 @@
                             <th>Image</th>
                             <th>Name</th>
                             <th>Artist</th>
+                            <th>Stored at</th>
                             <th class="w-1"></th>
                         </tr>
                         </thead>
@@ -219,6 +226,7 @@
                                          class="rounded img-fluid"></td>
                                 <td class="text-muted">{{$item->title_en}}</td>
                                 <td class="text-muted">{{$item->artist->name_en}}</td>
+                                <td class="text-muted">{{$item->stored_at}}</td>
                                 <td>
                                     <a href="#">Edit</a>
                                 </td>

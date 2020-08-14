@@ -67,3 +67,13 @@ if (!function_exists("get_ip")) {
         return "";
     }
 }
+
+if (!function_exists('generate_slug')) {
+    function generate_slug($string, $separator = '-', $limit = 100)
+    {
+        $string = str_replace('‌', ' ', $string);
+        $string = \Illuminate\Support\Str::words($string, $limit, '');
+        $string = mb_ereg_replace('([^آ-ی۰-۹a-z0-9]|-)+', $separator, $string);
+        return trim($string, $separator);
+    }
+}

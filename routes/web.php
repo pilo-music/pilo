@@ -12,6 +12,7 @@
 */
 
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Route;
 
 Route::get('/', "Client\IndexController@index");
 Route::get('/policy', "Client\IndexController@policy");
@@ -24,6 +25,7 @@ Route::get('/policy', "Client\IndexController@policy");
 Route::prefix('admin')->middleware('auth')->namespace('Admin')->group(static function () {
     Route::get('/', 'IndexController')->name('admin.index');
     Route::get('/home', 'IndexController')->name('home');
+
     Route::resource('artists', 'ArtistController');
     Route::resource('musics', 'MusicController');
     Route::resource('albums', 'AlbumController');
