@@ -11,6 +11,7 @@
 |
 */
 
+use App\Mail\VerifyMail;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -34,4 +35,3 @@ Route::prefix('admin')->middleware('auth')->namespace('Admin')->group(static fun
 
 
 Auth::routes(['reset' => false, 'register' => false, 'forgot' => false, 'confirm' => false]);
-
