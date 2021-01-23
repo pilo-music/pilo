@@ -38,6 +38,7 @@
                             <th>Name</th>
                             <th>Status</th>
                             <th>Stored at</th>
+                            <th>Created_at at</th>
                             <th class="w-1"></th>
                             <th class="w-1"></th>
                         </tr>
@@ -53,13 +54,16 @@
                                 <td class="text-muted">{{$item->title_en}}</td>
                                 @if($item->status == 1)
                                     <td>
-                                        <span class="badge badge-success">Active</span>
+                                        <span class="badge bg-success text-white">Active</span>
                                     </td>
                                 @else
                                     <td>
-                                        <span class="badge badge-danger">Draft</span>
+                                        <span class="badge bg-danger text-white">Draft</span>
                                     </td>
                                 @endif
+                                <td>
+                                    {{$item->stored_at}}
+                                </td>
                                 <td>
                                     {{$item->stored_at}}
                                 </td>

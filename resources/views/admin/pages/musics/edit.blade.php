@@ -10,11 +10,19 @@
         <div class="card-body">
             <div class="form-group mb-3">
                 <label class="form-label">Name En<span class="form-required">*</span></label>
-                <input type="text" name="name_en" class="form-control" value="{{$data->name_en}}"/>
+                <input type="text" name="name_en" class="form-control" value="{{$data->title_en}}"/>
             </div>
             <div class="form-group mb-3">
                 <label class="form-label">Name<span class="form-required">*</span></label>
-                <input name="name" type="text" class="form-control" value="{{$data->name}}"/>
+                <input name="name" type="text" class="form-control" value="{{$data->title}}"/>
+            </div>
+            <div class="form-group mb-3">
+                <label class="form-label">Link128<span class="form-required">*</span></label>
+                <input name="name" type="text" class="form-control" value="{{$data->link128}}"/>
+            </div>
+            <div class="form-group mb-3">
+                <label class="form-label">Link320<span class="form-required">*</span></label>
+                <input name="name" type="text" class="form-control" value="{{$data->link320}}"/>
             </div>
             <div class="form-group mb-3">
                 <div class="form-label">Image</div>
@@ -26,7 +34,7 @@
                     </label>
                 </div>
                 <div class="mt-1">
-                    <label for="">Null</label>
+                    <label for="">Image Null</label>
                     <input type="checkbox" value="1" name="image_null">
                 </div>
                 <div class="mt-3">
