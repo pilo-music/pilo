@@ -48,7 +48,7 @@ Route::prefix('v1')->namespace('Api\V1')->group(function () {
     Route::get('/albums', 'AlbumController@index');
     Route::get('/album', 'AlbumController@single');
 
-    Route::group(['middleware' => 'auth:api'], function () {
+    Route::group(['middleware' => 'auth:sanctum'], function () {
         Route::post("/update", 'UserController@update');
         Route::post("/me", 'UserController@me');
 

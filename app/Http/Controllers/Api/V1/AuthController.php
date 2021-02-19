@@ -67,7 +67,7 @@ class AuthController extends Controller
             }
         }
 
-        $token = $user->createToken('Client token')->accessToken;
+        $token = $user->createToken('Client token')->plainTextToken;
 
         return CustomResponse::create([
             'access_token' => $token,
@@ -166,8 +166,7 @@ class AuthController extends Controller
          */
         $verifyCode->delete();
 
-
-        $token = $user->createToken('Client token')->accessToken;
+        $token = $user->createToken('Client token')->plainTextToken;
         return CustomResponse::create([
             'access_token' => $token,
             'user' => UserRepo::getInstance()->toJson()->setUser($user)->build(),

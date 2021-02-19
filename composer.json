@@ -11,6 +11,7 @@
         "php": "^7.3|^8.0",
         "ext-fileinfo": "*",
         "ext-json": "*",
+        "doctrine/dbal": "^3.0",
         "falahati/php-mp3": "^0.9.5@alpha",
         "fideloper/proxy": "^4.4",
         "fruitcake/laravel-cors": "^2.0",
@@ -27,6 +28,7 @@
         "spatie/laravel-backup": "^6.9"
     },
     "require-dev": {
+        "roave/security-advisories": "dev-master",
         "facade/ignition": "^2.5",
         "fakerphp/faker": "^1.9.1",
         "laravel/sail": "^1.3",

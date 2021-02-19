@@ -26,7 +26,6 @@ class CreateAlbumsTable extends Migration
             $table->string('slug')->unique();
             $table->text('image');
             $table->boolean('isbest');
-            $table->bigInteger('play_count');
             $table->timestamps();
         });
     }
