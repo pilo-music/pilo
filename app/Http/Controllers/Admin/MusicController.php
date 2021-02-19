@@ -58,12 +58,13 @@ class MusicController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
-     * @return Response
+     * @param int $id
+     * @return Application|Factory|View
      */
     public function edit($id)
     {
-        //
+        $data = Music::query()->findOrFail($id);
+        return view('admin.pages.musics.edit',compact('data'));
     }
 
     /**
