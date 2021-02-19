@@ -154,17 +154,9 @@ class Find
             /*
             *  find from name
             */
-            $albums = Album::searchByQuery([
-                'multi_match' => [
-                    'query' => $this->name,
-                    "fuzziness" => "AUTO",
-                    "operator" => "AND",
-                    "lenient" => "true",
-                    'fields' => [
-                        'title_en', 'title'
-                    ]
-                ],
-            ], null, null, $this->count, ($this->page - 1) * $this->count)->where('status', Album::STATUS_ACTIVE);
+            $albums = Album::search($this->name)
+                ->where('status', Album::STATUS_ACTIVE)
+                ->paginate($this->count,'page',$this->page);
 
             if ($this->toJson) {
                 $albums = AlbumRepo::getInstance()->toJsonArray()->setAlbums($albums)->build();

@@ -2,27 +2,29 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Notifications\Notifiable;
+use Laravel\Scout\Searchable;
 
 class Music extends Model
 {
-    use Notifiable;
+    use Notifiable, Searchable, HasFactory;
 
     protected $table = "musics";
 
-    const STATUS_ACTIVE = 1;
-    const STATUS_DRAFT = 0;
-    const STATUS_JUST_IN_APP = 2;
-    const STATUS_JUST_IN_WEB = 3;
+    public const STATUS_ACTIVE = 1;
+    public const STATUS_DRAFT = 0;
+    public const STATUS_JUST_IN_APP = 2;
+    public const STATUS_JUST_IN_WEB = 3;
 
-    const SORT_LATEST = "latest";
-    const SORT_BEST = "best";
-    const SORT_OLDEST = "oldest";
-    const SORT_SEARCH = "search";
+    public const SORT_LATEST = "latest";
+    public const SORT_BEST = "best";
+    public const SORT_OLDEST = "oldest";
+    public const SORT_SEARCH = "search";
 
-    const DEFAULT_ITEM_COUNT = 12;
-    const DEFAULT_ITEM_SORT = self::SORT_LATEST;
+    public const DEFAULT_ITEM_COUNT = 12;
+    public const DEFAULT_ITEM_SORT = self::SORT_LATEST;
 
 
     public function path()

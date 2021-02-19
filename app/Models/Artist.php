@@ -2,10 +2,14 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Laravel\Scout\Searchable;
 
 class Artist extends Model
 {
+    use Searchable, HasFactory;
+
     public const STATUS_ACTIVE = 1;
     public const STATUS_DRAFT = 0;
     public const STATUS_JUST_IN_APP = 2;

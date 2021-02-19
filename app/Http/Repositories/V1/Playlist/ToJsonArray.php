@@ -17,10 +17,10 @@ class ToJsonArray
     /**
      * Set the value of playlists
      *
-     * @param Collection $playlists
+     * @param  $playlists
      * @return  self
      */
-    public function setPlaylists(Collection $playlists)
+    public function setPlaylists($playlists)
     {
         $this->playlists = $playlists;
 

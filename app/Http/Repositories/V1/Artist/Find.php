@@ -117,17 +117,9 @@ class Find
             /**
              *  find from name
              */
-            $artists = Artist::searchByQuery([
-                'multi_match' => [
-                    'query' => $this->name,
-                    "fuzziness" => "AUTO",
-                    "operator" => "AND",
-                    "lenient" => "true",
-                    'fields' => [
-                        'name_en', 'name'
-                    ]
-                ],
-            ], null, null, $this->count, ($this->page - 1) * $this->count)->where('status', Artist::STATUS_ACTIVE);
+            $artists = Artist::search($this->name)
+                ->where('status', Artist::STATUS_ACTIVE)
+                ->paginate($this->count,'page',$this->page);
 
             if ($this->toJson) {
                 $artists = ArtistRepo::getInstance()->toJsonArray()->setArtists($artists)->build();

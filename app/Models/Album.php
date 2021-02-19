@@ -2,23 +2,26 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Laravel\Scout\Searchable;
 
 class Album extends Model
 {
-    const STATUS_ACTIVE = 1;
-    const STATUS_DRAFT = 0;
-    const STATUS_JUST_IN_APP = 2;
-    const STATUS_JUST_IN_WEB = 3;
+    use Searchable, HasFactory;
 
-    const SORT_LATEST = "latest";
-    const SORT_BEST = "best";
-    const SORT_OLDEST = "oldest";
-    const SORT_SEARCH = "search";
+    public const STATUS_ACTIVE = 1;
+    public const STATUS_DRAFT = 0;
+    public const STATUS_JUST_IN_APP = 2;
+    public const STATUS_JUST_IN_WEB = 3;
 
-    const DEFAULT_ITEM_COUNT = 12;
-    const DEFAULT_ITEM_SORT = self::SORT_LATEST;
+    public const SORT_LATEST = "latest";
+    public const SORT_BEST = "best";
+    public const SORT_OLDEST = "oldest";
+    public const SORT_SEARCH = "search";
 
+    public const DEFAULT_ITEM_COUNT = 12;
+    public const DEFAULT_ITEM_SORT = self::SORT_LATEST;
 
 
     protected $guarded = [

@@ -20,7 +20,7 @@ class ToJsonArray
      * @param $albums
      * @return  self
      */
-    public function setAlbums(Collection $albums)
+    public function setAlbums($albums)
     {
         $this->albums = $albums;
 

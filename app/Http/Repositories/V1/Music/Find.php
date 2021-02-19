@@ -125,17 +125,9 @@ class Find
             /*
              *  find from name
              */
-            $musics = Music::searchByQuery([
-                'multi_match' => [
-                    'query' => $this->name,
-                    "fuzziness" => "AUTO",
-                    "operator" => "AND",
-                    "lenient" => "true",
-                    'fields' => [
-                        'title_en', 'title'
-                    ]
-                ],
-            ], null, null, $this->count, ($this->page - 1) * $this->count)->where('status', Music::STATUS_ACTIVE);
+            $musics = Music::search($this->name)
+                ->where('status', Music::STATUS_ACTIVE)
+                ->paginate($this->count, 'page', $this->page);
 
             if ($this->toJson) {
                 $musics = MusicRepo::getInstance()->toJsonArray()->setMusics($musics)->build();

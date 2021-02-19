@@ -125,17 +125,9 @@ class Find
             /*
           *  find from name
           */
-            $video = Video::searchByQuery([
-                'multi_match' => [
-                    'query' => $this->name,
-                    "fuzziness" => "AUTO",
-                    "operator" => "AND",
-                    "lenient" => "true",
-                    'fields' => [
-                        'title_en', 'title'
-                    ]
-                ],
-            ], null, null, $this->count, ($this->page - 1) * $this->count)->where('status', Video::STATUS_ACTIVE);
+            $video = Video::search($this->name)
+                ->where('status', Video::STATUS_ACTIVE)
+                ->paginate($this->count, 'page', $this->page);
 
             if ($this->toJson) {
                 $video = VideoRepo::getInstance()->toJsonArray()->setVideos($video)->build();
