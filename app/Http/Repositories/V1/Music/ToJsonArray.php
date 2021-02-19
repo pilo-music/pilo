@@ -27,8 +27,15 @@ class ToJsonArray
 
     public function build()
     {
-        return $this->musics->map(function ($item) {
-            return MusicRepo::getInstance()->toJson()->setMusic($item)->build();
-        })->unique();
+        $items = [];
+
+        foreach ($this->musics as $music) {
+            $item = MusicRepo::getInstance()->toJson()->setMusic($music)->build();
+            if (!in_array($item, $items)) {
+                $items[] = $item;
+            }
+        }
+
+        return $items;
     }
 }
