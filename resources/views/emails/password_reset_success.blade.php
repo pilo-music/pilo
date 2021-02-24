@@ -66,7 +66,7 @@
 
     <div class="content">
         <div class="logo">
-            <img src="https://api.pilo.app/images/pilo-logo-gray-text.svg" alt="logo">
+            <img src="{{$message->embed(asset('logo.png'))}}" alt="logo" width="50px">
         </div>
         <h2>You are changed your password successful.</h2>
 
