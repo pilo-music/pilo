@@ -66,7 +66,7 @@
 
     <div class="content">
         <div class="logo">
-            <img src="{{$message->embed('https://api.pilo.app/images/pilo-logo-gray-text.svg')}}" alt="logo">
+            <img src="{{$message->embed('https://new.pilo.app/logo.png')}}" alt="logo">
         </div>
         <h2>You are receiving this email because we received a password reset request for your account.</h2>
 
