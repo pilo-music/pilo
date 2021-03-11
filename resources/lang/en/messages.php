@@ -10,5 +10,6 @@ return [
     'playlist_create' => "Playlist create successfully",
     'playlist_update' => "Playlist update successfully",
     'playlist_delete' => "Playlist delete successfully",
-    'operation_done'=>'Operation done'
+    'operation_done'=>'Operation done',
+    'password_change_successfully'=>'Your password changed successfully'
 ];
