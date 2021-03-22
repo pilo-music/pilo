@@ -8,7 +8,6 @@
             position: fixed;
             width: 100%;
             height: 100%;
-            padding: 40px;
             margin: 0;
             display: flex;
             justify-content: center;
@@ -18,7 +17,6 @@
         }
 
         .content {
-            background: white;
             border-radius: 5px;
             padding: 32px;
         }

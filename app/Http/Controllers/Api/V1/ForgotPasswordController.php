@@ -66,6 +66,6 @@ class ForgotPasswordController extends Controller
         $user->password = bcrypt($request->password);
         $user->save();
 
-        return CustomResponse::create(UserRepo::getInstance()->toJson()->setUser($user)->build(), '', true);
+        return CustomResponse::create(null, __("messages.password_change_successfully"), true);
     }
 }
