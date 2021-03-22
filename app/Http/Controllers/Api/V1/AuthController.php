@@ -8,6 +8,7 @@ use App\Http\Repositories\V1\User\UserRepo;
 use App\Mail\VerifyMail;
 use App\Models\User;
 use App\Models\VerifyCode;
+use Google_Client;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -174,12 +175,41 @@ class AuthController extends Controller
     }
 
 
-    public function SocialSignup($provider)
+    /**
+     * login with google api
+     *
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function loginWithGoogle(Request $request): JsonResponse
     {
-        // Socialite will pick response data automatic
-        $user = Socialite::driver($provider)->stateless()->user();
+        $request->validate([
+            'id_token' => 'required'
+        ]);
 
-        return response()->json($user);
+        $client = new Google_Client(['client_id' => config('pilo.google_login_client_id')]);
+        $payload = $client->verifyIdToken($request->get('id_token'));
+        if ($payload) {
+            $user = User::query()->where('email', $payload['email'])->first();
+            if (!$user) {
+                $user = User::query()->create([
+                    'name' => $payload['name'],
+                    'password' => bcrypt($payload['sub']),
+                    'email' => $payload['email'],
+                    'status' => User::USER_STATUS_ACTIVE,
+                    'email_verified_at' => now()
+                ]);
+            }
+
+            $token = $user->createToken('Client token')->plainTextToken;
+            return CustomResponse::create([
+                'access_token' => $token,
+                'user' => UserRepo::getInstance()->toJson()->setUser($user)->build(),
+            ], '', true);
+
+        } else {
+            return CustomResponse::create(null, __("messages.server_error"), false);
+        }
     }
 
 }

@@ -18,6 +18,7 @@ Route::prefix('v1')->namespace('Api\V1')->group(function () {
     Route::post("/login", 'AuthController@login');
     Route::post("/register", 'AuthController@register');
     Route::post("/verify", 'AuthController@verify');
+    Route::post('login/google', 'AuthController@loginWithGoogle');
 
     Route::post('/forgot-passport/create', 'ForgotPasswordController@create');
     Route::post('/forgot-passport/reset', 'ForgotPasswordController@reset');
