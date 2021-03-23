@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Controllers\Api\CustomResponse;
 use App\Http\Controllers\Controller;
-use App\Http\Repositories\V1\Bookmark\BookmarkRepo;
 use App\Http\Repositories\V1\Like\LikeRepo;
 use App\Http\Repositories\V1\Video\VideoRepo;
 use App\Models\Video;
@@ -51,7 +50,6 @@ class VideoController extends Controller
             'video' => VideoRepo::getInstance()->toJson()->setVideo($video)->build(),
             'related' => VideoRepo::getInstance()->get()->setArtist($video->artist)->setToJson()->build(),
             'has_like' => LikeRepo::getInstance()->has()->setUser($request->user("api"))->setItem($video)->build(),
-            'has_bookmark' => BookmarkRepo::getInstance()->has()->setUser($request->user("api"))->setItem($video)->build(),
         ], '', true);
     }
 }

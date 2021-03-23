@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Controllers\Api\CustomResponse;
 use App\Http\Controllers\Controller;
-use App\Http\Repositories\V1\Bookmark\BookmarkRepo;
 use App\Http\Repositories\V1\Like\LikeRepo;
 use App\Http\Repositories\V1\Music\MusicRepo;
 use App\Http\Repositories\V1\Playlist\PlaylistRepo;
@@ -58,7 +57,6 @@ class PlaylistController extends Controller
             'playlist' => PlaylistRepo::getInstance()->toJson()->setPlaylist($playlist)->build(),
             'musics' => PlaylistRepo::getInstance()->musics()->setPlaylist($playlist)->setToJson()->build(),
             'has_like' => LikeRepo::getInstance()->has()->setUser($request->user("api"))->setItem($playlist)->build(),
-            'has_bookmark' => BookmarkRepo::getInstance()->has()->setUser($request->user("api"))->setItem($playlist)->build(),
         ], '', true);
     }
 

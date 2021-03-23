@@ -3,9 +3,7 @@
 namespace App\Http\Repositories\V1\Music;
 
 use App\Http\Repositories\V1\Artist\ArtistRepo;
-use App\Http\Repositories\V1\Bookmark\BookmarkRepo;
 use App\Http\Repositories\V1\Like\LikeRepo;
-use App\Models\Artist;
 use App\Models\Music;
 use Carbon\Carbon;
 
