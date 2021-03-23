@@ -51,7 +51,6 @@ class ToJson
                 'created_at' => Carbon::parse($this->music->created_at)->format('D d,Y'),
                 'type' => 'music',
                 'has_like' => LikeRepo::getInstance()->has()->setUser(auth()->user())->setItem($this->music)->build(),
-                'has_bookmark' => BookmarkRepo::getInstance()->has()->setUser(auth()->user())->setItem($this->music)->build(),
             ];
         }
         return null;

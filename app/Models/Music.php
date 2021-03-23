@@ -67,12 +67,6 @@ class Music extends Model
     }
 
 
-    public function bookmarks()
-    {
-        return $this->morphMany(Bookmark::class, "bookmarkable");
-    }
-
-
     protected $indexSettings = [
         'analysis' => [
             'char_filter' => [
