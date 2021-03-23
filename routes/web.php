@@ -15,7 +15,7 @@ use App\Mail\VerifyMail;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', "Client\IndexController@index");
+//Route::get('/', "Client\IndexController@index");
 Route::get('/policy', "Client\IndexController@policy");
 
 //Route::get('/login/google', 'Panel\UserController@redirectToProvider');
