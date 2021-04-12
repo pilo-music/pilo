@@ -15,6 +15,9 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 //Route::get('/', "Client\IndexController@index");
+Route::redirect("/","https://pilo.app");
+
+
 Route::get('/policy', "Client\IndexController@policy");
 
 Route::prefix('admin')->middleware('auth')->namespace('Admin')->group(static function () {
