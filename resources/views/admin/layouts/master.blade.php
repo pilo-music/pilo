@@ -30,7 +30,7 @@
 </head>
 <body class="antialiased">
 <div class="page">
-    @include('admin.partials.header')
+    @include('admin.layouts.partials.header')
     @if (session()->has('admin_message_text'))
         <div class="alert alert-{{ session()->get('admin_message_text') }}">
             {{ session()->get('admin_message_class') }}
@@ -40,7 +40,7 @@
         <div class="container-xl">
             @yield('content')
         </div>
-        @include('admin.partials.footer')
+        @include('admin.layouts.partials.footer')
     </div>
 </div>
 <!-- Libs JS -->

@@ -8,7 +8,6 @@ use App\Models\Artist;
 use App\Models\Music;
 use App\Models\User;
 use App\Models\Video;
-use Illuminate\Http\Request;
 
 class IndexController extends Controller
 {
@@ -25,6 +24,6 @@ class IndexController extends Controller
         $artists = Artist::query()->latest('stored_at')->get()->take(5);
 
         $data = compact('music_count', 'artist_count', 'user_count', 'album_count', 'musics', 'albums', 'videos', 'artists');
-        return view('admin.pages.index', $data);
+        return view('admin.pages.index.index', $data);
     }
 }
