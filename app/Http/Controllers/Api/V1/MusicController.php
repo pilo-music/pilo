@@ -21,8 +21,10 @@ class MusicController extends Controller
         $page = request()->has('page') ? request()->page : 1;
         $count = request()->has('count') ? request()->count : Music::DEFAULT_ITEM_COUNT;
         $artist = request()->artist;
-        if (!$artist) {
-            $artist = request()->related;
+        $related = request()->related;
+        if ($related) {
+            $music = MusicRepo::getInstance()->find()->setSlug($related)->build();
+            $artist = $music->artist;
         }
 
         $data = MusicRepo::getInstance()->get()->setPage($page)
