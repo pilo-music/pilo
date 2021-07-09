@@ -3,12 +3,12 @@
 namespace App\Exceptions;
 
 use App\Http\Controllers\Api\CustomResponse;
-use Exception;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
-use Symfony\Component\HttpFoundation\Response;
-use Throwable;
+use Symfony\Component\HttpKernel\Exception\HttpException;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class Handler extends ExceptionHandler
 {
@@ -27,46 +27,50 @@ class Handler extends ExceptionHandler
      * @var array
      */
     protected $dontFlash = [
+        'current_password',
         'password',
         'password_confirmation',
     ];
 
     /**
-     * Report or log an exception.
+     * Register the exception handling callbacks for the application.
      *
-     * @param Throwable $exception
      * @return void
-     *
-     * @throws Exception
      */
-    public function report(Throwable $exception)
+    public function register()
     {
-        parent::report($exception);
-    }
 
-    /**
-     * Render an exception into an HTTP response.
-     *
-     * @param Request $request
-     * @param Throwable $exception
-     * @return Response
-     *
-     * @throws Throwable
-     */
-    public function render($request, Throwable $exception)
-    {
-        if ($exception instanceof ValidationException && $request->isJson()) {
-            $message = "";
-            foreach ($exception->errors() as $item) {
-                foreach ($item as $error) {
-                    $message .= $error;
+        $this->renderable(function (ValidationException $exception, Request $request) {
+            if ($request->expectsJson()) {
+                $message = "";
+                foreach ($exception->errors() as $item) {
+                    foreach ($item as $error) {
+                        $message .= $error;
+                        break;
+                    }
                     break;
                 }
-                break;
-            }
 
-            return CustomResponse::create(null, $message, false);
-        }
-        return parent::render($request, $exception);
+                return CustomResponse::create(null, $message, false);
+            }
+        });
+
+        $this->renderable(function (ModelNotFoundException $e, Request $request) {
+            if ($request->expectsJson()) {
+                return CustomResponse::create(null, __("http.not_found"), false);
+            }
+        });
+
+        $this->renderable(function (NotFoundHttpException $e, Request $request) {
+            if ($request->expectsJson()) {
+                return CustomResponse::create(null, __("http.not_found"), false);
+            }
+        });
+
+        $this->renderable(function (HttpException $e, Request $request) {
+            if ($request->expectsJson()) {
+                return CustomResponse::create(null, __("http.server_error"), false);
+            }
+        });
     }
 }

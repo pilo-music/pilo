@@ -11,17 +11,12 @@
 |
 */
 
-use App\Mail\VerifyMail;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', "Client\IndexController@index");
-Route::get('/policy', "Client\IndexController@policy");
+Route::redirect("/","https://pilo.app");
 
-//Route::get('/login/google', 'Panel\UserController@redirectToProvider');
-//Route::get('/login/google/callback', 'Panel\UserController@handleProviderCallback');
-//
-
+Route::get('/policy', "HomeController@policy");
 
 Route::prefix('admin')->middleware('auth')->namespace('Admin')->group(static function () {
     Route::get('/', 'IndexController')->name('admin.index');

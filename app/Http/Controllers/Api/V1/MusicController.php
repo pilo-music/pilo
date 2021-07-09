@@ -4,11 +4,8 @@ namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Controllers\Api\CustomResponse;
 use App\Http\Controllers\Controller;
-use App\Http\Repositories\V1\Bookmark\BookmarkRepo;
-use App\Http\Repositories\V1\Follow\FollowRepo;
 use App\Http\Repositories\V1\Like\LikeRepo;
 use App\Http\Repositories\V1\Music\MusicRepo;
-use App\Models\Like;
 use App\Models\Music;
 use Illuminate\Http\Request;
 
@@ -24,6 +21,11 @@ class MusicController extends Controller
         $page = request()->has('page') ? request()->page : 1;
         $count = request()->has('count') ? request()->count : Music::DEFAULT_ITEM_COUNT;
         $artist = request()->artist;
+        $related = request()->related;
+        if ($related) {
+            $music = MusicRepo::getInstance()->find()->setSlug($related)->build();
+            $artist = $music->artist;
+        }
 
         $data = MusicRepo::getInstance()->get()->setPage($page)
             ->setCount($count)
@@ -54,7 +56,6 @@ class MusicController extends Controller
             'music' => MusicRepo::getInstance()->toJson()->setMusic($music)->build(),
             'related' => MusicRepo::getInstance()->get()->setArtist($music->artist)->setToJson()->build(),
             'has_like' => LikeRepo::getInstance()->has()->setUser($request->user("api"))->setItem($music)->build(),
-            'has_bookmark' => BookmarkRepo::getInstance()->has()->setUser($request->user("api"))->setItem($music)->build(),
         ], '', true);
     }
 }

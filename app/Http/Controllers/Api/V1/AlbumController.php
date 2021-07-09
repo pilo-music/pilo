@@ -5,8 +5,6 @@ namespace App\Http\Controllers\Api\V1;
 use App\Http\Controllers\Api\CustomResponse;
 use App\Http\Controllers\Controller;
 use App\Http\Repositories\V1\Album\AlbumRepo;
-use App\Http\Repositories\V1\Bookmark\BookmarkRepo;
-use App\Http\Repositories\V1\Follow\FollowRepo;
 use App\Http\Repositories\V1\Like\LikeRepo;
 use App\Models\Album;
 use Illuminate\Http\Request;
@@ -58,7 +56,6 @@ class AlbumController extends Controller
 //            'related' => AlbumRepo::getInstance()->toJsonArray()->setAlbums($related)->build(),
             'related' => [],
             'has_like' => LikeRepo::getInstance()->has()->setUser($request->user("api"))->setItem($album)->build(),
-            'has_bookmark' => BookmarkRepo::getInstance()->has()->setUser($request->user("api"))->setItem($album)->build(),
         ], '', true);
     }
 }

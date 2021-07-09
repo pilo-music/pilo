@@ -58,7 +58,7 @@
 
     <div class="content">
         <div class="logo">
-            <img src="{{$message->embed('https://new.pilo.app/logo.png')}}" alt="logo">
+            <img src="{{$message->embed(config('app.url').'/'.'logo.png')}}" alt="logo">
         </div>
         <h2>Welcome to the Pilo</h2>
         <p>
