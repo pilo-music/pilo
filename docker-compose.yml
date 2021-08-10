@@ -35,20 +35,20 @@ services:
             - sail
         healthcheck:
           test: ["CMD", "mysqladmin", "ping"]
-    phpmyadmin:
-        image: phpmyadmin
-        container_name: phpmyadmin
-        depends_on:
-            - mysql
-        environment:
-            PMA_HOST: mysql
-            MYSQL_USERNAME: '${DB_USERNAME}'
-            MYSQL_ROOT_PASSWORD: '${DB_PASSWORD}'
-        restart: always
-        networks:
-            - sail
-        ports:
-        - '8081:80'
+#    phpmyadmin:
+#        image: phpmyadmin
+#        container_name: phpmyadmin
+#        depends_on:
+#            - mysql
+#        environment:
+#            PMA_HOST: mysql
+#            MYSQL_USERNAME: '${DB_USERNAME}'
+#            MYSQL_ROOT_PASSWORD: '${DB_PASSWORD}'
+#        restart: always
+#        networks:
+#            - sail
+#        ports:
+#        - '8081:80'
     redis:
         image: 'redis:alpine'
         ports:
