@@ -308,13 +308,13 @@ class HomeController extends Controller
 
     private function getForYou($item, $type)
     {
-        //todo
+        return [];
     }
 
 
     private function getMusicFollows($item, $type)
     {
-        //todo
+        return [];
     }
 
     private function getClientPlaylists($home, $type)
