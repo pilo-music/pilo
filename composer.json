@@ -11,6 +11,7 @@
         "php": "^8.0",
         "ext-fileinfo": "*",
         "ext-json": "*",
+        "babenkoivan/elastic-scout-driver": "^1.6",
         "doctrine/dbal": "^3.1",
         "falahati/php-mp3": "^0.9.5@alpha",
         "fideloper/proxy": "^4.4",
