@@ -30,4 +30,4 @@ Route::prefix('ohmygod')->middleware('auth')->namespace('Admin')->group(static f
 
 
 Route::get('ohmygod/login', [AuthController::class, 'show'])->name("login");
-Route::post('ohmygod/login', [AuthController::class, 'login'])->name("login");
+Route::post('ohmygod/login', [AuthController::class, 'login'])->name("login.post");
