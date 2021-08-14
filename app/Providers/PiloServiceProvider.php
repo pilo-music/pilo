@@ -6,6 +6,8 @@ use App\Models\Album;
 use App\Models\Artist;
 use App\Models\Music;
 use App\Models\Playlist;
+use App\Models\Search\EloquentSearchRepository;
+use App\Models\Search\SearchRepository;
 use App\Models\Video;
 use App\Observers\AlbumObserver;
 use App\Observers\ArtistObserver;
@@ -55,5 +57,8 @@ class PiloServiceProvider extends ServiceProvider
 
         Blade::component(AlbumRow::class);
         Blade::component(MusicRow::class);
+
+
+        $this->app->bind(SearchRepository::class, EloquentSearchRepository::class);
     }
 }

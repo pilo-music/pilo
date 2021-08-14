@@ -1,8 +1,6 @@
 <?php
 
-
 namespace App\Http\Repositories\V1\Playlist;
-
 
 class UpdateImage
 {
@@ -25,7 +23,7 @@ class UpdateImage
 
     public function build()
     {
-        if (isset($this->playlist)){
+        if (isset($this->playlist)) {
             $playlist = $this->playlist;
             $musics = $playlist->musics()->get();
             if ($musics->count() == 0) {

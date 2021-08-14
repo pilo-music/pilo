@@ -134,7 +134,6 @@ class Find
             }
 
             return $video;
-
         }
 
         if (isset($this->id)) {
@@ -165,6 +164,4 @@ class Find
         }
         return null;
     }
-
-
 }

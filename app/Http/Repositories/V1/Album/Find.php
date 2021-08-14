@@ -1,8 +1,6 @@
 <?php
 
-
 namespace App\Http\Repositories\V1\Album;
-
 
 use App\Models\Album;
 use App\Models\Artist;
@@ -156,7 +154,7 @@ class Find
             */
             $albums = Album::search($this->name)
                 ->where('status', Album::STATUS_ACTIVE)
-                ->paginate($this->count,'page',$this->page);
+                ->paginate($this->count, 'page', $this->page);
 
             if ($this->toJson) {
                 $albums = AlbumRepo::getInstance()->toJsonArray()->setAlbums($albums)->build();
@@ -166,7 +164,6 @@ class Find
         }
 
         if (isset($this->id)) {
-
             $album = Album::query()->where('status', Album::STATUS_ACTIVE)
                 ->where('id', $this->id)->first();
 
@@ -175,7 +172,6 @@ class Find
             }
 
             return $album;
-
         }
 
         /**
@@ -193,6 +189,4 @@ class Find
         }
         return null;
     }
-
-
 }

@@ -1,8 +1,6 @@
 <?php
 
-
 namespace App\Http\Repositories\V1\Playlist;
-
 
 use App\Models\Album;
 use App\Models\Playlist;
@@ -180,7 +178,6 @@ class Find
         }
 
         if (isset($this->id)) {
-
             $playlist = Playlist::query()->where('status', Playlist::STATUS_ACTIVE)
                 ->where('id', $this->id)->first();
 
@@ -191,7 +188,6 @@ class Find
             }
 
             return $playlist;
-
         }
 
         $playlist = Playlist::query()->where('status', Playlist::STATUS_ACTIVE)

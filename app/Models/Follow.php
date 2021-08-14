@@ -8,7 +8,8 @@ class Follow extends Model
 {
     protected $guarded = ['id'];
 
-    public function artist(){
+    public function artist()
+    {
         return $this->belongsTo(Artist::class);
     }
 

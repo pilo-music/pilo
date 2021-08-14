@@ -159,10 +159,10 @@ class Get
 
             $newMusicArray = [];
 
-            foreach ($musics->get() as $item){
+            foreach ($musics->get() as $item) {
                 $newMusicArray[] = $item;
             }
-            foreach ($this->artist->tagMusics()->get() as $item){
+            foreach ($this->artist->tagMusics()->get() as $item) {
                 $newMusicArray[] = $item;
             }
 

@@ -32,7 +32,6 @@ class UpdateMusicsChangeTablesNullable extends Migration
             $table->string('title_en')->nullable(false)->change();
             $table->string('title')->nullable()->change();
         });
-
     }
 
     /**
@@ -61,6 +60,5 @@ class UpdateMusicsChangeTablesNullable extends Migration
             $table->string('title_en')->nullable()->change();
             $table->string('title')->change();
         });
-
     }
 }

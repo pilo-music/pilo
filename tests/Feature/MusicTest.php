@@ -12,5 +12,4 @@ class MusicTest extends Base
         $response = $this->json('GET', "/api/v1/music?slug=$music");
         $this->assertAll($response);
     }
-
 }

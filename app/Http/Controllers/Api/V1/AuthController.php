@@ -41,7 +41,6 @@ class AuthController extends Controller
         /**
          * check password
          */
-
         if (!Hash::check($request->password, $user->password)) {
             return CustomResponse::create(null, __("messages.wrong_email_password"), false);
         }
@@ -50,7 +49,6 @@ class AuthController extends Controller
         /**
          * check user status
          */
-
         if ($user->status != User::USER_STATUS_ACTIVE) {
             if ($user->status == User::USER_STATUS_DEACTIVE) {
                 return CustomResponse::create(null, __("messages.account_ban"), false);
@@ -206,10 +204,8 @@ class AuthController extends Controller
                 'access_token' => $token,
                 'user' => UserRepo::getInstance()->toJson()->setUser($user)->build(),
             ], '', true);
-
         } else {
             return CustomResponse::create(null, __("messages.server_error"), false);
         }
     }
-
 }

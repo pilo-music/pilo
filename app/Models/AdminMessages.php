@@ -8,10 +8,10 @@ class AdminMessages extends Model
 {
     protected $guarded = ['id'];
 
-    const TYPE_ERROR = 1;
-    const TYPE_WARNING = 2;
-    const TYPE_INFO = 3;
-    const TYPE_SUCCESS = 4;
+    public const TYPE_ERROR = 1;
+    public const TYPE_WARNING = 2;
+    public const TYPE_INFO = 3;
+    public const TYPE_SUCCESS = 4;
 
     public function user()
     {

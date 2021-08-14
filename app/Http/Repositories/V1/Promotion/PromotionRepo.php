@@ -1,12 +1,9 @@
 <?php
 
-
 namespace App\Http\Repositories\V1\Promotion;
-
 
 class PromotionRepo implements Builder
 {
-
     private static $instance = null;
 
     public static function getInstance(): PromotionRepo

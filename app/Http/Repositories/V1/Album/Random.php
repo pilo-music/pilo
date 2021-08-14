@@ -1,8 +1,6 @@
 <?php
 
-
 namespace App\Http\Repositories\V1\Album;
-
 
 use App\Models\Album;
 
@@ -30,8 +28,9 @@ class Random
     {
         $items = Album::query()->where('status', Album::STATUS_ACTIVE)->get();
 
-        if ($this->count > $items->count())
+        if ($this->count > $items->count()) {
             $this->count = $items->count();
+        }
 
         $items = $items->random($this->count);
 

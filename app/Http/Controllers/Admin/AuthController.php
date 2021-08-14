@@ -28,7 +28,7 @@ class AuthController extends Controller
         }
 
 
-        if (Auth::attempt($request->only(["email", "password"]),$request->get("remember"))) {
+        if (Auth::attempt($request->only(["email", "password"]), $request->get("remember"))) {
             return redirect()->route("admin.index");
         }
 

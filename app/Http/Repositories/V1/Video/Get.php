@@ -99,8 +99,9 @@ class Get
         if (isset($this->artist)) {
             if (!$this->artist instanceof Artist) {
                 $this->artist = ArtistRepo::getInstance()->find()->setSlug($this->artist)->build();
-                if (!$this->artist)
+                if (!$this->artist) {
                     return collect([]);
+                }
             }
             $videos = $this->artist->videos()->where('status', Video::STATUS_ACTIVE);
         } else {

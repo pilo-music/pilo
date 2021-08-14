@@ -16,7 +16,6 @@ use Intervention\Image\Facades\Image;
 
 class PlaylistController extends Controller
 {
-
     public function index(Request $request)
     {
         /*
@@ -138,11 +137,14 @@ class PlaylistController extends Controller
             $fileName = now()->timestamp . '_' . uniqid('', true) . '.' . explode('/', explode(':', substr($request->get('image'), 0, strpos($request->get('image'), ';')))[1])[1];
             Storage::disk('custom-ftp')->put('public_html/cover/' . $fileName, $img);
             $image = env('APP_URL', 'https://pilo.app') . '/cover/' . $fileName;
-        } else $image = $playlist->image;
+        } else {
+            $image = $playlist->image;
+        }
 
 
-        if ($request->image_remove)
+        if ($request->image_remove) {
             $image = null;
+        }
 
 
         $playlist->update([
@@ -157,7 +159,6 @@ class PlaylistController extends Controller
 
     public function delete(Request $request)
     {
-
         $request->validate([
             'slug' => 'required|exists:playlists,slug',
         ]);
@@ -229,7 +230,7 @@ class PlaylistController extends Controller
                 DB::table('playlistables')->where('playlist_id', $playlist->id)
                     ->where('playlistable_id', $music_id)
                     ->where('playlistable_type', Music::class)->delete();
-            } else if (!$music && $request->action == 'add') {
+            } elseif (!$music && $request->action == 'add') {
                 DB::table('playlistables')->insert([
                     'playlistable_id' => $music_id,
                     'playlistable_type' => Music::class,

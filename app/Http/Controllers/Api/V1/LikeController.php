@@ -58,7 +58,7 @@ class LikeController extends Controller
         foreach ($likes as $like) {
             if ($like->likeable_type == get_class(new Music())) {
                 $item = MusicRepo::getInstance()->find()->setId($like->likeable_id)->setToJson()->build();
-            } else if ($like->likeable_type == get_class(new Video())) {
+            } elseif ($like->likeable_type == get_class(new Video())) {
                 $item = VideoRepo::getInstance()->find()->setId($like->likeable_id)->setToJson()->build();
             } elseif ($like->likeable_type == get_class(new Playlist())) {
                 $item = PlaylistRepo::getInstance()->find()->setId($like->likeable_id)->setToJson()->build();

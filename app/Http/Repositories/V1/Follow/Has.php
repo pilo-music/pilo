@@ -1,8 +1,6 @@
 <?php
 
-
 namespace App\Http\Repositories\V1\Follow;
-
 
 use App\Models\Follow;
 
@@ -39,13 +37,14 @@ class Has
 
     public function build()
     {
-        if ($this->user == null)
+        if ($this->user == null) {
             return false;
-        if ($this->user == null)
+        }
+        if ($this->user == null) {
             return false;
+        }
 
         return Follow::query()->where('artist_id', $this->artist->id)
-            ->where('user_id',$this->user->id)->exists();
+            ->where('user_id', $this->user->id)->exists();
     }
-
 }

@@ -1,4 +1,5 @@
 <?php
+
 return [
     'account_ban' => 'Your account was baned. Please Contact to support',
     'verify_not_found' => 'Verify code not found',

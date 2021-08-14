@@ -14,15 +14,13 @@ class CreateUsersTable extends Migration
     public function up()
     {
         Schema::create('users', function (Blueprint $table) {
-            $table->charset = 'utf8';
-            $table->collation = 'utf8_persian_ci';
             $table->increments('id');
             $table->string('name')->nullable();
-            $table->string('level',20)->default('user');
+            $table->string('level', 20)->default('user');
             $table->string('email')->unique();
-            $table->string('phone',20)->nullable()->unique();
-            $table->string('birth',30)->nullable();
-            $table->string('gender',7)->nullable();
+            $table->string('phone', 20)->nullable()->unique();
+            $table->string('birth', 30)->nullable();
+            $table->boolean('gender')->nullable();
             $table->string('pic')->nullable();
             $table->string('password');
             $table->tinyInteger('status')->default(\App\Models\User::USER_STATUS_NOT_VERIFY);

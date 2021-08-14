@@ -14,7 +14,6 @@ class AlbumObserver
      */
     public function created(Album $album)
     {
-
         $artist = $album->artist;
         $artists = $album->artists()->get();
 
@@ -117,6 +116,5 @@ class AlbumObserver
      */
     public function forceDeleted(Album $album)
     {
-
     }
 }

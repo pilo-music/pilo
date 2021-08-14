@@ -6,11 +6,11 @@ use Illuminate\Database\Eloquent\Model;
 
 class Message extends Model
 {
-    const TYPE_TEXT = 1;
-    const TYPE_IMAGE = 2;
+    public const TYPE_TEXT = 1;
+    public const TYPE_IMAGE = 2;
 
-    const SENDER_ADMIN = 1;
-    const SENDER_USER = 2;
+    public const SENDER_ADMIN = 1;
+    public const SENDER_USER = 2;
 
     protected $guarded = ['id'];
 

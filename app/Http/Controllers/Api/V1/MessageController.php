@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\Api\V1;
 
-
 use App\Http\Controllers\Api\CustomResponse;
 use App\Models\Message;
 use Illuminate\Http\Request;
@@ -11,7 +10,6 @@ use Morilog\Jalali\Jalalian;
 
 class MessageController extends Controller
 {
-
     public function index()
     {
         $user = auth()->user();
@@ -57,5 +55,4 @@ class MessageController extends Controller
             'sender' => $item->sender
         ], "", true);
     }
-
 }

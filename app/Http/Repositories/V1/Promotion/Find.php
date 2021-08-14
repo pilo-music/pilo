@@ -1,8 +1,6 @@
 <?php
 
-
 namespace App\Http\Repositories\V1\Promotion;
-
 
 use App\Models\Promotion;
 
@@ -64,17 +62,19 @@ class Find
 
     public function build()
     {
-        if (isset($this->id))
+        if (isset($this->id)) {
             $promotion = Promotion::query()->where('id', $this->id);
-        elseif(isset($this->slug))
-            $promotion = Promotion::query()->where('slug',$this->slug);
-        else
+        } elseif (isset($this->slug)) {
+            $promotion = Promotion::query()->where('slug', $this->slug);
+        } else {
             return null;
+        }
 
-        $promotion  = $promotion->where('status',Promotion::STATUS_ACTIVE);
+        $promotion  = $promotion->where('status', Promotion::STATUS_ACTIVE);
 
-        if (isset($this->type))
-            $promotion = $promotion->where('type',$this->type);
+        if (isset($this->type)) {
+            $promotion = $promotion->where('type', $this->type);
+        }
 
         $promotion = $promotion->first();
 
@@ -84,5 +84,4 @@ class Find
 
         return $promotion;
     }
-
 }

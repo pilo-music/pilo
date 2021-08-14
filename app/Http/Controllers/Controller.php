@@ -10,7 +10,9 @@ use Illuminate\Support\Facades\Storage;
 
 class Controller extends BaseController
 {
-    use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
+    use AuthorizesRequests;
+    use DispatchesJobs;
+    use ValidatesRequests;
 
 
     public static function uploadFile($url, $path, $extension, $fileName = null)

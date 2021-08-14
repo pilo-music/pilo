@@ -14,8 +14,6 @@ class CreateMusicsTable extends Migration
     public function up()
     {
         Schema::create('musics', function (Blueprint $table) {
-            $table->charset = 'utf8';
-            $table->collation = 'utf8_persian_ci';
             $table->increments('id');
             $table->unsignedInteger('user_id');
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');

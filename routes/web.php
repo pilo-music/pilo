@@ -12,6 +12,7 @@
 */
 
 use App\Http\Controllers\Admin\AuthController;
+use App\Models\Search\SearchRepository;
 use Illuminate\Support\Facades\Route;
 
 Route::redirect("/", "https://pilo.app");
@@ -31,3 +32,10 @@ Route::prefix('ohmygod')->middleware('auth')->namespace('Admin')->group(static f
 
 Route::get('ohmygod/login', [AuthController::class, 'show'])->name("login");
 Route::post('ohmygod/login', [AuthController::class, 'login'])->name("login.post");
+
+
+Route::get('test', function (SearchRepository $searchRepository) {
+    return request()->has('q')
+        ? $searchRepository->search(new \App\Models\Music(), request('q'))
+        : App\Models\Music::all();
+});
