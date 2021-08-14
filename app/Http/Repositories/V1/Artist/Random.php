@@ -48,13 +48,15 @@ class Random
             ->get();
 
 
-        if ($this->count > $items->count())
+        if ($this->count > $items->count()) {
             $this->count = $items->count();
+        }
 
         $items = $items->random($this->count);
 
-        if ($this->toJson)
+        if ($this->toJson) {
             $items = ArtistRepo::getInstance()->toJsonArray()->setArtists($items)->build();
+        }
 
         return $items;
     }

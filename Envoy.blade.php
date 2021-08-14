@@ -1,7 +1,7 @@
-@servers(['web' => ['root@78.47.116.174']])
+@servers(['web' => ['pilo']])
 
 @setup
-$path = "/home/new_pilo";
+$path = "/home/pilo/back";
 @endsetup
 
 @task('deploy')
@@ -11,19 +11,19 @@ php artisan down
 
 
 @if ($branch)
-    git pull origin {{$branch}}
+git pull origin {{$branch}}
 @else
-    git pull origin master
+git pull origin master
 @endif
 
 @if($composer)
-    cd {{$path}}
-    composer update
+cd {{$path}}
+composer update
 @endif
 
 @if($migrate)
-    cd {{$path}}
-    php artisan migrate
+cd {{$path}}
+php artisan migrate
 @endif
 
 php artisan optimize

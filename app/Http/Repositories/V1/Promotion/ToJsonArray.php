@@ -1,6 +1,5 @@
 <?php
 
-
 namespace App\Http\Repositories\V1\Promotion;
 
 use Illuminate\Support\Collection;

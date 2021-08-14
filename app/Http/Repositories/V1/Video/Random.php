@@ -28,8 +28,9 @@ class Random
     {
         $items = Video::query()->where('status', Video::STATUS_ACTIVE)->get();
 
-        if ($this->count > $items->count())
+        if ($this->count > $items->count()) {
             $this->count = $items->count();
+        }
 
         $items = $items->random($this->count);
 

@@ -39,7 +39,6 @@ class Handler extends ExceptionHandler
      */
     public function register()
     {
-
         $this->renderable(function (ValidationException $exception, Request $request) {
             if ($request->expectsJson()) {
                 $message = "";

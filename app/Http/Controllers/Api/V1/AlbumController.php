@@ -11,7 +11,6 @@ use Illuminate\Http\Request;
 
 class AlbumController extends Controller
 {
-
     public function index()
     {
         /*

@@ -133,7 +133,6 @@ class SearchController extends Controller
             "albums" => $albums,
             'playlists' => $playlist
         ], "", true);
-
     }
 
     private function getRecommend($q)
@@ -189,5 +188,4 @@ class SearchController extends Controller
 
         return CustomResponse::create(null, '', true);
     }
-
 }

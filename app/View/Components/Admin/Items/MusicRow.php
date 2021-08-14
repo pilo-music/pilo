@@ -14,7 +14,6 @@ class MusicRow extends Component
      */
     public function __construct(protected Music $item)
     {
-
     }
 
     /**

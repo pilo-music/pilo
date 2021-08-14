@@ -12,5 +12,4 @@ class AlbumTest extends Base
         $response = $this->json('GET', "/api/v1/album?slug=$album");
         $this->assertAll($response);
     }
-
 }

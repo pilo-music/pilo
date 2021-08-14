@@ -1,8 +1,6 @@
 <?php
 
-
 namespace App\Http\Repositories\V1\Like;
-
 
 use App\Models\Like;
 
@@ -40,14 +38,15 @@ class Has
 
     public function build()
     {
-        if ($this->user == null)
+        if ($this->user == null) {
             return false;
-        if ($this->item == null)
+        }
+        if ($this->item == null) {
             return false;
+        }
 
         return Like::query()->where('likeable_id', $this->item->id)
             ->where('likeable_type')
             ->where('user_id', $this->user->id)->exists();
     }
-
 }

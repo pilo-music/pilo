@@ -1,8 +1,6 @@
 <?php
 
-
 namespace App\Http\Repositories\V1\User;
-
 
 class ToJson
 {
@@ -35,7 +33,7 @@ class ToJson
                 'phone' => $this->user->phone ?? "",
                 'birth' => $this->user->birth ?? "",
                 'gender' => $this->user->gender ?? "",
-                'pic' => get_image($this->user,'pic') ?? "",
+                'pic' => get_image($this->user, 'pic') ?? "",
                 'global_notification' => $this->user->global_notification,
                 'music_notification' => $this->user->music_notification,
                 'album_notification' => $this->user->album_notification,

@@ -11,14 +11,15 @@
 |
 */
 
-use Illuminate\Support\Facades\Auth;
+use App\Http\Controllers\Admin\AuthController;
+use App\Models\Search\SearchRepository;
 use Illuminate\Support\Facades\Route;
 
-Route::redirect("/","https://pilo.app");
+Route::redirect("/", "https://pilo.app");
 
 Route::get('/policy', "HomeController@policy");
 
-Route::prefix('admin')->middleware('auth')->namespace('Admin')->group(static function () {
+Route::prefix('ohmygod')->middleware('auth')->namespace('Admin')->group(static function () {
     Route::get('/', 'IndexController')->name('admin.index');
     Route::get('/home', 'IndexController')->name('home');
 
@@ -29,4 +30,12 @@ Route::prefix('admin')->middleware('auth')->namespace('Admin')->group(static fun
 });
 
 
-Auth::routes(['reset' => false, 'register' => false, 'forgot' => false, 'confirm' => false]);
+Route::get('ohmygod/login', [AuthController::class, 'show'])->name("login");
+Route::post('ohmygod/login', [AuthController::class, 'login'])->name("login.post");
+
+
+Route::get('test', function (SearchRepository $searchRepository) {
+    return request()->has('q')
+        ? $searchRepository->search(new \App\Models\Music(), request('q'))
+        : App\Models\Music::all();
+});

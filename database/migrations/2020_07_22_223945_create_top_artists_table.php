@@ -16,7 +16,8 @@ class CreateTopArtistsTable extends Migration
         Schema::create('top_artists', function (Blueprint $table) {
             $table->id();
             $table->unsignedInteger("artist_id");
-            $table->foreign("artist_id")->on("artists")->references("id");            $table->string('type')->default('trending');
+            $table->foreign("artist_id")->on("artists")->references("id");
+            $table->string('type')->default('trending');
             $table->boolean('is_active')->default(true);
             $table->timestamps();
         });

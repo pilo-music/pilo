@@ -24,5 +24,4 @@ class Base extends TestCase
                 "status" => true,
             ]);
     }
-
 }

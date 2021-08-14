@@ -1,6 +1,5 @@
 <?php
 
-
 namespace App\Http\Repositories\V1\Playlist;
 
 class PlaylistRepo implements Builder
@@ -37,7 +36,7 @@ class PlaylistRepo implements Builder
         return new Random();
     }
 
-    public function updateImage() : UpdateImage
+    public function updateImage(): UpdateImage
     {
         return new UpdateImage();
     }

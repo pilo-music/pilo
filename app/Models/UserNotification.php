@@ -6,12 +6,12 @@ use Illuminate\Database\Eloquent\Model;
 
 class UserNotification extends Model
 {
-    const TYPE_URL = 1;
-    const TYPE_MUSIC = 2;
-    const TYPE_ALBUM = 3;
-    const TYPE_PLAYLIST = 4;
-    const TYPE_ARTIST = 5;
-    const TYPE_VIDEO = 6;
+    public const TYPE_URL = 1;
+    public const TYPE_MUSIC = 2;
+    public const TYPE_ALBUM = 3;
+    public const TYPE_PLAYLIST = 4;
+    public const TYPE_ARTIST = 5;
+    public const TYPE_VIDEO = 6;
 
     protected $guarded = ['id'];
 

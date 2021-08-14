@@ -75,7 +75,6 @@ class Get
 
     public function build()
     {
-
         $artists = Artist::query()->where('status', Artist::STATUS_ACTIVE);
 
         switch ($this->sort) {

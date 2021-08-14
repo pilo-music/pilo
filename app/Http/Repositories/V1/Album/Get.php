@@ -1,8 +1,6 @@
 <?php
 
-
 namespace App\Http\Repositories\V1\Album;
-
 
 use App\Models\Album;
 use App\Models\Artist;
@@ -120,12 +118,12 @@ class Get
 
         $album = $album->skip(($this->page - 1) * $this->count)->take($this->count)->get();
 
-        if ($album->count() < $this->count){
+        if ($album->count() < $this->count) {
             $newAlbumArray = [];
-            foreach ($album as $item){
+            foreach ($album as $item) {
                 $newAlbumArray[] = $item;
             }
-            foreach ($this->artist->tagAlbums()->get() as $item){
+            foreach ($this->artist->tagAlbums()->get() as $item) {
                 $newAlbumArray[] = $item;
             }
 

@@ -8,8 +8,8 @@ class Comment extends Model
 {
     protected $guarded = ['id','status'];
 
-    const STATUS_DEACTIVE = 0;
-    const STATUS_ACTIVE = 1;
+    public const STATUS_DEACTIVE = 0;
+    public const STATUS_ACTIVE = 1;
 
     public function commentable()
     {
@@ -23,6 +23,6 @@ class Comment extends Model
 
     public function setCommentAttribute($value)
     {
-        $this->attributes['comment'] = str_replace(PHP_EOL , "<br>" , $value);
+        $this->attributes['comment'] = str_replace(PHP_EOL, "<br>", $value);
     }
 }

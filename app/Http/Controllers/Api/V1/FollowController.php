@@ -20,8 +20,9 @@ class FollowController extends Controller
 
         $artist = ArtistRepo::getInstance()->find()->setSlug($request->slug)->build();
 
-        if (!$artist)
+        if (!$artist) {
             abort(404);
+        }
 
         $user = $request->user();
 
@@ -41,7 +42,6 @@ class FollowController extends Controller
         $data = ArtistRepo::getInstance()->toJson()->setArtist($artist)->build();
 
         return CustomResponse::create($data, '', true);
-
     }
 
     public function index()

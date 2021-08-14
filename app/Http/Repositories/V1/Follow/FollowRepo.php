@@ -1,12 +1,9 @@
 <?php
 
-
 namespace App\Http\Repositories\V1\Follow;
-
 
 class FollowRepo implements Builder
 {
-
     private static $instance = null;
 
     public static function getInstance(): FollowRepo
@@ -20,7 +17,7 @@ class FollowRepo implements Builder
     /**
      * @return Has
      */
-    public function has() : Has
+    public function has(): Has
     {
         return new Has();
     }

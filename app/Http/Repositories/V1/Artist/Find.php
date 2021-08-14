@@ -119,7 +119,7 @@ class Find
              */
             $artists = Artist::search($this->name)
                 ->where('status', Artist::STATUS_ACTIVE)
-                ->paginate($this->count,'page',$this->page);
+                ->paginate($this->count, 'page', $this->page);
 
             if ($this->toJson) {
                 $artists = ArtistRepo::getInstance()->toJsonArray()->setArtists($artists)->build();
@@ -141,7 +141,6 @@ class Find
             }
 
             return $artists;
-
         }
 
         /*
@@ -160,5 +159,4 @@ class Find
         }
         return null;
     }
-
 }

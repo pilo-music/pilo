@@ -1,12 +1,9 @@
 <?php
 
-
 namespace App\Http\Repositories\V1\User;
-
 
 class UserRepo implements Builder
 {
-
     private static $instance = null;
 
     public static function getInstance(): UserRepo

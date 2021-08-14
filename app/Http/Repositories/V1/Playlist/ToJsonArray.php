@@ -1,6 +1,5 @@
 <?php
 
-
 namespace App\Http\Repositories\V1\Playlist;
 
 use Illuminate\Support\Collection;

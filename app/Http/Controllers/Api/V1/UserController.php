@@ -12,7 +12,6 @@ use Intervention\Image\Facades\Image;
 
 class UserController extends Controller
 {
-
     public function update(Request $request)
     {
         $user = auth()->user();
@@ -37,8 +36,9 @@ class UserController extends Controller
             } else {
                 $imageUrl = $user->pic;
             }
-        } else
+        } else {
             $imageUrl = $user->pic;
+        }
 
 
         $user->update([
@@ -65,5 +65,4 @@ class UserController extends Controller
         $user = auth()->user();
         return CustomResponse::create(UserRepo::getInstance()->toJson()->setUser($user)->build(), '', true);
     }
-
 }

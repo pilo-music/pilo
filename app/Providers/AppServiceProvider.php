@@ -27,8 +27,9 @@ class AppServiceProvider extends ServiceProvider
         Validator::extend('is_image', function ($attribute, $value, $params, $validator) {
             if ($value != "") {
                 $result = mime_content_type($value);
-                if ($result == 'image/png' || $result == 'image/jpg' || $result == 'image/jpeg')
+                if ($result == 'image/png' || $result == 'image/jpg' || $result == 'image/jpeg') {
                     return true;
+                }
             }
             return false;
         });

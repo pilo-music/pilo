@@ -4,12 +4,41 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
+use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use Illuminate\Notifications\Notifiable;
-use Laravel\Scout\Searchable;
+use Illuminate\Support\Collection;
 
+/**
+ * @property integer id
+ * @property integer user_id
+ * @property integer artist_id
+ * @property integer album_id
+ * @property string title
+ * @property string title_en
+ * @property string slug
+ * @property string image
+ * @property string text
+ * @property string link128
+ * @property string link320
+ * @property boolean isbest
+ * @property string time
+ * @property integer like_count
+ * @property integer play_count
+ * @property string thumbnail
+ *
+ * @property Album album
+ * @property Artist artist
+ * @property Collection artists
+ * @property Collection comments
+ * @property Collection sources
+ *
+ */
 class Music extends Model
 {
-    use Notifiable, Searchable, HasFactory;
+    use Notifiable;
+    use HasFactory;
 
     protected $table = "musics";
 
@@ -27,7 +56,7 @@ class Music extends Model
     public const DEFAULT_ITEM_SORT = self::SORT_LATEST;
 
 
-    public function path()
+    public function path(): string
     {
         return "/music/$this->slug";
     }
@@ -36,32 +65,32 @@ class Music extends Model
         'id',
     ];
 
-    public function user()
+    public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
     }
 
-    public function album()
+    public function album(): BelongsTo
     {
         return $this->belongsTo(Album::class);
     }
 
-    public function artist()
+    public function artist(): BelongsTo
     {
         return $this->belongsTo(Artist::class);
     }
 
-    public function artists()
+    public function artists(): MorphToMany
     {
         return $this->morphToMany(Artist::class, 'artistable');
     }
 
-    public function comments()
+    public function comments(): MorphMany
     {
         return $this->morphMany(Comment::class, 'commentable');
     }
 
-    public function sources()
+    public function sources(): MorphMany
     {
         return $this->morphMany(Source::class, 'sourceable');
     }

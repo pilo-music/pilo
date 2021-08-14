@@ -117,8 +117,9 @@ class HomeController extends Controller
             $items = $this->explodeHomeItems($home);
             foreach ($items as $item) {
                 $artist = ArtistRepo::getInstance()->find()->setId($item)->setToJson()->build();
-                if ($artist)
+                if ($artist) {
                     $artists[] = $artist;
+                }
             }
         }
 
@@ -140,8 +141,9 @@ class HomeController extends Controller
             $items = $this->explodeHomeItems($home);
             foreach ($items as $item) {
                 $music = MusicRepo::getInstance()->find()->setId($item)->setToJson()->build();
-                if ($music)
+                if ($music) {
                     $musics[] = $music;
+                }
             }
         }
 
@@ -190,8 +192,9 @@ class HomeController extends Controller
             $items = $this->explodeHomeItems($home);
             foreach ($items as $item) {
                 $playlist = PlaylistRepo::getInstance()->find()->setId($item)->setPage($this->page)->setToJson()->build();
-                if ($playlist)
+                if ($playlist) {
                     $playlists[] = $playlist;
+                }
             }
         }
 
@@ -210,9 +213,9 @@ class HomeController extends Controller
             $items = $this->explodeHomeItems($home);
             foreach ($items as $item) {
                 $promotion = PromotionRepo::getInstance()->find()->setId($item)->setToJson();
-                if ($promotion)
+                if ($promotion) {
                     $promotions[] = $promotion;
-
+                }
             }
         }
 
@@ -242,7 +245,6 @@ class HomeController extends Controller
                 ->where('created_at', '>', now()->subDays(7))
                 ->skip($this->page)
                 ->latest()->get();
-
         } else {
             $limit = 18;
             $musics = MusicRepo::getInstance()->get()->setSort(Music::SORT_LATEST)
@@ -252,11 +254,13 @@ class HomeController extends Controller
         }
 
 
-        if (isset($albums) && count($albums) == 0)
+        if (isset($albums) && count($albums) == 0) {
             $albums = AlbumRepo::getInstance()->random()->setCount($limit - count($albums))->build();
+        }
 
-        if (isset($musics) && count($musics) == 0)
+        if (isset($musics) && count($musics) == 0) {
             $musics = MusicRepo::getInstance()->random()->setCount($limit - count($musics))->build();
+        }
 
 
         $musics_albums = $musics->merge($albums)->sortByDesc('created_at');
@@ -268,7 +272,7 @@ class HomeController extends Controller
             if ($count <= $limit) {
                 if ($musics_album instanceof Album) {
                     $data[] = AlbumRepo::getInstance()->toJson()->setAlbum($musics_album)->build();
-                } else if ($musics_album instanceof Music) {
+                } elseif ($musics_album instanceof Music) {
                     $data[] = MusicRepo::getInstance()->toJson()->setMusic($musics_album)->build();
                 }
             }
@@ -308,13 +312,13 @@ class HomeController extends Controller
 
     private function getForYou($item, $type)
     {
-        //todo
+        return [];
     }
 
 
     private function getMusicFollows($item, $type)
     {
-        //todo
+        return [];
     }
 
     private function getClientPlaylists($home, $type)

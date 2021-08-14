@@ -7,14 +7,16 @@ if (!function_exists('get_image')) {
     {
         if (isset($model) && !is_string($model)) {
             $image = $model[$column];
-            if (!isset($image) || $image == "")
+            if (!isset($image) || $image == "") {
                 return "";
+            }
             if (substr_count($image, 'http') == 0) {
                 if (substr_count($image, 'storage') > 0) {
                     if (substr_count($image, '/storage') > 0) {
                         $image = config()->get('app.url') . $image;
-                    } else
+                    } else {
                         $image = config()->get('app.url') . '/' . $image;
+                    }
                 } else {
                     $image = config()->get('app.url') . '/storage/' . $image;
                 }
@@ -83,7 +85,7 @@ if (!function_exists('generate_slug')) {
 if (!function_exists('flash')) {
     function flash($message, $class)
     {
-        session()->flash('admin_message_text',$message);
-        session()->flash('admin_message_class',$class);
+        session()->flash('admin_message_text', $message);
+        session()->flash('admin_message_class', $class);
     }
 }

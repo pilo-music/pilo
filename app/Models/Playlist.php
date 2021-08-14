@@ -8,7 +8,7 @@ use Laravel\Scout\Searchable;
 
 class Playlist extends Model
 {
-    use Searchable, HasFactory;
+    use HasFactory;
 
     public const STATUS_ACTIVE = 1;
     public const STATUS_DRAFT = 0;

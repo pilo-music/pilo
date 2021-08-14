@@ -1,8 +1,6 @@
 <?php
 
-
 namespace App\Http\Middleware;
-
 
 use Closure;
 use Illuminate\Foundation\Application;
@@ -34,7 +32,7 @@ class Localization
         $locale = $request->header('Content-Language');
 
         // if the header is missed
-        if(!$locale){
+        if (!$locale) {
             // take the default local language
             $locale = config()->get('app.locale');
         }

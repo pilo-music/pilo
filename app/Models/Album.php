@@ -4,11 +4,36 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Laravel\Scout\Searchable;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
+use Illuminate\Database\Eloquent\Relations\MorphToMany;
+use Illuminate\Support\Collection;
 
+/**
+ * @property integer id
+ * @property integer user_id
+ * @property integer artist_id
+ * @property string title
+ * @property string title_en
+ * @property string slug
+ * @property string image
+ * @property boolean isbest
+ * @property integer like_count
+ * @property integer play_count
+ * @property integer music_count
+ * @property string thumbnail
+ *
+ * @property User user
+ * @property Artist artist
+ * @property Collection artists
+ * @property Collection comments
+ * @property Collection sources
+ * @property Collection musics
+ */
 class Album extends Model
 {
-    use Searchable, HasFactory;
+    use HasFactory;
 
     public const STATUS_ACTIVE = 1;
     public const STATUS_DRAFT = 0;
@@ -28,37 +53,37 @@ class Album extends Model
         'id'
     ];
 
-    public function path()
+    public function path(): string
     {
         return "/album/$this->slug";
     }
 
-    public function user()
+    public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
     }
 
-    public function artist()
+    public function artist(): BelongsTo
     {
         return $this->belongsTo(Artist::class);
     }
 
-    public function artists()
+    public function artists(): MorphToMany
     {
         return $this->morphToMany(Artist::class, 'artistable');
     }
 
-    public function comments()
+    public function comments(): MorphMany
     {
         return $this->morphMany(Comment::class, 'commentable');
     }
 
-    public function sources()
+    public function sources(): MorphMany
     {
         return $this->morphMany(Source::class, 'sourceable');
     }
 
-    public function musics()
+    public function musics(): HasMany
     {
         return $this->hasMany(Music::class);
     }
