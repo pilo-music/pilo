@@ -14,28 +14,10 @@ class VideoObserver
      */
     public function created(Video $video)
     {
-        $artist = $video->artist;
-        $artists = $video->artists()->get();
-
-
-        $artist->update([
-            'video_count' => $artist->videos()->count() + $artist->tagVideos()->count()
-        ]);
-
-        foreach ($artists as $item) {
-            $artist->update([
-                'video_count' => $item->videos()->count() + $item->tagVideos()->count()
-            ]);
-        }
-
+        $this->update($video);
         $video->update([
             'stored_at' => now()
         ]);
-
-        try {
-            $video->addToIndex();
-        } catch (\Exception $e) {
-        }
     }
 
     /**
@@ -46,24 +28,7 @@ class VideoObserver
      */
     public function updated(Video $video)
     {
-        $artist = $video->artist;
-        $artists = $video->artists()->get();
-
-
-        $artist->update([
-            'video_count' => $artist->videos()->count() + $artist->tagVideos()->count()
-        ]);
-
-        foreach ($artists as $item) {
-            $artist->update([
-                'video_count' => $item->videos()->count() + $item->tagVideos()->count()
-            ]);
-        }
-
-        try {
-            $video->updateIndex();
-        } catch (\Exception $e) {
-        }
+        $this->update($video);
     }
 
     /**
@@ -74,24 +39,7 @@ class VideoObserver
      */
     public function deleted(Video $video)
     {
-        $artist = $video->artist;
-        $artists = $video->artists()->get();
-
-
-        $artist->update([
-            'video_count' => $artist->videos()->count() + $artist->tagVideos()->count()
-        ]);
-
-        foreach ($artists as $item) {
-            $artist->update([
-                'video_count' => $item->videos()->count() + $item->tagVideos()->count()
-            ]);
-        }
-
-        try {
-            $video->removeFromIndex();
-        } catch (\Exception $e) {
-        }
+        $this->update($video);
     }
 
     /**
@@ -102,10 +50,6 @@ class VideoObserver
      */
     public function restored(Video $video)
     {
-        try {
-            $video->addToIndex();
-        } catch (\Exception $e) {
-        }
     }
 
     /**
@@ -117,5 +61,21 @@ class VideoObserver
     public function forceDeleted(Video $video)
     {
         //
+    }
+
+    private function update($video){
+        $artist = $video->artist;
+        $artists = $video->artists()->get();
+
+
+        $artist->update([
+            'video_count' => $artist->videos()->count() + $artist->tagVideos()->count()
+        ]);
+
+        foreach ($artists as $item) {
+            $artist->update([
+                'video_count' => $item->videos()->count() + $item->tagVideos()->count()
+            ]);
+        }
     }
 }

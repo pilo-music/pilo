@@ -2,13 +2,17 @@
 
 namespace App\Models;
 
+use App\Search\PlaylistIndexConfigurator;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Laravel\Scout\Searchable;
+use ScoutElastic\Searchable;
+
 
 class Playlist extends Model
 {
-    use HasFactory;
+    use HasFactory,Searchable;
+
+    protected $indexConfigurator = PlaylistIndexConfigurator::class;
 
     public const STATUS_ACTIVE = 1;
     public const STATUS_DRAFT = 0;
@@ -45,49 +49,5 @@ class Playlist extends Model
     public function artists()
     {
         return $this->morphToMany(Artist::class, 'artistable');
-    }
-
-    protected $indexSettings = [
-        'analysis' => [
-            'char_filter' => [
-                'replace' => [
-                    'type' => 'mapping',
-                    'mappings' => [
-                        '&=> and '
-                    ],
-                ],
-            ],
-            'filter' => [
-                'word_delimiter' => [
-                    'type' => 'word_delimiter',
-                    'split_on_numerics' => false,
-                    'split_on_case_change' => true,
-                    'generate_word_parts' => true,
-                    'generate_number_parts' => true,
-                    'catenate_all' => true,
-                    'preserve_original' => true,
-                    'catenate_numbers' => true,
-                ]
-            ],
-            'analyzer' => [
-                'default' => [
-                    'type' => 'custom',
-                    'char_filter' => [
-                        'html_strip',
-                        'replace',
-                    ],
-                    'tokenizer' => 'whitespace',
-                    'filter' => [
-                        'lowercase',
-                        'word_delimiter',
-                    ],
-                ],
-            ],
-        ],
-    ];
-
-    public function getIndexName()
-    {
-        return 'playlists';
     }
 }

@@ -22,7 +22,7 @@
         }
 
         h2 {
-            color: #4f545c;
+               color: #4f545c;
             font-weight: 500;
             font-size: 20px;
             letter-spacing: 0.27px;

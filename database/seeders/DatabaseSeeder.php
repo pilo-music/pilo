@@ -17,14 +17,13 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        // $this->call(UsersTableSeeder::class);
 
         $user = User::factory()->create();
         $artist = Artist::factory()->create([
             'user_id' => $user->id
         ]);
 
-        $album = Album::factory()->create([
+        $album = Album::factory()->make([
             'user_id' => $user->id,
             'artist_id' => $artist->id
         ]);

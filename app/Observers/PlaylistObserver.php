@@ -14,26 +14,11 @@ class PlaylistObserver
      */
     public function created(Playlist $playlist)
     {
-        $musics = $playlist->musics()->get();
-
-        foreach ($musics as $music) {
-            $artist = $music->artist();
-            $artists = $music->artists();
-
-            $artist->increment('playlist_count');
-            foreach ($artists as $item) {
-                $item->increment('playlist_count');
-            }
-        }
-
+        $this->update($playlist);
         $playlist->update([
             'stored_at' => now()
         ]);
 
-        try {
-            $playlist->addToIndex();
-        } catch (\Exception $e) {
-        }
     }
 
     /**
@@ -44,10 +29,8 @@ class PlaylistObserver
      */
     public function updated(Playlist $playlist)
     {
-        try {
-            $playlist->updateIndex();
-        } catch (\Exception $e) {
-        }
+        $this->update($playlist);
+
     }
 
     /**
@@ -57,6 +40,34 @@ class PlaylistObserver
      * @return void
      */
     public function deleted(Playlist $playlist)
+    {
+        $this->update($playlist);
+    }
+
+    /**
+     * Handle the playlist "restored" event.
+     *
+     * @param \App\Models\Playlist $playlist
+     * @return void
+     */
+    public function restored(Playlist $playlist)
+    {
+
+    }
+
+    /**
+     * Handle the playlist "force deleted" event.
+     *
+     * @param \App\Models\Playlist $playlist
+     * @return void
+     */
+    public function forceDeleted(Playlist $playlist)
+    {
+        //
+    }
+
+
+    public function update($playlist)
     {
         $musics = $playlist->musics()->get();
 
@@ -69,35 +80,5 @@ class PlaylistObserver
                 $item->decrement('playlist_count');
             }
         }
-
-        try {
-            $playlist->removeFromIndex();
-        } catch (\Exception $e) {
-        }
-    }
-
-    /**
-     * Handle the playlist "restored" event.
-     *
-     * @param \App\Models\Playlist $playlist
-     * @return void
-     */
-    public function restored(Playlist $playlist)
-    {
-        try {
-            $playlist->addToIndex();
-        } catch (\Exception $e) {
-        }
-    }
-
-    /**
-     * Handle the playlist "force deleted" event.
-     *
-     * @param \App\Models\Playlist $playlist
-     * @return void
-     */
-    public function forceDeleted(Playlist $playlist)
-    {
-        //
     }
 }

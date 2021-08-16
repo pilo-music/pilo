@@ -18,6 +18,7 @@ class MusicFactory extends Factory
      * Define the model's default state.
      *
      * @return array
+     * @throws \Exception
      */
     public function definition()
     {
@@ -29,10 +30,10 @@ class MusicFactory extends Factory
             'text' => $this->faker->text(100),
             'link128' => $this->faker->url(),
             'link320' => $this->faker->url(),
-            'isbest' => $this->faker->numberBetween(0, 2),
+            'isbest' => random_int(0, 2),
             'time' => $this->faker->time("i:s"),
-            'like_count' => $this->faker->numberBetween(0, 100),
-            'play_count' => $this->faker->numberBetween(0, 100),
+            'like_count' => random_int(0, 100),
+            'play_count' => random_int(0, 100),
             'thumbnail' => $this->faker->imageUrl(300, 300),
         ];
     }

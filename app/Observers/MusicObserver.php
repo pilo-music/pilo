@@ -14,28 +14,10 @@ class MusicObserver
      */
     public function created(Music $music)
     {
-        $artist = $music->artist;
-        $artists = $music->artists()->get();
-
-
-        $artist->update([
-            'music_count' => $artist->musics()->count() + $artist->tagMusics()->count()
-        ]);
-
-        foreach ($artists as $item) {
-            $artist->update([
-                'music_count' => $item->musics()->count() + $item->tagMusics()->count()
-            ]);
-        }
-
+        $this->update($music);
         $music->update([
             'stored_at' => now()
         ]);
-
-        try {
-            $music->addToIndex();
-        } catch (\Exception $e) {
-        }
     }
 
     /**
@@ -46,24 +28,7 @@ class MusicObserver
      */
     public function updated(Music $music)
     {
-        $artist = $music->artist;
-        $artists = $music->artists()->get();
-
-
-        $artist->update([
-            'music_count' => $artist->musics()->count() + $artist->tagMusics()->count()
-        ]);
-
-        foreach ($artists as $item) {
-            $artist->update([
-                'music_count' => $item->musics()->count() + $item->tagMusics()->count()
-            ]);
-        }
-
-        try {
-            $music->updateIndex();
-        } catch (\Exception $e) {
-        }
+        $this->update($music);
     }
 
     /**
@@ -74,24 +39,7 @@ class MusicObserver
      */
     public function deleted(Music $music)
     {
-        $artist = $music->artist;
-        $artists = $music->artists()->get();
-
-
-        $artist->update([
-            'music_count' => $artist->musics()->count() + $artist->tagMusics()->count()
-        ]);
-
-        foreach ($artists as $item) {
-            $artist->update([
-                'music_count' => $item->musics()->count() + $item->tagMusics()->count()
-            ]);
-        }
-
-        try {
-            $music->removeFromIndex();
-        } catch (\Exception $e) {
-        }
+        $this->update($music);
     }
 
     /**
@@ -102,10 +50,6 @@ class MusicObserver
      */
     public function restored(Music $music)
     {
-        try {
-            $music->addToIndex();
-        } catch (\Exception $e) {
-        }
     }
 
     /**
@@ -117,5 +61,21 @@ class MusicObserver
     public function forceDeleted(Music $music)
     {
         //
+    }
+
+    private function update($music){
+        $artist = $music->artist;
+        $artists = $music->artists()->get();
+
+
+        $artist->update([
+            'music_count' => $artist->musics()->count() + $artist->tagMusics()->count()
+        ]);
+
+        foreach ($artists as $item) {
+            $artist->update([
+                'music_count' => $item->musics()->count() + $item->tagMusics()->count()
+            ]);
+        }
     }
 }

@@ -17,11 +17,6 @@ class ArtistObserver
         $artist->update([
             'stored_at' => now()
         ]);
-
-        try {
-            $artist->addToIndex();
-        } catch (\Exception $e) {
-        }
     }
 
     /**
@@ -32,10 +27,7 @@ class ArtistObserver
      */
     public function updated(Artist $artist)
     {
-        try {
-            $artist->updateIndex();
-        } catch (\Exception $e) {
-        }
+
     }
 
     /**
@@ -46,10 +38,6 @@ class ArtistObserver
      */
     public function deleted(Artist $artist)
     {
-        try {
-            $artist->removeFromIndex();
-        } catch (\Exception $e) {
-        }
     }
 
     /**
@@ -60,10 +48,7 @@ class ArtistObserver
      */
     public function restored(Artist $artist)
     {
-        try {
-            $artist->addToIndex();
-        } catch (\Exception $e) {
-        }
+
     }
 
     /**

@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Search\MusicIndexConfigurator;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -9,6 +10,7 @@ use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Collection;
+use ScoutElastic\Searchable;
 
 /**
  * @property integer id
@@ -39,6 +41,9 @@ class Music extends Model
 {
     use Notifiable;
     use HasFactory;
+    use Searchable;
+
+    protected $indexConfigurator = MusicIndexConfigurator::class;
 
     protected $table = "musics";
 
@@ -93,50 +98,5 @@ class Music extends Model
     public function sources(): MorphMany
     {
         return $this->morphMany(Source::class, 'sourceable');
-    }
-
-
-    protected $indexSettings = [
-        'analysis' => [
-            'char_filter' => [
-                'replace' => [
-                    'type' => 'mapping',
-                    'mappings' => [
-                        '&=> and '
-                    ],
-                ],
-            ],
-            'filter' => [
-                'word_delimiter' => [
-                    'type' => 'word_delimiter',
-                    'split_on_numerics' => false,
-                    'split_on_case_change' => true,
-                    'generate_word_parts' => true,
-                    'generate_number_parts' => true,
-                    'catenate_all' => true,
-                    'preserve_original' => true,
-                    'catenate_numbers' => true,
-                ]
-            ],
-            'analyzer' => [
-                'default' => [
-                    'type' => 'custom',
-                    'char_filter' => [
-                        'html_strip',
-                        'replace',
-                    ],
-                    'tokenizer' => 'whitespace',
-                    'filter' => [
-                        'lowercase',
-                        'word_delimiter',
-                    ],
-                ],
-            ],
-        ],
-    ];
-
-    public function getIndexName()
-    {
-        return 'musics';
     }
 }

@@ -18,6 +18,7 @@ class ArtistFactory extends Factory
      * Define the model's default state.
      *
      * @return array
+     * @throws \Exception
      */
     public function definition()
     {
@@ -27,11 +28,11 @@ class ArtistFactory extends Factory
             'slug' => $this->faker->text(10),
             'image' => $this->faker->imageUrl(300, 300),
             'isbest' => $this->faker->numberBetween(0, 2),
-            'music_count' => $this->faker->numberBetween(0, 100),
-            'album_count' => $this->faker->numberBetween(0, 100),
-            'followers_count' => $this->faker->numberBetween(0, 100),
-            'playlist_count' => $this->faker->numberBetween(0, 100),
-            'video_count' => $this->faker->numberBetween(0, 100),
+            'music_count' => random_int(0, 100),
+            'album_count' => random_int(0, 100),
+            'followers_count' => random_int(0, 100),
+            'playlist_count' => random_int(0, 100),
+            'video_count' => random_int(0, 100),
             'header_image' => $this->faker->imageUrl(300, 300),
             'thumbnail' => $this->faker->imageUrl(300, 300),
         ];

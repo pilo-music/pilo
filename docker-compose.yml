@@ -45,18 +45,18 @@ services:
       - sail
     healthcheck:
       test: [ "CMD", "redis-cli", "ping" ]
-  elasticsearch:
-    image: 'elasticsearch:7.14.0'
-    environment:
-      - discovery.type=single-node
-    ports:
-      - 9200:9200
-      - 9300:9300
-    volumes:
-      - sailelasticsearch:/usr/share/elasticsearch/data
-    networks:
-      - sail
 
+#  elasticsearch:
+#    image: 'elasticsearch:7.14.0'
+#    environment:
+#      - discovery.type=single-node
+#    ports:
+#      - 9200:9200
+#      - 9300:9300
+#    volumes:
+#      - sailelasticsearch:/usr/share/elasticsearch/data
+#    networks:
+#      - sail
 networks:
   sail:
     driver: bridge

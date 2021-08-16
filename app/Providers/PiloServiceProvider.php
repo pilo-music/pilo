@@ -57,8 +57,5 @@ class PiloServiceProvider extends ServiceProvider
 
         Blade::component(AlbumRow::class);
         Blade::component(MusicRow::class);
-
-
-        $this->app->bind(SearchRepository::class, EloquentSearchRepository::class);
     }
 }
