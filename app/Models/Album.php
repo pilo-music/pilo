@@ -10,7 +10,6 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use Illuminate\Support\Collection;
-use ScoutElastic\Searchable;
 
 /**
  * @property integer id
@@ -35,10 +34,7 @@ use ScoutElastic\Searchable;
  */
 class Album extends Model
 {
-    use HasFactory, Searchable;
-
-    protected $indexConfigurator = AlbumIndexConfigurator::class;
-
+    use HasFactory;
 
     public const STATUS_ACTIVE = 1;
     public const STATUS_DRAFT = 0;

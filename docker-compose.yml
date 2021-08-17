@@ -45,18 +45,18 @@ services:
       - sail
     healthcheck:
       test: [ "CMD", "redis-cli", "ping" ]
-
-#  elasticsearch:
-#    image: 'elasticsearch:7.14.0'
-#    environment:
-#      - discovery.type=single-node
-#    ports:
-#      - 9200:9200
-#      - 9300:9300
-#    volumes:
-#      - sailelasticsearch:/usr/share/elasticsearch/data
-#    networks:
-#      - sail
+  meilisearch:
+    image: 'getmeili/meilisearch:latest'
+    ports:
+      - '${FORWARD_MEILISEARCH_PORT:-7700}:7700'
+    volumes:
+      - 'sailmeilisearch:/data.ms'
+    networks:
+      - sail
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--spider",  "http://localhost:7700/health"]
+      retries: 3
+      timeout: 5s
 networks:
   sail:
     driver: bridge
@@ -65,5 +65,5 @@ volumes:
     driver: local
   sailredis:
     driver: local
-  sailelasticsearch:
+  sailmeilisearch:
     driver: local

@@ -5,11 +5,10 @@ namespace App\Models;
 use App\Search\VideoIndexConfigurator;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use ScoutElastic\Searchable;
 
 class Video extends Model
 {
-    use HasFactory,Searchable;
+    use HasFactory;
     protected $indexConfigurator = VideoIndexConfigurator::class;
 
     public const STATUS_ACTIVE = 1;

@@ -10,7 +10,6 @@ use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Collection;
-use ScoutElastic\Searchable;
 
 /**
  * @property integer id
@@ -41,7 +40,6 @@ class Music extends Model
 {
     use Notifiable;
     use HasFactory;
-    use Searchable;
 
     protected $indexConfigurator = MusicIndexConfigurator::class;
 

@@ -10,7 +10,6 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use Illuminate\Support\Collection;
-use ScoutElastic\Searchable;
 
 /**
  * @property integer id
@@ -42,7 +41,7 @@ use ScoutElastic\Searchable;
  */
 class Artist extends Model
 {
-    use HasFactory, Searchable;
+    use HasFactory;
 
     protected $indexConfigurator = ArtistIndexConfigurator::class;
 

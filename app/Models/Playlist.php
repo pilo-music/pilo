@@ -5,12 +5,11 @@ namespace App\Models;
 use App\Search\PlaylistIndexConfigurator;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use ScoutElastic\Searchable;
 
 
 class Playlist extends Model
 {
-    use HasFactory,Searchable;
+    use HasFactory;
 
     protected $indexConfigurator = PlaylistIndexConfigurator::class;
 
