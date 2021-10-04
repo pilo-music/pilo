@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use App\Search\ArtistIndexConfigurator;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -10,6 +9,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use Illuminate\Support\Collection;
+use Laravel\Scout\Searchable;
 
 /**
  * @property integer id
@@ -41,10 +41,7 @@ use Illuminate\Support\Collection;
  */
 class Artist extends Model
 {
-    use HasFactory;
-
-    protected $indexConfigurator = ArtistIndexConfigurator::class;
-
+    use HasFactory,Searchable;
 
     public const STATUS_ACTIVE = 1;
     public const STATUS_DRAFT = 0;

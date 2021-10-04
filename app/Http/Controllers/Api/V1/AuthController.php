@@ -208,4 +208,75 @@ class AuthController extends Controller
             return CustomResponse::create(null, __("messages.server_error"), false);
         }
     }
+
+
+    /**
+     * Get a JWT via given credentials.
+     *
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function loginPhone(Request $request): JsonResponse
+    {
+        $request->validate([
+            'phone' => 'required|integer|min:11|max:12',
+        ]);
+
+        VerifyCode::query()->create([
+            'phone' => $request->get('phone'),
+            'code' => bcrypt(random_int(100000, 999999))
+        ]);
+
+        return CustomResponse::create(null, '', true);
+    }
+
+    public function verifyPhone(Request $request): JsonResponse
+    {
+        $request->validate([
+            'phone' => 'required|integer|min:11|max:12',
+            'code' => 'required|integer|min:6|max:7',
+        ]);
+
+        /**
+         * check verify code exists
+         */
+        $verifyCode = VerifyCode::query()
+            ->where('phone', $request->phone)
+            ->first();
+
+        if (!$verifyCode) {
+            return CustomResponse::create(null, __('messages.verify_not_found'), false);
+        }
+
+        if (!Hash::check($request->code, $verifyCode->code)) {
+            return CustomResponse::create(null, __('messages.verify_not_found'), false);
+        }
+
+
+        /**
+         * check code expired after 15 min
+         */
+        if (is_past($verifyCode->created_at, 15)) {
+            $verifyCode->delete();
+            return CustomResponse::create(null, __("messages.verify_code_expired"), false);
+        }
+
+        $user = User::query()->where('phone', $verifyCode->phone)->firstOrNew();
+        $user->phone = $request->phone;
+        $user->status = User::USER_STATUS_ACTIVE;
+        $user->phone_verified_at = now();
+        $user->save();
+
+
+        /**
+         * delete verify code
+         */
+        $verifyCode->delete();
+
+        $token = $user->createToken('Client token')->plainTextToken;
+        return CustomResponse::create([
+            'access_token' => $token,
+            'user' => UserRepo::getInstance()->toJson()->setUser($user)->build(),
+        ], '', true);
+    }
 }

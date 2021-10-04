@@ -16,12 +16,10 @@ use Illuminate\Support\Facades\Route;
 
 Route::prefix('v1')->namespace('Api\V1')->group(function () {
     Route::post("/login", 'AuthController@login');
-    Route::post("/register", 'AuthController@register');
     Route::post("/verify", 'AuthController@verify');
-    Route::post('login/google', 'AuthController@loginWithGoogle');
 
-    Route::post('/forgot-passport/create', 'ForgotPasswordController@create');
-    Route::post('/forgot-passport/reset', 'ForgotPasswordController@reset');
+    Route::post("/login/phone", 'AuthController@loginPhone');
+    Route::post("/verify/phone", 'AuthController@verifyPhone');
 
     Route::get("/version", 'VersionController@index');
 
