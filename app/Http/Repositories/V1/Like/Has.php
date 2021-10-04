@@ -46,7 +46,7 @@ class Has
         }
 
         return Like::query()->where('likeable_id', $this->item->id)
-            ->where('likeable_type')
+            ->where('likeable_type',get_class($this->item))
             ->where('user_id', $this->user->id)->exists();
     }
 }
