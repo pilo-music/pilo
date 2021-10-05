@@ -34,7 +34,7 @@ use Laravel\Scout\Searchable;
  */
 class Album extends Model
 {
-    use HasFactory,Searchable;
+    use HasFactory;
 
     public const STATUS_ACTIVE = 1;
     public const STATUS_DRAFT = 0;

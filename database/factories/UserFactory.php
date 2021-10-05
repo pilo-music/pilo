@@ -32,6 +32,7 @@ class UserFactory extends Factory
             'status' => User::USER_STATUS_ACTIVE,
             'email_verified_at' => now(),
             'phone_verified_at' => now(),
+            "password" => bcrypt("123456")
         ];
     }
 }

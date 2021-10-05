@@ -40,7 +40,6 @@ class Music extends Model
 {
     use Notifiable;
     use HasFactory;
-    use Searchable;
 
     protected $table = "musics";
 

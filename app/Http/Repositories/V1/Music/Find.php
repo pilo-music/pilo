@@ -3,6 +3,7 @@
 namespace App\Http\Repositories\V1\Music;
 
 use App\Models\Music;
+use ProtoneMedia\LaravelCrossEloquentSearch\Search;
 
 class Find
 {
@@ -125,9 +126,10 @@ class Find
             /*
              *  find from name
              */
-            $musics = Music::search($this->name)
-                ->where('status', Music::STATUS_ACTIVE)
-                ->paginate($this->count, 'page', $this->page);
+            $musics = Search::new()
+                ->add(Music::class, ['title', 'title_en'])
+                ->paginate($this->count, 'page', $this->page)
+                ->get($this->name);
 
             if ($this->toJson) {
                 $musics = MusicRepo::getInstance()->toJsonArray()->setMusics($musics)->build();
