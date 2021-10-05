@@ -50,7 +50,7 @@ class ToJson
                 "share_url" => "https://pilo.app/music/" . $this->music->slug,
                 'created_at' => Carbon::parse($this->music->created_at)->format('D d,Y'),
                 'type' => 'music',
-                'has_like' => LikeRepo::getInstance()->has()->setUser(auth()->user())->setItem($this->music)->build(),
+                'has_like' => LikeRepo::getInstance()->has()->setUser(auth()->user("api"))->setItem($this->music)->build(),
             ];
         }
         return null;
