@@ -18,7 +18,6 @@ use App\Models\SearchHistory;
 use App\Models\Video;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
-use ProtoneMedia\LaravelCrossEloquentSearch\Search;
 
 class SearchController extends Controller
 {
