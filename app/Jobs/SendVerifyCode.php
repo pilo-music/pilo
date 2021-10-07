@@ -30,16 +30,20 @@ class SendVerifyCode implements ShouldQueue
      */
     public function handle(): void
     {
-        $result = Http::post("https://rest.payamak-panel.com/api/SendSMS/SendSMS", [
-            "username" => config("pilo.melipayamak_username"),
-            "password" => config("pilo.melipayamak_password"),
-            "from" => config("pilo.melipayamak_number"),
-            "to" => $this->phone,
-            "text" => "Pilo code " . $this->code,
-        ])->json();
+        try {
+            $result = Http::post("https://rest.payamak-panel.com/api/SendSMS/SendSMS", [
+                "username" => config("pilo.melipayamak_username"),
+                "password" => config("pilo.melipayamak_password"),
+                "from" => config("pilo.melipayamak_number"),
+                "to" => $this->phone,
+                "text" => "Pilo code " . $this->code,
+            ])->json();
 
-        if (!isset($result["RetStatus"]) || $result["RetStatus"] != 1) {
-            $this->fail();
+            if (!isset($result["RetStatus"]) || $result["RetStatus"] != 1) {
+                $this->fail();
+            }
+        } catch (\Exception $e) {
+            $this->fail($e);
         }
     }
 }
