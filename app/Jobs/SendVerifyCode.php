@@ -2,12 +2,14 @@
 
 namespace App\Jobs;
 
+use GuzzleHttp\Client;
+use GuzzleHttp\Exception\GuzzleException;
+use GuzzleHttp\RequestOptions;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
-use Illuminate\Support\Facades\Http;
 
 class SendVerifyCode implements ShouldQueue
 {
@@ -31,18 +33,23 @@ class SendVerifyCode implements ShouldQueue
     public function handle(): void
     {
         try {
-            $result = Http::post("https://rest.payamak-panel.com/api/SendSMS/SendSMS", [
-                "username" => config("pilo.melipayamak_username"),
-                "password" => config("pilo.melipayamak_password"),
-                "from" => config("pilo.melipayamak_number"),
-                "to" => $this->phone,
-                "text" => "Pilo code " . $this->code,
-            ])->json();
+            $client = new Client();
+            $result = $client->post("https://rest.payamak-panel.com/api/SendSMS/SendSMS", [
+                RequestOptions::JSON => [
+                    "username" => config("pilo.melipayamak_username"),
+                    "password" => config("pilo.melipayamak_password"),
+                    "from" => config("pilo.melipayamak_number"),
+                    "to" => $this->phone,
+                    "text" => "Pilo code " . $this->code,
+                ]
+            ])->getBody()->getContents();
+
+            $result = json_decode($result);
 
             if (!isset($result["RetStatus"]) || $result["RetStatus"] != 1) {
                 $this->fail();
             }
-        } catch (\Exception $e) {
+        } catch (\Exception | GuzzleException $e) {
             $this->fail($e);
         }
     }
