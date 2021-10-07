@@ -44,7 +44,7 @@ class SendVerifyCode implements ShouldQueue
                 ]
             ])->getBody()->getContents();
 
-            $result = json_decode($result);
+            $result = json_decode($result, true, 512, JSON_THROW_ON_ERROR);
 
             if (!isset($result["RetStatus"]) || $result["RetStatus"] != 1) {
                 $this->fail();
