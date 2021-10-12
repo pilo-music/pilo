@@ -22,7 +22,7 @@ class CreateUsersTable extends Migration
             $table->string('birth', 30)->nullable();
             $table->boolean('gender')->nullable();
             $table->string('pic')->nullable();
-            $table->string('password');
+            $table->string('password')->nullable();
             $table->tinyInteger('status')->default(\App\Models\User::USER_STATUS_NOT_VERIFY);
             $table->timestamp('email_verified_at')->nullable();
             $table->timestamp('phone_verified_at')->nullable();
