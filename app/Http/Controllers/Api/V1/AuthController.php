@@ -8,6 +8,7 @@ use App\Http\Repositories\V1\User\UserRepo;
 use App\Jobs\SendVerifyCode;
 use App\Models\User;
 use App\Models\VerifyCode;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -28,11 +29,18 @@ class AuthController extends Controller
         ]);
 
         $phone = $request->get('phone');
-        $code = random_int(100000, 999999);
-        VerifyCode::query()->create([
-            'phone' => $request->get('phone'),
-            'code' => bcrypt($code)
-        ]);
+
+        $verifyCode = $this->findVerifyCode($phone);
+        if ($verifyCode) {
+            if (is_past($verifyCode->created_at, 2)) {
+                $verifyCode->delete();
+            } else {
+                return CustomResponse::create(null, __("messages.verify_code_sent"), false);
+            }
+        }
+
+
+        $code = $this->generateVerifyCode($phone);
 
         SendVerifyCode::dispatch($phone, $code);
 
@@ -47,18 +55,23 @@ class AuthController extends Controller
         ]);
 
         /**
+         * get failed limit
+         */
+        if ($this->getFailedCount($request->phone) > 5) {
+            return CustomResponse::create(null, __("messages.too_many_attempt"), false);
+        }
+
+        /**
          * check verify code exists
          */
-        $verifyCode = VerifyCode::query()
-            ->where('phone', $request->phone)
-            ->latest()
-            ->first();
+        $verifyCode = $this->findVerifyCode($request->phone);
 
         if (!$verifyCode) {
             return CustomResponse::create(null, __('messages.verify_not_found'), false);
         }
 
         if (!Hash::check($request->code, $verifyCode->code)) {
+            $this->createFailedLog($request->phone);
             return CustomResponse::create(null, __('messages.verify_not_found'), false);
         }
 
@@ -88,5 +101,42 @@ class AuthController extends Controller
             'access_token' => $token,
             'user' => UserRepo::getInstance()->toJson()->setUser($user)->build(),
         ], '', true);
+    }
+
+    private function findVerifyCode($phone): Builder|null
+    {
+        return VerifyCode::query()
+            ->where('phone', $phone)
+            ->latest()
+            ->first();
+    }
+
+    private function generateVerifyCode($phone): int
+    {
+        $code = random_int(100000, 999999);
+        VerifyCode::query()->create([
+            'phone' => $phone,
+            'code' => bcrypt($code)
+        ]);
+
+        return $code;
+    }
+
+    private function createFailedLog($phone): void
+    {
+        $count = $this->getFailedCount($phone);
+
+        cache()->put("login_failed_$phone", $count + 1, 18000);
+    }
+
+    private function getFailedCount($phone)
+    {
+        $count = cache()->get("login_failed_$phone");
+
+        if (!$count) {
+            $count = 0;
+        }
+
+        return $count;
     }
 }
