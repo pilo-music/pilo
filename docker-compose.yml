@@ -30,7 +30,7 @@ services:
       MYSQL_PASSWORD: '${DB_PASSWORD}'
       MYSQL_ALLOW_EMPTY_PASSWORD: 'yes'
     volumes:
-      - 'sailmysql:/var/lib/mysql'
+      - './db/:/var/lib/mysql'
     networks:
       - sail
     healthcheck:
@@ -49,7 +49,5 @@ networks:
   sail:
     driver: bridge
 volumes:
-  sailmysql:
-    driver: local
   sailredis:
     driver: local
