@@ -103,7 +103,7 @@ class AuthController extends Controller
         ], '', true);
     }
 
-    private function findVerifyCode($phone): Builder|null
+    private function findVerifyCode($phone)
     {
         return VerifyCode::query()
             ->where('phone', $phone)
