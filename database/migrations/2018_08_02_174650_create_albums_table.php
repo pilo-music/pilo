@@ -19,8 +19,8 @@ class CreateAlbumsTable extends Migration
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->unsignedInteger('artist_id');
             $table->foreign('artist_id')->references('id')->on('artists')->onDelete('cascade');
-            $table->string('title', 50);
-            $table->string('title_en', 50);
+            $table->string('title', 50)->index();
+            $table->string('title_en', 50)->index();
             $table->string('slug')->unique();
             $table->text('image');
             $table->boolean('isbest');

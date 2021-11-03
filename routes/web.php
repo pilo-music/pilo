@@ -12,6 +12,7 @@
 */
 
 use App\Http\Controllers\Admin\AuthController;
+use Elasticsearch\ClientBuilder;
 use Illuminate\Support\Facades\Route;
 
 Route::redirect("/", "https://pilo.app");

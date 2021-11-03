@@ -3,6 +3,8 @@
 namespace App\Http\Repositories\V1\Video;
 
 use App\Models\Video;
+use Illuminate\Support\Collection;
+use ProtoneMedia\LaravelCrossEloquentSearch\Search;
 
 class Find
 {
@@ -117,17 +119,18 @@ class Find
     }
 
     /**
-     * @return array|null|video
+     * @return array|null|Collection
      */
     public function build()
     {
         if (isset($this->name) && !empty($this->name)) {
-            /*
-          *  find from name
-          */
-            $video = Video::search($this->name)
-                ->where('status', Video::STATUS_ACTIVE)
-                ->paginate($this->count, 'page', $this->page);
+            /**
+             * find from name
+             */
+            $video = Search::new()
+                ->add(Video::class, ['title', 'title_en'])
+                ->paginate($this->count, 'page', $this->page)
+                ->get($this->name);
 
             if ($this->toJson) {
                 $video = VideoRepo::getInstance()->toJsonArray()->setVideos($video)->build();

@@ -3,6 +3,7 @@
 namespace App\Http\Repositories\V1\Artist;
 
 use App\Models\Artist;
+use ProtoneMedia\LaravelCrossEloquentSearch\Search;
 
 class Find
 {
@@ -117,9 +118,10 @@ class Find
             /**
              *  find from name
              */
-            $artists = Artist::search($this->name)
-                ->where('status', Artist::STATUS_ACTIVE)
-                ->paginate($this->count, 'page', $this->page);
+            $artists = Search::new()
+                ->add(Artist::class, ['name', 'name_en'])
+                ->paginate($this->count, 'page', $this->page)
+                ->get($this->name);
 
             if ($this->toJson) {
                 $artists = ArtistRepo::getInstance()->toJsonArray()->setArtists($artists)->build();

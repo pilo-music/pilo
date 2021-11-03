@@ -1,6 +1,22 @@
 <?php
 
-use Illuminate\Http\Request;
+use App\Http\Controllers\Api\V1\AlbumController;
+use App\Http\Controllers\Api\V1\ArtistController;
+use App\Http\Controllers\Api\V1\AuthController;
+use App\Http\Controllers\Api\V1\BrowseController;
+use App\Http\Controllers\Api\V1\FollowController;
+use App\Http\Controllers\Api\V1\HomeController;
+use App\Http\Controllers\Api\V1\LikeController;
+use App\Http\Controllers\Api\V1\MessageController;
+use App\Http\Controllers\Api\V1\MusicController;
+use App\Http\Controllers\Api\V1\NotificationController;
+use App\Http\Controllers\Api\V1\PlayHistoryController;
+use App\Http\Controllers\Api\V1\PlaylistController;
+use App\Http\Controllers\Api\V1\SearchController;
+use App\Http\Controllers\Api\V1\UserController;
+use App\Http\Controllers\Api\V1\VersionController;
+use App\Http\Controllers\Api\V1\VideoController;
+
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -15,61 +31,56 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::prefix('v1')->namespace('Api\V1')->group(function () {
-    Route::post("/login", 'AuthController@login');
-    Route::post("/register", 'AuthController@register');
-    Route::post("/verify", 'AuthController@verify');
-    Route::post('login/google', 'AuthController@loginWithGoogle');
+    Route::post("/login", [AuthController::class, 'login']);
+    Route::post("/verify", [AuthController::class, 'verify']);
 
-    Route::post('/forgot-passport/create', 'ForgotPasswordController@create');
-    Route::post('/forgot-passport/reset', 'ForgotPasswordController@reset');
-
-    Route::get("/version", 'VersionController@index');
-
-    Route::get('/homes', 'HomeController@index');
-    Route::get('/home', 'HomeController@single');
-
-    Route::get('/browses', 'BrowseController@index');
-    Route::get('/browse', 'BrowseController@single');
-
-    Route::get('/search', 'SearchController@search');
-    Route::post('/search/click', 'SearchController@click');
-
-    Route::get('/musics', 'MusicController@index');
-    Route::get('/music', 'MusicController@single');
-
-    Route::get('/videos', 'VideoController@index');
-    Route::get('/video', 'VideoController@single');
-
-    Route::get('/artists', 'ArtistController@index');
-    Route::get('/artist', 'ArtistController@single');
-
-    Route::get('/playlists', 'PlaylistController@index');
-    Route::get('/playlist', 'PlaylistController@single');
-
-    Route::get('/albums', 'AlbumController@index');
-    Route::get('/album', 'AlbumController@single');
+    Route::get("/version", [VersionController::class, 'index']);
 
     Route::group(['middleware' => 'auth:sanctum'], function () {
-        Route::post("/update", 'UserController@update');
-        Route::post("/me", 'UserController@me');
 
-        Route::post('/playlist/create', 'PlaylistController@create');
-        Route::post('/playlist/edit', 'PlaylistController@edit');
-        Route::post('/playlist/delete', 'PlaylistController@delete');
-        Route::post('/playlist/music', 'PlaylistController@music');
+        Route::get('/homes', [HomeController::class, 'index']);
+        Route::get('/home', [HomeController::class, 'single']);
 
+        Route::get('/browses', [BrowseController::class, 'index']);
+        Route::get('/browse', [BrowseController::class, 'single']);
 
-        Route::post('/play-history', 'PlayHistoryController@create');
+        Route::get('/search', [SearchController::class, 'search']);
+        Route::post('/search/click', [SearchController::class, 'click']);
 
-        Route::get('/likes', 'LikeController@index');
-        Route::post('/like', 'LikeController@like');
+        Route::get('/musics', [MusicController::class, "index"]);
+        Route::get('/music', [MusicController::class, 'single']);
 
-        Route::get('/follows', 'FollowController@index');
-        Route::post('/follow', 'FollowController@follow');
+        Route::get('/videos', [VideoController::class, "index"]);
+        Route::get('/video', [VideoController::class, "single"]);
 
-        Route::get('/messages', 'MessageController@index');
-        Route::post('/message', 'MessageController@message');
+        Route::get('/artists', [ArtistController::class, "index"]);
+        Route::get('/artist', [ArtistController::class, "single"]);
 
-        Route::get('/notifications', 'NotificationController@index');
+        Route::get('/playlists', [PlaylistController::class, "index"]);
+        Route::get('/playlist', [PlaylistController::class, "single"]);
+
+        Route::get('/albums', [AlbumController::class, "index"]);
+        Route::get('/album', [AlbumController::class, "single"]);
+
+        Route::post("/update", [UserController::class, 'update']);
+        Route::post("/me", [UserController::class, "me"]);
+
+        Route::post('/playlist/create', [PlaylistController::class, "create"]);
+        Route::post('/playlist/edit', [PlaylistController::class, "edit"]);
+        Route::post('/playlist/delete', [PlaylistController::class, "delete"]);
+        Route::post('/playlist/music', [PlaylistController::class, "music"]);
+
+        Route::post('/play-history', [PlayHistoryController::class, 'create']);
+
+        Route::get('/likes', [LikeController::class, 'index']);
+        Route::post('/like', [LikeController::class, 'like']);
+
+        Route::get('/follows', [FollowController::class, 'index']);
+        Route::post('/follow', [FollowController::class, "follow"]);
+
+        Route::get('/messages', [MessageController::class,"index"]);
+        Route::post('/message', [MessageController::class, "message"]);
+
+        Route::get('/notifications', [NotificationController::class, "index"]);
     });
 });

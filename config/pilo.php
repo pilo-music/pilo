@@ -2,6 +2,7 @@
 
 return [
     'download_host_url' => 'https://dl.pilo.app',
-    'google_login_client_id' => env('GOOGLE_LOGIN_CLIENT_ID'),
-    'google_login_client_secret' => env('GOOGLE_CLIENT_SECRET')
+    'melipayamak_username' => env("MELI_PAYAMAK_USERNAME"),
+    "melipayamak_password" => env("MELI_PAYAMAK_PASSWORD"),
+    "melipayamak_number" => env("MELI_PAYAMAK_NUMBER")
 ];
