@@ -11,6 +11,6 @@ class HomeController extends Controller
 
     public function policy()
     {
-        return view('client.policy');
+        return view('policy');
     }
 }
