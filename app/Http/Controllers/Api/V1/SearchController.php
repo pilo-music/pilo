@@ -101,10 +101,10 @@ class SearchController extends Controller
             $artists = ArtistRepo::getInstance()->find()->setName($request->input('query'))
                 ->setSort(Artist::SORT_SEARCH)
                 ->setCount($count)->setToJson()->build();
-            $videos = VideoRepo::getInstance()->find()->setName($request->input('query'))
-                ->setSort(Video::SORT_SEARCH)
-                ->setCount($count)
-                ->setToJson()->build();
+//            $videos = VideoRepo::getInstance()->find()->setName($request->input('query'))
+//                ->setSort(Video::SORT_SEARCH)
+//                ->setCount($count)
+//                ->setToJson()->build();
             $albums = AlbumRepo::getInstance()->find()->setName($request->input('query'))
                 ->setSort(Album::SORT_SEARCH)
                 ->setCount($count)->setToJson()->build();
@@ -129,7 +129,7 @@ class SearchController extends Controller
             "recommend" => $recommend,
             "musics" => $musics,
             "artists" => $artists,
-            "videos" => $videos,
+            "videos" => [],
             "albums" => $albums,
             'playlists' => $playlist
         ], "", true);
@@ -166,7 +166,8 @@ class SearchController extends Controller
                 $item = ArtistRepo::getInstance()->find()->setSlug($request->clickable_slug)->build();
                 break;
             case "video":
-                $item = VideoRepo::getInstance()->find()->setSlug($request->clickable_slug)->build();
+//                $item = VideoRepo::getInstance()->find()->setSlug($request->clickable_slug)->build();
+                $item = [];
                 break;
             case "album":
                 $item = AlbumRepo::getInstance()->find()->setSlug($request->clickable_slug)->build();
