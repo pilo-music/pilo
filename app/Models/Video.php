@@ -2,15 +2,13 @@
 
 namespace App\Models;
 
-use App\Search\VideoIndexConfigurator;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use ScoutElastic\Searchable;
+use Laravel\Scout\Searchable;
 
 class Video extends Model
 {
-    use HasFactory,Searchable;
-    protected $indexConfigurator = VideoIndexConfigurator::class;
+    use HasFactory;
 
     public const STATUS_ACTIVE = 1;
     public const STATUS_DRAFT = 0;

@@ -2,17 +2,14 @@
 
 namespace App\Models;
 
-use App\Search\PlaylistIndexConfigurator;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use ScoutElastic\Searchable;
+use Laravel\Scout\Searchable;
 
 
 class Playlist extends Model
 {
-    use HasFactory,Searchable;
-
-    protected $indexConfigurator = PlaylistIndexConfigurator::class;
+    use HasFactory;
 
     public const STATUS_ACTIVE = 1;
     public const STATUS_DRAFT = 0;

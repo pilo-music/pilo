@@ -5,6 +5,9 @@ namespace App\Http\Repositories\V1\Album;
 use App\Models\Album;
 use App\Models\Artist;
 use App\Http\Repositories\V1\Artist\ArtistRepo;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
+use Illuminate\Database\Eloquent\Collection;
+use ProtoneMedia\LaravelCrossEloquentSearch\Search;
 
 class Find
 {
@@ -134,7 +137,7 @@ class Find
 
 
     /**
-     * @return array|null|Album
+     * @return array|null|Collection
      */
     public function build()
     {
@@ -152,9 +155,11 @@ class Find
             /*
             *  find from name
             */
-            $albums = Album::search($this->name)
-                ->where('status', Album::STATUS_ACTIVE)
-                ->paginate($this->count, 'page', $this->page);
+
+            $albums = Search::new()
+                ->add(Album::class, ['title', 'title_en'])
+                ->paginate($this->count, 'page', $this->page)
+                ->get($this->name);
 
             if ($this->toJson) {
                 $albums = AlbumRepo::getInstance()->toJsonArray()->setAlbums($albums)->build();

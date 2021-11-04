@@ -4,6 +4,7 @@ namespace App\Http\Repositories\V1\Playlist;
 
 use App\Models\Album;
 use App\Models\Playlist;
+use ProtoneMedia\LaravelCrossEloquentSearch\Search;
 
 class Find
 {
@@ -166,9 +167,10 @@ class Find
             /**
              *  find from name
              */
-            $playlist = Playlist::search($this->name)
-                ->where('status', Playlist::STATUS_ACTIVE)
-                ->paginate($this->count, 'page', $this->page);
+            $playlist = Search::new()
+                ->add(Album::class, ['title'])
+                ->paginate($this->count, 'page', $this->page)
+                ->get($this->name);
 
             if ($this->toJson) {
                 $playlist = PlaylistRepo::getInstance()->toJsonArray()->setPlaylists($playlist)->build();

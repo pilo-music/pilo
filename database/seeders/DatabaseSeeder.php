@@ -23,7 +23,7 @@ class DatabaseSeeder extends Seeder
             'user_id' => $user->id
         ]);
 
-        $album = Album::factory()->make([
+        $album = Album::factory()->create([
             'user_id' => $user->id,
             'artist_id' => $artist->id
         ]);

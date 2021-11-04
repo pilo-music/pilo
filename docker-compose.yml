@@ -20,7 +20,7 @@ services:
       - mysql
       - redis
   mysql:
-    image: 'mysql:8.0'
+    image: 'mariadb:latest'
     ports:
       - '${FORWARD_DB_PORT:-3306}:3306'
     environment:
@@ -30,7 +30,7 @@ services:
       MYSQL_PASSWORD: '${DB_PASSWORD}'
       MYSQL_ALLOW_EMPTY_PASSWORD: 'yes'
     volumes:
-      - 'sailmysql:/var/lib/mysql'
+      - './db/:/var/lib/mysql'
     networks:
       - sail
     healthcheck:
@@ -45,25 +45,9 @@ services:
       - sail
     healthcheck:
       test: [ "CMD", "redis-cli", "ping" ]
-
-#  elasticsearch:
-#    image: 'elasticsearch:7.14.0'
-#    environment:
-#      - discovery.type=single-node
-#    ports:
-#      - 9200:9200
-#      - 9300:9300
-#    volumes:
-#      - sailelasticsearch:/usr/share/elasticsearch/data
-#    networks:
-#      - sail
 networks:
   sail:
     driver: bridge
 volumes:
-  sailmysql:
-    driver: local
   sailredis:
-    driver: local
-  sailelasticsearch:
     driver: local
