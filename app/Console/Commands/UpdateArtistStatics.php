@@ -22,16 +22,6 @@ class UpdateArtistStatics extends Command
     protected $description = 'Update artist music_count,album_count,video_count,video_count,playlist_count';
 
     /**
-     * Create a new command instance.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        parent::__construct();
-    }
-
-    /**
      * Execute the console command.
      *
      * @return mixed
