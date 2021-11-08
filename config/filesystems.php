@@ -59,7 +59,7 @@ return [
             'driver' => 'ftp',
             'host' => '136.243.175.217',
             'username' => 'mobin@dl.pilo.app',
-            'password' => 'xailY5VW',
+            'password' => 'b!*^z#i7*0jttwBCPZKw3X!ug6G9lfnlRzpTaVKE%*2T',
         ],
 
         's3' => [
