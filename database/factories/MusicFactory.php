@@ -22,10 +22,11 @@ class MusicFactory extends Factory
      */
     public function definition()
     {
+        $title = $this->faker->text(5);
         return [
-            'title' => $this->faker->text(5),
-            'title_en' => $this->faker->text(5),
-            'slug' => $this->faker->text(5),
+            'title' => $title,
+            'title_en' => $title,
+            'slug' => generate_slug($title),
             'image' => $this->faker->imageUrl(300, 300),
             'text' => $this->faker->text(100),
             'link128' => $this->faker->url(),

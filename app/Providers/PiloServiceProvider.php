@@ -6,8 +6,6 @@ use App\Models\Album;
 use App\Models\Artist;
 use App\Models\Music;
 use App\Models\Playlist;
-use App\Models\Search\EloquentSearchRepository;
-use App\Models\Search\SearchRepository;
 use App\Models\Video;
 use App\Observers\AlbumObserver;
 use App\Observers\ArtistObserver;
@@ -19,6 +17,7 @@ use App\View\Components\Admin\Forms\Input;
 use App\View\Components\Admin\Items\AlbumRow;
 use App\View\Components\Admin\Items\MusicRow;
 use App\View\Components\Admin\UI\Table;
+use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\ServiceProvider;
 
@@ -47,15 +46,6 @@ class PiloServiceProvider extends ServiceProvider
         Video::observe(VideoObserver::class);
         Playlist::observe(PlaylistObserver::class);
 
-        Blade::componentNamespace('App\\View\\Components\\Admin\\UI', 'ui');
-
-
-        Blade::component(Input::class);
-        Blade::component(Button::class);
-
-        Blade::component(Table::class);
-
-        Blade::component(AlbumRow::class);
-        Blade::component(MusicRow::class);
+        Paginator::useBootstrap();
     }
 }

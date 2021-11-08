@@ -1,10 +1,10 @@
 <div>
-    <div>
+    <div class="d-flex justify-content-between align-items-center">
         @if($title)
-            <h2 class="float-left">{{$title}}</h2>
+            <h2>{{$title}}</h2>
         @endif
         @if($link)
-            <a href="{{$link}}" class="float-right">show more</a>
+            <a href="{{$link}}">show more</a>
         @endif
     </div>
     <div class="box">

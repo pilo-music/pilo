@@ -19,7 +19,7 @@ class MusicController extends Controller
      */
     public function index()
     {
-        $data = Music::query()->latest()->paginate(15);
+        $data = Music::query()->latest()->paginate(5);
         return  view('admin.pages.musics.browser', compact('data'));
     }
 

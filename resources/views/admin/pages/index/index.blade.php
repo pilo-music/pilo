@@ -18,10 +18,11 @@
         @include('admin.pages.index.partials.box',['title'=>'Artists','value'=>$artist_count])
         @include('admin.pages.index.partials.box',['title'=>'Users','value'=>$user_count])
         @include('admin.pages.index.partials.box',['title'=>'Albums','value'=>$album_count])
-        @include('admin.pages.index.partials.table_music')
-        @include('admin.pages.index.partials.table_artist')
-        @include('admin.pages.index.partials.table_album')
-        @include('admin.pages.index.partials.table_video')
+
+        <x-music-table title="Last Musics ({{$music_count}})" :items="$musics" />
+        <x-artist-table title="Last Artists ({{$artist_count}})" :items="$artists" />
+        <x-album-table title="Last Albums ({{$album_count}})" :items="$albums" />
+        <x-video-table title="Last Videos ({{$video_count}})" :items="$videos" />
 
     </div>
 @endsection

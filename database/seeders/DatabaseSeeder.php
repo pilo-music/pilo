@@ -19,6 +19,14 @@ class DatabaseSeeder extends Seeder
     {
 
         $user = User::factory()->create();
+
+//        User::factory()->create([
+//            'email' => 'mobin@gmail.com',
+//            'password' => bcrypt('123456'),
+//            'level' => 'admin'
+//        ]);
+
+
         $artist = Artist::factory()->create([
             'user_id' => $user->id
         ]);
@@ -28,7 +36,7 @@ class DatabaseSeeder extends Seeder
             'artist_id' => $artist->id
         ]);
 
-        $musics = Music::factory()->create([
+        $musics = Music::factory()->count(100)->create([
             'user_id' => $user->id,
             'artist_id' => $artist->id,
             'album_id' => $album->id

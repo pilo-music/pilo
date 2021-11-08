@@ -89,3 +89,10 @@ if (!function_exists('flash')) {
         session()->flash('admin_message_class', $class);
     }
 }
+
+if (!function_exists("is_local")) {
+    function is_local(): bool
+    {
+        return config('app.env') === "local";
+    }
+}

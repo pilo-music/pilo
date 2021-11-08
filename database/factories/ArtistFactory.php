@@ -22,10 +22,11 @@ class ArtistFactory extends Factory
      */
     public function definition()
     {
+        $title = $this->faker->text(5);
         return [
-            'name' => $this->faker->name,
-            'name_en' => $this->faker->name,
-            'slug' => $this->faker->text(10),
+            'name' => $title,
+            'name_en' => $title,
+            'slug' => generate_slug($title),
             'image' => $this->faker->imageUrl(300, 300),
             'isbest' => $this->faker->numberBetween(0, 2),
             'music_count' => random_int(0, 100),
