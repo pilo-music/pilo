@@ -48,6 +48,17 @@ class HomeController extends Controller
         return CustomResponse::create($data, '', true);
     }
 
+    public function landing()
+    {
+        $data = MusicRepo::getInstance()->get()->setPage(1)
+            ->setCount(5)
+            ->setSort(Music::SORT_BEST)
+            ->setToJson()
+            ->build();
+
+        return CustomResponse::create($data, '', true);
+    }
+
 
     private function getVitrineData($item)
     {

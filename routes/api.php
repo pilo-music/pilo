@@ -30,6 +30,8 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+Route::get('/landing', [HomeController::class, 'landing']);
+
 Route::prefix('v1')->namespace('Api\V1')->group(function () {
     Route::post("/login", [AuthController::class, 'login']);
     Route::post("/verify", [AuthController::class, 'verify']);
@@ -78,7 +80,7 @@ Route::prefix('v1')->namespace('Api\V1')->group(function () {
         Route::get('/follows', [FollowController::class, 'index']);
         Route::post('/follow', [FollowController::class, "follow"]);
 
-        Route::get('/messages', [MessageController::class,"index"]);
+        Route::get('/messages', [MessageController::class, "index"]);
         Route::post('/message', [MessageController::class, "message"]);
 
         Route::get('/notifications', [NotificationController::class, "index"]);
