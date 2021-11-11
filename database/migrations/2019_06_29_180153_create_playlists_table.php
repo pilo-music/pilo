@@ -28,6 +28,7 @@ class CreatePlaylistsTable extends Migration
             $table->unsignedInteger('like_count')->default(0);
             $table->unsignedInteger('play_count')->default(0);
             $table->unsignedBigInteger('search_count')->default(0);
+            $table->boolean('is_public')->default(false);
             $table->tinyInteger('status')->default(\App\Models\Playlist::STATUS_ACTIVE);
             $table->timestamp('stored_at')->nullable();
             $table->timestamps();
