@@ -17,11 +17,21 @@ class CreateArtistsTable extends Migration
             $table->increments('id');
             $table->unsignedInteger('user_id');
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
-            $table->string('name', 191)->index();
+            $table->string('name', 191)->nullable()->index();
             $table->string('name_en', 191)->index();
             $table->string('slug')->unique();
             $table->text('image');
+            $table->string('header_image')->nullable();
+            $table->string('thumbnail')->nullable();
+            $table->unsignedInteger('music_count')->default(0);
+            $table->unsignedInteger('album_count')->default(0);
+            $table->unsignedInteger('followers_count')->default(0);
+            $table->unsignedInteger('playlist_count')->default(0);
+            $table->unsignedInteger('video_count')->default(0);
+            $table->unsignedBigInteger('search_count')->default(0);
             $table->boolean("isbest")->default(false);
+            $table->tinyInteger('status')->default(\App\Models\Artist::STATUS_ACTIVE);
+            $table->timestamp('stored_at')->nullable();
             $table->timestamps();
         });
 

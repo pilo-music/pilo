@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class UpdateVerifyCodesTable extends Migration
+class AddPublicToPlaylistsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,8 @@ class UpdateVerifyCodesTable extends Migration
      */
     public function up()
     {
-        Schema::table("verify_codes",function(Blueprint $table){
-           $table->dropColumn("email");
+        Schema::table('playlists', function (Blueprint $table) {
+            $table->boolean('is_public')->default(false);
         });
     }
 
@@ -25,8 +25,8 @@ class UpdateVerifyCodesTable extends Migration
      */
     public function down()
     {
-        Schema::table("verify_codes",function(Blueprint $table){
-            $table->string("email");
+        Schema::table('playlists', function (Blueprint $table) {
+            //
         });
     }
 }

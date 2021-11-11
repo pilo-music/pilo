@@ -15,7 +15,6 @@ class CreateVerifyCodesTable extends Migration
     {
         Schema::create('verify_codes', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('email');
             $table->string('phone');
             $table->string('code');
             $table->timestamps();
@@ -30,6 +29,5 @@ class CreateVerifyCodesTable extends Migration
     public function down()
     {
         Schema::dropIfExists('verify_codes');
-        Schema::dropIfExists('verify_users');
     }
 }

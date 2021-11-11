@@ -26,6 +26,11 @@ class CreateUsersTable extends Migration
             $table->tinyInteger('status')->default(\App\Models\User::USER_STATUS_NOT_VERIFY);
             $table->timestamp('email_verified_at')->nullable();
             $table->timestamp('phone_verified_at')->nullable();
+
+            $table->boolean('global_notification')->default(true);
+            $table->boolean('music_notification')->default(true);
+            $table->boolean('album_notification')->default(true);
+            $table->boolean('video_notification')->default(true);
             $table->rememberToken();
             $table->timestamps();
         });

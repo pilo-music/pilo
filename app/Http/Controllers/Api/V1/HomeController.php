@@ -59,6 +59,10 @@ class HomeController extends Controller
         return CustomResponse::create($data, '', true);
     }
 
+    public function share()
+    {
+
+    }
 
     private function getVitrineData($item)
     {

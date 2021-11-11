@@ -35,8 +35,9 @@ class ToJson
     public function build()
     {
         if ($this->music) {
+            $slug = $this->music->slug;
             return [
-                'slug' => $this->music->slug,
+                'slug' => $slug,
                 'title' => $this->music->title_en,
                 'image' => get_image($this->music, 'image'),
                 'thumbnail' => get_image($this->music, 'thumbnail'),
@@ -47,7 +48,7 @@ class ToJson
                 'play_count' => $this->music->play_count,
                 'artist' => ArtistRepo::getInstance()->toJson()->setArtist($this->music->artist)->build(),
                 'tags' => ArtistRepo::getInstance()->toJsonArray()->setArtists($this->music->artists()->get())->build(),
-                "share_url" => "https://pilo.app/music/" . $this->music->slug,
+                "share_url" => "https://pilo.app/share?slug={$slug}&type=music",
                 'created_at' => Carbon::parse($this->music->created_at)->format('D d,Y'),
                 'type' => 'music',
                 'has_like' => LikeRepo::getInstance()->has()->setUser(request()->user("api"))->setItem($this->music)->build(),

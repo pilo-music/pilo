@@ -27,8 +27,10 @@ class ToJson
     public function build()
     {
         if (isset($this->artist)) {
+            $slug = $this->artist->slug;
+
             return [
-                'slug' => $this->artist->slug,
+                'slug' => $slug,
                 'name' => $this->artist->name_en ?? "",
                 'image' => get_image($this->artist, 'image'),
                 'thumbnail' => get_image($this->artist, 'thumbnail'),
@@ -37,7 +39,7 @@ class ToJson
                 'video_count' => $this->artist->video_count,
                 'followers_count' => $this->artist->followers_count,
                 'playlist_count' => $this->artist->playlist_count,
-                "share_url" => "https://pilo.app/artist/".$this->artist->slug,
+                "share_url" => "https://pilo.app/share?slug={$slug}&type=artist",
                 'created_at' => date('Y-m-d', strtotime($this->artist->created_at)),
                 'type' => 'artist',
             ];

@@ -22,7 +22,7 @@ class AlbumFactory extends Factory
      */
     public function definition()
     {
-        $title = $this->faker->text(5);
+        $title = $this->faker->unique()->name;
         return [
             'title' => $title,
             'title_en' => $title,

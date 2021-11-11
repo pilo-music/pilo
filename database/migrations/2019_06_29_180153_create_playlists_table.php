@@ -24,7 +24,12 @@ class CreatePlaylistsTable extends Migration
             $table->string("image_two")->nullable();
             $table->string("image_three")->nullable();
             $table->string("image_four")->nullable();
-            $table->boolean("is_active")->default(true);
+            $table->unsignedInteger('music_count')->default(0);
+            $table->unsignedInteger('like_count')->default(0);
+            $table->unsignedInteger('play_count')->default(0);
+            $table->unsignedBigInteger('search_count')->default(0);
+            $table->tinyInteger('status')->default(\App\Models\Playlist::STATUS_ACTIVE);
+            $table->timestamp('stored_at')->nullable();
             $table->timestamps();
         });
         Schema::create('playlistables', function (Blueprint $table) {

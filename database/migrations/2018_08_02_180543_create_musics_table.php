@@ -21,15 +21,21 @@ class CreateMusicsTable extends Migration
             $table->foreign('artist_id')->references('id')->on('artists')->onDelete('cascade');
             $table->unsignedInteger('album_id')->nullable();
             $table->foreign('album_id')->references('id')->on('albums')->onDelete('cascade');
-            $table->string('title', 191)->index();
-            $table->string('title_en', 191)->index()->nullable();
+            $table->string('title', 191)->nullable()->index();
+            $table->string('title_en', 191)->index();
             $table->string('slug')->unique();
             $table->text('image');
+            $table->string('thumbnail')->nullable();
             $table->text('text')->nullable();
             $table->string('link128');
             $table->string('link320')->nullable();
+            $table->unsignedInteger('like_count')->default(0);
+            $table->unsignedInteger('play_count')->default(0);
+            $table->unsignedBigInteger('search_count')->default(0);
             $table->boolean('isbest')->default(false);
             $table->string('time', 15)->default('00:00');
+            $table->tinyInteger('status')->default(\App\Models\Music::STATUS_ACTIVE);
+            $table->timestamp('stored_at')->nullable();
             $table->timestamps();
         });
     }
