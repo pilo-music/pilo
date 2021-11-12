@@ -19,6 +19,7 @@
         "intervention/image": "^2.7",
         "james-heinrich/getid3": "^1.9",
         "laravel/framework": "8.*",
+        "laravel/octane": "^1.0",
         "laravel/sanctum": "2.*",
         "laravel/tinker": "^2.6",
         "mikehaertl/php-shellcommand": "^1.6",

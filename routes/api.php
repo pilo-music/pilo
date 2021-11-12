@@ -31,7 +31,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/landing', [HomeController::class, 'landing']);
-//Route::get('/share', [HomeController::class, 'share']);
+Route::get('/share', [HomeController::class, 'share']);
 
 Route::prefix('v1')->namespace('Api\V1')->group(function () {
     Route::post("/login", [AuthController::class, 'login']);
