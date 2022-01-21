@@ -4,12 +4,12 @@ namespace App\Http\Repositories\V1\Music;
 
 class MusicRepo implements Builder
 {
-    private static $instance = null;
+    private static ?MusicRepo $instance = null;
 
     public static function getInstance(): MusicRepo
     {
-        if (self::$instance == null) {
-            self::$instance = new MusicRepo();
+        if (self::$instance === null) {
+            self::$instance = new self();
         }
 
         return self::$instance;
@@ -20,7 +20,6 @@ class MusicRepo implements Builder
     {
         return new Find();
     }
-
 
     public function get(): Get
     {

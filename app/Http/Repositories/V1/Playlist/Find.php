@@ -4,10 +4,12 @@ namespace App\Http\Repositories\V1\Playlist;
 
 use App\Models\Album;
 use App\Models\Playlist;
-use ProtoneMedia\LaravelCrossEloquentSearch\Search;
+use App\Services\Search\Search;
 
 class Find
 {
+    private Search $search;
+    protected $columns;
     protected $count;
     protected $page;
     protected $sort;
@@ -21,15 +23,26 @@ class Find
 
     public function __construct()
     {
+        $this->search = new Search();
+        $this->columns = ["*"];
         $this->count = Playlist::DEFAULT_ITEM_COUNT;
         $this->page = 1;
         $this->sort = Playlist::DEFAULT_ITEM_SORT;
+        $this->id = null;
         $this->name = null;
         $this->slug = null;
         $this->artist = null;
         $this->toJson = false;
-        $this->id = null;
         $this->user = null;
+    }
+
+    /**
+     * @param mixed $columns
+     */
+    public function setColumns(array $columns)
+    {
+        $this->columns = $columns;
+        return $this;
     }
 
 
@@ -167,10 +180,15 @@ class Find
             /**
              *  find from name
              */
-            $playlist = Search::new()
-                ->add(Album::class, ['title'])
-                ->paginate($this->count, 'page', $this->page)
-                ->get($this->name);
+            $items = $this->search->search(Search::INDEX_PLAYLIST, $this->name, $this->page, $this->count);
+            $idList = collect($items)->pluck("id")->toArray();
+            $playlist = Playlist::query()->select($this->columns)
+                ->where('status', Playlist::STATUS_ACTIVE)
+                ->where(function (Builder $query) {
+                    return $query->whereNull('user_id')
+                        ->orWhere('is_public', true);
+                })
+                ->whereIn('id', $idList)->get();
 
             if ($this->toJson) {
                 $playlist = PlaylistRepo::getInstance()->toJsonArray()->setPlaylists($playlist)->build();
@@ -180,7 +198,7 @@ class Find
         }
 
         if (isset($this->id)) {
-            $playlist = Playlist::query()->where('status', Playlist::STATUS_ACTIVE)
+            $playlist = Playlist::query()->select($this->columns)->where('status', Playlist::STATUS_ACTIVE)
                 ->where('id', $this->id)->first();
 
             $playlist = $this->checkUser($playlist);
@@ -192,7 +210,7 @@ class Find
             return $playlist;
         }
 
-        $playlist = Playlist::query()->where('status', Playlist::STATUS_ACTIVE)
+        $playlist = Playlist::query()->select($this->columns)->where('status', Playlist::STATUS_ACTIVE)
             ->where('slug', $this->slug)->first();
 
         $playlist = $this->checkUser($playlist);

@@ -9,7 +9,6 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use Illuminate\Support\Collection;
-use Laravel\Scout\Searchable;
 
 /**
  * @property integer id
@@ -41,8 +40,6 @@ use Laravel\Scout\Searchable;
  */
 class Artist extends Model
 {
-    use HasFactory;
-
     public const STATUS_ACTIVE = 1;
     public const STATUS_DRAFT = 0;
     public const STATUS_JUST_IN_APP = 2;
@@ -56,15 +53,10 @@ class Artist extends Model
     public const DEFAULT_ITEM_COUNT = 12;
     public const DEFAULT_ITEM_SORT = self::SORT_LATEST;
 
-    protected $guarded = [
-        'id'
-    ];
+    use HasFactory;
 
+    protected $guarded = [];
 
-    public function path(): string
-    {
-        return "/artist/$this->slug";
-    }
 
     public function user(): BelongsTo
     {

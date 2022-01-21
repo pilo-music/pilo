@@ -9,7 +9,6 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use Illuminate\Support\Collection;
-use Laravel\Scout\Searchable;
 
 /**
  * @property integer id
@@ -34,8 +33,6 @@ use Laravel\Scout\Searchable;
  */
 class Album extends Model
 {
-    use HasFactory;
-
     public const STATUS_ACTIVE = 1;
     public const STATUS_DRAFT = 0;
     public const STATUS_JUST_IN_APP = 2;
@@ -50,14 +47,15 @@ class Album extends Model
     public const DEFAULT_ITEM_SORT = self::SORT_LATEST;
 
 
-    protected $guarded = [
-        'id'
-    ];
+    use HasFactory;
 
-    public function path(): string
+    protected $guarded = [];
+
+    public function scopeActive($query)
     {
-        return "/album/$this->slug";
+        $query->where('status', self::STATUS_ACTIVE);
     }
+
 
     public function user(): BelongsTo
     {

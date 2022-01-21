@@ -5,12 +5,13 @@ namespace App\Http\Repositories\V1\Album;
 use App\Models\Album;
 use App\Models\Artist;
 use App\Http\Repositories\V1\Artist\ArtistRepo;
-use Illuminate\Contracts\Pagination\LengthAwarePaginator;
+use App\Services\Search\Search;
 use Illuminate\Database\Eloquent\Collection;
-use ProtoneMedia\LaravelCrossEloquentSearch\Search;
 
 class Find
 {
+    private Search $search;
+    protected $columns;
     protected $count;
     protected $page;
     protected $sort;
@@ -23,6 +24,8 @@ class Find
 
     public function __construct()
     {
+        $this->search = new Search();
+        $this->columns = ["*"];
         $this->count = Album::DEFAULT_ITEM_COUNT;
         $this->page = 1;
         $this->sort = Album::DEFAULT_ITEM_SORT;
@@ -33,6 +36,14 @@ class Find
         $this->id = null;
     }
 
+    /**
+     * @param mixed $columns
+     */
+    public function setColumns(array $columns)
+    {
+        $this->columns = $columns;
+        return $this;
+    }
 
     /**
      * Set the value of count
@@ -155,11 +166,10 @@ class Find
             /*
             *  find from name
             */
-
-            $albums = Search::new()
-                ->add(Album::class, ['title', 'title_en'])
-                ->paginate($this->count, 'page', $this->page)
-                ->get($this->name);
+            $items = $this->search->search(Search::INDEX_ALBUMS, $this->name, $this->page, $this->count);
+            $idList = collect($items)->pluck("id")->toArray();
+            $albums = Album::query()->select($this->columns)->where('status', Album::STATUS_ACTIVE)
+                ->whereIn('id', $idList)->get();
 
             if ($this->toJson) {
                 $albums = AlbumRepo::getInstance()->toJsonArray()->setAlbums($albums)->build();
@@ -169,7 +179,7 @@ class Find
         }
 
         if (isset($this->id)) {
-            $album = Album::query()->where('status', Album::STATUS_ACTIVE)
+            $album = Album::query()->select($this->columns)->where('status', Album::STATUS_ACTIVE)
                 ->where('id', $this->id)->first();
 
             if ($this->toJson) {
@@ -183,7 +193,7 @@ class Find
          * find from slug
          */
         if (isset($this->slug) && $this->slug != "") {
-            $album = Album::query()->where('status', Album::STATUS_ACTIVE)
+            $album = Album::query()->select($this->columns)->where('status', Album::STATUS_ACTIVE)
                 ->where('slug', $this->slug)->first();
 
             if ($this->toJson) {

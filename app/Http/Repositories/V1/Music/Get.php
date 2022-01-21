@@ -26,9 +26,9 @@ class Get
         $this->page = 1;
         $this->sort = Music::SORT_LATEST;
         $this->artist = null;
-        $this->toJson = false;
         $this->withAlbum = true;
         $this->withTags = false;
+        $this->toJson = false;
     }
 
     /**

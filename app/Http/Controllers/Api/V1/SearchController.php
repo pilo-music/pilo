@@ -8,20 +8,18 @@ use App\Http\Repositories\V1\Album\AlbumRepo;
 use App\Http\Repositories\V1\Artist\ArtistRepo;
 use App\Http\Repositories\V1\Music\MusicRepo;
 use App\Http\Repositories\V1\Playlist\PlaylistRepo;
-use App\Http\Repositories\V1\Video\VideoRepo;
 use App\Models\Album;
 use App\Models\Artist;
 use App\Models\Music;
 use App\Models\Playlist;
 use App\Models\SearchClick;
 use App\Models\SearchHistory;
-use App\Models\Video;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Http;
 
 class SearchController extends Controller
 {
-    public function search(Request $request)
+    public function search(Request $request): JsonResponse
     {
         $request->validate([
             'query' => 'required|max:50|min:1'
@@ -29,128 +27,54 @@ class SearchController extends Controller
 
         $page = $request->page ?? 1;
         $type = $request->type ?? null;
-        $count = $request->has('type') ? Music::DEFAULT_ITEM_COUNT : 4;
-
-        if ($type) {
-            switch ($type) {
-                case "music":
-                    $musics = MusicRepo::getInstance()->find()->setName($request->input('query'))
-                        ->setPage($page)
-                        ->setSort(Music::SORT_SEARCH)
-                        ->setCount($count)
-                        ->setToJson()->build();
-                    $artists = [];
-                    $videos = [];
-                    $albums = [];
-                    $playlist = [];
-                    break;
-                case "artist":
-                    $artists = ArtistRepo::getInstance()->find()->setName($request->input('query'))
-                        ->setPage($page)
-                        ->setSort(Artist::SORT_SEARCH)
-                        ->setCount($count)
-                        ->setToJson()->build();
-                    $musics = [];
-                    $videos = [];
-                    $albums = [];
-                    $playlist = [];
-                    break;
-                case "video":
-                    $videos = VideoRepo::getInstance()->find()->setName($request->input('query'))
-                        ->setPage($page)
-                        ->setSort(Video::SORT_SEARCH)
-                        ->setCount($count)
-                        ->setToJson()->build();
-                    $albums = [];
-                    $playlist = [];
-                    $musics = [];
-                    $artists = [];
-                    break;
-                case "album":
-                    $albums = AlbumRepo::getInstance()->find()->setName($request->input('query'))
-                        ->setPage($page)
-                        ->setSort(Album::SORT_SEARCH)
-                        ->setCount($count)
-                        ->setToJson()->build();
-                    $musics = [];
-                    $artists = [];
-                    $videos = [];
-                    $playlist = [];
-                    break;
-                case "playlist":
-                    $playlist = PlaylistRepo::getInstance()->find()->setName($request->input('query'))
-                        ->setPage($page)
-                        ->setSort(Playlist::SORT_SEARCH)
-                        ->setCount($count)->setToJson()->build();
-                    $musics = [];
-                    $artists = [];
-                    $videos = [];
-                    $albums = [];
-                    break;
-                default:
-                    $musics = [];
-                    $artists = [];
-                    $videos = [];
-                    $albums = [];
-                    $playlist = [];
-            }
-        } else {
-            $musics = MusicRepo::getInstance()->find()->setName($request->input('query'))
-                ->setSort(Music::SORT_SEARCH)
-                ->setCount($count)->setToJson()->build();
-            $artists = ArtistRepo::getInstance()->find()->setName($request->input('query'))
-                ->setSort(Artist::SORT_SEARCH)
-                ->setCount($count)->setToJson()->build();
-//            $videos = VideoRepo::getInstance()->find()->setName($request->input('query'))
-//                ->setSort(Video::SORT_SEARCH)
-//                ->setCount($count)
-//                ->setToJson()->build();
-            $albums = AlbumRepo::getInstance()->find()->setName($request->input('query'))
-                ->setSort(Album::SORT_SEARCH)
-                ->setCount($count)->setToJson()->build();
-            $playlist = PlaylistRepo::getInstance()->find()->setName($request->input('query'))
-                ->setSort(Playlist::SORT_SEARCH)
-                ->setCount($count)
-                ->setToJson()->build();
-        }
-
-        $recommend = $this->getRecommend($request->input("query"));
+        $count = $request->has('count') ? $request->get('count') : 4;
 
         $history = SearchHistory::query()->create([
-            'user_id' => $request->user('api') != null ? $request->user("api")->id : null,
+            'user_id' => $request->user('api') !== null ? $request->user("api")->id : null,
             'query' => $request->input('query'),
-            'current_spell' => $recommend,
             'ip' => get_ip(),
             'agent' => $request->header('user-agent'),
         ]);
 
-        return CustomResponse::create([
+
+        $response = [
             'id' => $history->id,
-            "recommend" => $recommend,
-            "musics" => $musics,
-            "artists" => $artists,
-            "videos" => [],
-            "albums" => $albums,
-            'playlists' => $playlist
-        ], "", true);
-    }
+            "musics" => [],
+            "artists" => [],
+            "albums" => [],
+            'playlists' => []
+        ];
 
-    private function getRecommend($q)
-    {
-//        m.parsijoo.ir/mobile-arbiter/MobileArbiter/webservlet?utm-source=cafebazaar&type=result&Version=1&nrpp=10&co=0&query=بهنام بانی
-        try {
-            $result = Http::get("https://www.googleapis.com/customsearch/v1?key=AIzaSyCx6JQt1pez7jr9euWMfJQU40QtTxdkjO0&cx=017576662512468239146:omuauf_lfve&q=" . $q);
-            $result = json_decode($result->body());
-            if (isset($result->spelling)){
-                return ($result->spelling->correctedQuery);
-            }
-            return "";
-        } catch (\Exception $e) {
-            return "";
+        if ($type === "music") {
+            $response['musics'] = $this->searchMusic($request->get('query'), $page, $count);
+            return CustomResponse::create($response, "", true);
         }
+
+        if ($type === "artist") {
+            $response['artists'] = $this->searchArtist($request->get('query'), $page, $count);
+            return CustomResponse::create($response, "", true);
+        }
+
+        if ($type === "album") {
+            $response['albums'] = $this->searchAlbum($request->get('query'), $page, $count);
+            return CustomResponse::create($response, "", true);
+        }
+
+        if ($type === "playlist") {
+            $response['playlists'] = $this->searchPlaylist($request->get('query'), $page, $count);
+            return CustomResponse::create($response, "", true);
+        }
+
+
+        $response['musics'] = $this->searchMusic($request->get('query'), $page, $count);
+        $response['artists'] = $this->searchArtist($request->get('query'), $page, $count);
+        $response['albums'] = $this->searchAlbum($request->get('query'), $page, $count);
+        $response['playlists'] = $this->searchPlaylist($request->get('query'), $page, $count);
+
+        return CustomResponse::create($response, "", true);
     }
 
-    public function click(Request $request)
+    public function click(Request $request): JsonResponse
     {
         $request->validate([
             'id' => "required|exists:search_histories",
@@ -158,27 +82,14 @@ class SearchController extends Controller
             'clickable_type' => 'required|in:music,album,artist,playlist,video'
         ]);
 
-        switch ($request->clickable_type) {
-            case "music":
-                $item = MusicRepo::getInstance()->find()->setSlug($request->clickable_slug)->build();
-                break;
-            case "artist":
-                $item = ArtistRepo::getInstance()->find()->setSlug($request->clickable_slug)->build();
-                break;
-            case "video":
-//                $item = VideoRepo::getInstance()->find()->setSlug($request->clickable_slug)->build();
-                $item = [];
-                break;
-            case "album":
-                $item = AlbumRepo::getInstance()->find()->setSlug($request->clickable_slug)->build();
-                break;
-            case "playlist":
-                $item = PlaylistRepo::getInstance()->find()->setSlug($request->clickable_slug)->build();
-                break;
-            default:
-                $item = null;
-                break;
-        }
+        $item = match ($request->clickable_type) {
+            "music" => MusicRepo::getInstance()->find()->setSlug($request->clickable_slug)->build(),
+            "artist" => ArtistRepo::getInstance()->find()->setSlug($request->clickable_slug)->build(),
+            "album" => AlbumRepo::getInstance()->find()->setSlug($request->clickable_slug)->build(),
+            "playlist" => PlaylistRepo::getInstance()->find()->setSlug($request->clickable_slug)->build(),
+            default => null,
+        };
+
         if ($item) {
             SearchClick::query()->create([
                 'search_history_id' => $request->id,
@@ -189,7 +100,40 @@ class SearchController extends Controller
             $item->increment('search_count');
         }
 
-
         return CustomResponse::create(null, '', true);
+    }
+
+
+    private function searchMusic($q, $page, $count)
+    {
+        return MusicRepo::getInstance()->find()->setName($q)
+            ->setSort(Music::SORT_SEARCH)
+            ->setPage($page)
+            ->setCount($count)->setToJson()->build();
+    }
+
+    private function searchArtist($q, $page, $count)
+    {
+        return ArtistRepo::getInstance()->find()->setName($q)
+            ->setSort(Artist::SORT_SEARCH)
+            ->setPage($page)
+            ->setCount($count)->setToJson()->build();
+    }
+
+    private function searchAlbum($q, $page, $count)
+    {
+        return AlbumRepo::getInstance()->find()->setName($q)
+            ->setSort(Album::SORT_SEARCH)
+            ->setPage($page)
+            ->setCount($count)->setToJson()->build();
+    }
+
+    private function searchPlaylist($q, $page, $count)
+    {
+        return PlaylistRepo::getInstance()->find()->setName($q)
+            ->setSort(Playlist::SORT_SEARCH)
+            ->setCount($count)
+            ->setPage($page)
+            ->setToJson()->build();
     }
 }

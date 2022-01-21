@@ -2,11 +2,15 @@
 
 namespace App\Http\Repositories\V1\Artist;
 
+use App\Http\Repositories\V1\Music\MusicRepo;
 use App\Models\Artist;
-use ProtoneMedia\LaravelCrossEloquentSearch\Search;
+use App\Models\Music;
+use App\Services\Search\Search;
 
 class Find
 {
+    private Search $search;
+    protected $columns;
     protected $name;
     protected $slug;
     protected $id;
@@ -17,14 +21,25 @@ class Find
 
     public function __construct()
     {
+        $this->search = new Search();
+        $this->columns = ["*"];
         $this->name = null;
         $this->slug = null;
+        $this->id = null;
         $this->count = Artist::DEFAULT_ITEM_COUNT;
+        $this->sort = Artist::DEFAULT_ITEM_SORT;
         $this->page = 1;
         $this->toJson = false;
-        $this->id = null;
     }
 
+    /**
+     * @param mixed $columns
+     */
+    public function setColumns(array $columns)
+    {
+        $this->columns = $columns;
+        return $this;
+    }
 
     /**
      * Set the value of name
@@ -118,10 +133,10 @@ class Find
             /**
              *  find from name
              */
-            $artists = Search::new()
-                ->add(Artist::class, ['name', 'name_en'])
-                ->paginate($this->count, 'page', $this->page)
-                ->get($this->name);
+            $items = $this->search->search(Search::INDEX_ARTIST, $this->name, $this->page, $this->count);
+            $idList = collect($items)->pluck("id")->toArray();
+            $artists = Artist::query()->select($this->columns)->where('status', Artist::STATUS_ACTIVE)
+                ->whereIn('id', $idList)->get();
 
             if ($this->toJson) {
                 $artists = ArtistRepo::getInstance()->toJsonArray()->setArtists($artists)->build();
@@ -134,7 +149,7 @@ class Find
             /**
              * find from id
              */
-            $artists = Artist::query()->where('status', Artist::STATUS_ACTIVE)
+            $artists = Artist::query()->select($this->columns)->where('status', Artist::STATUS_ACTIVE)
                 ->where('id', $this->id)->first();
 
 
@@ -149,7 +164,7 @@ class Find
                  * find from slug
                  */
         if (isset($this->slug)) {
-            $artists = Artist::query()->where('status', Artist::STATUS_ACTIVE)
+            $artists = Artist::query()->select($this->columns)->where('status', Artist::STATUS_ACTIVE)
                 ->where('slug', $this->slug)->first();
 
 

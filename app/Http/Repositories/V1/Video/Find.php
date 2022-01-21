@@ -8,6 +8,7 @@ use ProtoneMedia\LaravelCrossEloquentSearch\Search;
 
 class Find
 {
+    protected $columns;
     protected $count;
     protected $page;
     protected $sort;
@@ -19,15 +20,24 @@ class Find
 
     public function __construct()
     {
+        $this->columns = ["*"];
         $this->count = Video::DEFAULT_ITEM_COUNT;
         $this->page = 1;
         $this->sort = Video::DEFAULT_ITEM_SORT;
         $this->name = null;
         $this->slug = null;
-        $this->toJson = false;
         $this->id = null;
+        $this->toJson = false;
     }
 
+    /**
+     * @param mixed $columns
+     */
+    public function setColumns(array $columns)
+    {
+        $this->columns = $columns;
+        return $this;
+    }
 
     /**
      * Set the value of count
@@ -143,7 +153,7 @@ class Find
             /**
              * find from slug
              */
-            $video = Video::query()->where('status', Video::STATUS_ACTIVE)
+            $video = Video::query()->select($this->columns)->where('status', Video::STATUS_ACTIVE)
                 ->where('id', $this->id)->first();
 
             if ($this->toJson) {
@@ -156,7 +166,7 @@ class Find
          * find from slug
          */
         if (isset($this->slug) && $this->slug != "") {
-            $video = Video::query()->where('status', Video::STATUS_ACTIVE)
+            $video = Video::query()->select($this->columns)->where('status', Video::STATUS_ACTIVE)
                 ->where('slug', $this->slug)->first();
 
             if ($this->toJson) {
