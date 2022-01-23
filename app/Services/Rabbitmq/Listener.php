@@ -6,9 +6,7 @@ use PhpAmqpLib\Connection\AMQPStreamConnection;
 
 class Listener
 {
-    /**
-     * @throws \ErrorException
-     */
+
     public function __construct(
         private $queue = '',
         private $no_ack = false,
