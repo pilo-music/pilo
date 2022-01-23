@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Api\V1;
+namespace App\Http\Controllers\Api\V2;
 
 use App\Http\Controllers\Api\CustomResponse;
 use App\Http\Controllers\Controller;
@@ -11,17 +11,18 @@ use App\Http\Repositories\V1\Playlist\PlaylistRepo;
 use App\Http\Repositories\V1\Promotion\PromotionRepo;
 use App\Http\Repositories\V1\Video\VideoRepo;
 use App\Models\Album;
-use App\Models\Home;
+use App\Models\Browse;
 use App\Models\Music;
+use App\Models\PlayHistory;
 use Illuminate\Http\Request;
 
-class HomeController extends Controller
+class BrowseController extends Controller
 {
     protected $page = 1;
 
     public function index()
     {
-        $homes = Home::query()->where('status', Home::STATUS_ACTIVE)->get()->sortBy('row_number');
+        $homes = Browse::query()->where('status', Browse::STATUS_ACTIVE)->get()->sortBy('row_number');
 
         $data = [];
         foreach ($homes as $item) {
@@ -37,50 +38,73 @@ class HomeController extends Controller
     public function single(Request $request)
     {
         $request->validate([
-            'id' => 'required|exists:homes'
+            'id' => 'required|exists:browses'
         ]);
         $this->page = $request->page ?? 1;
         /**
          * get params
          */
-        $vitrine = Home::query()->where('id', $request->id)->where('status', Home::STATUS_ACTIVE)->firstOrFail();
+        $vitrine = Browse::query()->where('id', $request->id)->where('status', Browse::STATUS_ACTIVE)->firstOrFail();
         $data = $this->getVitrineData($vitrine);
-        return CustomResponse::create($data, '', true);
-    }
-
-    public function landing()
-    {
-        $data = MusicRepo::getInstance()->get()->setPage(1)
-            ->setCount(5)
-            ->setSort(Music::SORT_BEST)
-            ->setToJson()
-            ->build();
-
         return CustomResponse::create($data, '', true);
     }
 
 
     private function getVitrineData($item)
     {
-        $return_info = match ($item->type) {
-            Home::TYPE_ARTISTS => $this->getArtists($item, "artists"),
-            Home::TYPE_MUSICS => $this->getMusics($item, "musics"),
-            Home::TYPE_ALBUMS => $this->getAlbums($item, "albums"),
-            Home::TYPE_PLAYLISTS => $this->getPlaylists($item, "playlists"),
-            Home::TYPE_PROMOTIONS => $this->getPromotion($item, 'promotion'),
-            Home::TYPE_ALBUM_MUSIC_GRID => $this->getGridAlbumMusics($item, "album_music_grid"),
-            Home::TYPE_MUSIC_GRID => $this->getMusics($item, "music_grid"),
-            Home::TYPE_PLAYLIST_GRID => $this->getPlaylists($item, "playlist_grid"),
-            Home::TYPE_MUSIC_TRENDING => $this->getMusics($item, "trending"),
-            Home::TYPE_VIDEOS => $this->getVideos($item, "videos"),
-            Home::TYPE_MUSIC_VERTICAL => $this->getMusics($item, "music_vertical"),
-            Home::TYPE_FOR_YOU => $this->getForYou($item, "for_you"),
-            Home::TYPE_PLAY_HISTORY => $this->getStaticItem($item, "play_history"),
-            Home::TYPE_PLAY_FOLLOWS => $this->getMusicFollows($item, "music_follows"),
-            Home::TYPE_BROWSE_DOCK => $this->getStaticItem($item, "browse_dock"),
-            Home::TYPE_CLIENT_PLAYLISTS => $this->getClientPlaylists($item, "playlists"),
-            default => [],
-        };
+        switch ($item->type) {
+            case Browse::TYPE_ARTISTS:
+                $return_info = $this->getArtists($item, "artists");
+                break;
+            case Browse::TYPE_MUSICS:
+                $return_info = $this->getMusics($item, "musics");
+                break;
+            case Browse::TYPE_ALBUMS:
+                $return_info = $this->getAlbums($item, "albums");
+                break;
+            case Browse::TYPE_PLAYLISTS:
+                $return_info = $this->getPlaylists($item, "playlists");
+                break;
+            case Browse::TYPE_PROMOTIONS:
+                $return_info = $this->getPromotion($item, 'promotion');
+                break;
+            case Browse::TYPE_ALBUM_MUSIC_GRID:
+                $return_info = $this->getGridAlbumMusics($item, "album_music_grid");
+                break;
+            case Browse::TYPE_MUSIC_GRID:
+                $return_info = $this->getMusics($item, "music_grid");
+                break;
+            case Browse::TYPE_PLAYLIST_GRID:
+                $return_info = $this->getPlaylists($item, "playlist_grid");
+                break;
+            case Browse::TYPE_MUSIC_TRENDING:
+                $return_info = $this->getMusics($item, "trending");
+                break;
+            case Browse::TYPE_VIDEOS:
+                $return_info = $this->getVideos($item, "videos");
+                break;
+            case Browse::TYPE_MUSIC_VERTICAL:
+                $return_info = $this->getMusics($item, "music_vertical");
+                break;
+            case Browse::TYPE_FOR_YOU:
+                $return_info = $this->getForYou($item, "for_you");
+                break;
+            case Browse::TYPE_PLAY_HISTORY:
+                $return_info = $this->getStaticItem($item, "play_history");
+                break;
+            case Browse::TYPE_PLAY_FOLLOWS:
+                $return_info = $this->getMusicFollows($item, "music_follows");
+                break;
+            case Browse::TYPE_BROWSE_DOCK:
+                $return_info = $this->getStaticItem($item, "browse_dock");
+                break;
+            case Browse::TYPE_CLIENT_PLAYLISTS:
+                $return_info = $this->getClientPlaylists($item, "playlists");
+                break;
+            default:
+                $return_info = [];
+                break;
+        }
         return $return_info;
     }
 
@@ -289,7 +313,41 @@ class HomeController extends Controller
 
     private function getForYou($item, $type)
     {
-        return [];
+        if (auth()->guard('api')->check()) {
+//            $user = request()->user('api');
+//            $histories = PlayHistory::query()->where('user_id', $user->id)->where('historyable_type', Music::class)->limit(3)->get();
+//            $data = [];
+//            foreach ($histories as $history) {
+//
+//            }
+
+            $data [] = [
+                "title" => "آخرین موزیک ها",
+                "image" => "",
+                "music_count" => "",
+                "musics" => MusicRepo::getInstance()->get()->setSort(Music::SORT_LATEST)->setCount(5)->setPage(1)->setToJson()->build(),
+            ];
+
+            $data [] = [
+                "title" => "قدیمی ترین موزیک ها",
+                "image" => "",
+                "music_count" => "",
+                "musics" => MusicRepo::getInstance()->get()->setSort(Music::SORT_OLDEST)->setCount(5)->setPage(1)->setToJson()->build(),
+            ];
+
+            $data [] = [
+                "title" => "بهترین موزیک ها",
+                "image" => "",
+                "music_count" => "",
+                "musics" => MusicRepo::getInstance()->get()->setSort(Music::SORT_BEST)->setCount(5)->setPage(1)->setToJson()->build(),
+            ];
+        }
+        return [
+            'id' => $item->id,
+            'name' => $item->name,
+            'type' => $type,
+            'data' => []
+        ];
     }
 
 
@@ -298,7 +356,7 @@ class HomeController extends Controller
         return [];
     }
 
-    private function getClientPlaylists($home, $type): array
+    private function getClientPlaylists($home, $type)
     {
         $data = PlaylistRepo::getInstance()->get()
             ->setUser(auth()->guard('api')->user())
@@ -315,7 +373,7 @@ class HomeController extends Controller
         ];
     }
 
-    private function getStaticItem($home, $type): array
+    private function getStaticItem($home, $type)
     {
         return [
             'id' => $home->id,
@@ -325,14 +383,14 @@ class HomeController extends Controller
         ];
     }
 
-    private function explodeHomeItems($item): array
+    private function explodeHomeItems($item)
     {
-        return $item->value !== null ? explode('-', $item->value) : $item->value;
+        return $item->value != null ? explode('-', $item->value) : $item->value;
     }
 
 
     private function checkHomeValue($home): bool
     {
-        return !(!isset($home->value) || $home->value === "" || $home->value === "-");
+        return !(!isset($home->value) || $home->value == "" || $home->value == "-");
     }
 }

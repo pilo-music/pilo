@@ -56,7 +56,6 @@ class Album extends Model
         $query->where('status', self::STATUS_ACTIVE);
     }
 
-
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);

@@ -53,8 +53,8 @@ Route::prefix('v1')->namespace('Api\V1')->group(function () {
         Route::get('/musics', [MusicController::class, "index"]);
         Route::get('/music', [MusicController::class, 'single']);
 
-//        Route::get('/videos', [VideoController::class, "index"]);
-//        Route::get('/video', [VideoController::class, "single"]);
+        Route::get('/videos', [VideoController::class, "index"]);
+        Route::get('/video', [VideoController::class, "single"]);
 
         Route::get('/artists', [ArtistController::class, "index"]);
         Route::get('/artist', [ArtistController::class, "single"]);

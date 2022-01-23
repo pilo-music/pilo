@@ -3,6 +3,7 @@
 namespace App\Observers;
 
 use App\Models\Music;
+use App\Services\Rabbitmq\Publisher;
 
 class MusicObserver
 {
@@ -18,6 +19,12 @@ class MusicObserver
         $music->update([
             'stored_at' => now()
         ]);
+
+        new Publisher([
+            'id' => $music->id,
+            'type' => 'music',
+            'action' => 'create'
+        ], 'crud_models');
     }
 
     /**
@@ -29,6 +36,12 @@ class MusicObserver
     public function updated(Music $music)
     {
         $this->update($music);
+
+        new Publisher([
+            'id' => $music->id,
+            'type' => 'music',
+            'action' => 'update'
+        ], 'crud_models');
     }
 
     /**
@@ -40,6 +53,12 @@ class MusicObserver
     public function deleted(Music $music)
     {
         $this->update($music);
+
+        new Publisher([
+            'id' => $music->id,
+            'type' => 'music',
+            'action' => 'delete'
+        ], 'crud_models');
     }
 
     /**

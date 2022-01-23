@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Api\V1;
+namespace App\Http\Controllers\Api\V2;
 
 use App\Http\Controllers\Api\CustomResponse;
 use App\Http\Controllers\Controller;
@@ -59,6 +59,14 @@ class HomeController extends Controller
         return CustomResponse::create($data, '', true);
     }
 
+    public function share(Request $request)
+    {
+//        if ($request->has('type') || $request->has('slug'))
+
+
+
+
+    }
 
     private function getVitrineData($item)
     {

@@ -3,6 +3,7 @@
 namespace App\Observers;
 
 use App\Models\Artist;
+use App\Services\Rabbitmq\Publisher;
 
 class ArtistObserver
 {
@@ -17,6 +18,12 @@ class ArtistObserver
         $artist->update([
             'stored_at' => now()
         ]);
+
+        new Publisher([
+            'id' => $artist->id,
+            'type' => 'artist',
+            'action' => 'create'
+        ], 'crud_models');
     }
 
     /**
@@ -27,7 +34,11 @@ class ArtistObserver
      */
     public function updated(Artist $artist)
     {
-
+        new Publisher([
+            'id' => $artist->id,
+            'type' => 'artist',
+            'action' => 'update'
+        ], 'crud_models');
     }
 
     /**
@@ -38,6 +49,11 @@ class ArtistObserver
      */
     public function deleted(Artist $artist)
     {
+        new Publisher([
+            'id' => $artist->id,
+            'type' => 'artist',
+            'action' => 'delete'
+        ], 'crud_models');
     }
 
     /**

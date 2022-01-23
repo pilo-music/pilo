@@ -18,7 +18,6 @@ class PlaylistObserver
         $playlist->update([
             'stored_at' => now()
         ]);
-
     }
 
     /**
@@ -69,6 +68,10 @@ class PlaylistObserver
 
     public function update($playlist)
     {
+        if ($playlist->user_id != null) {
+            return;
+        }
+
         $musics = $playlist->musics()->get();
 
         foreach ($musics as $music) {

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Api\V1;
+namespace App\Http\Controllers\Api\V2;
 
 use App\Http\Controllers\Api\CustomResponse;
 use App\Http\Controllers\Controller;
@@ -60,16 +60,16 @@ class SearchController extends Controller
             return CustomResponse::create($response, "", true);
         }
 
-//        if ($type === "playlist") {
-//            $response['playlists'] = $this->searchPlaylist($request->get('query'), $page, $count);
-//            return CustomResponse::create($response, "", true);
-//        }
-//
+        if ($type === "playlist") {
+            $response['playlists'] = $this->searchPlaylist($request->get('query'), $page, $count);
+            return CustomResponse::create($response, "", true);
+        }
+
 
         $response['musics'] = $this->searchMusic($request->get('query'), $page, $count);
         $response['artists'] = $this->searchArtist($request->get('query'), $page, $count);
         $response['albums'] = $this->searchAlbum($request->get('query'), $page, $count);
-//        $response['playlists'] = $this->searchPlaylist($request->get('query'), $page, $count);
+        $response['playlists'] = $this->searchPlaylist($request->get('query'), $page, $count);
 
         return CustomResponse::create($response, "", true);
     }
@@ -86,7 +86,7 @@ class SearchController extends Controller
             "music" => MusicRepo::getInstance()->find()->setSlug($request->clickable_slug)->build(),
             "artist" => ArtistRepo::getInstance()->find()->setSlug($request->clickable_slug)->build(),
             "album" => AlbumRepo::getInstance()->find()->setSlug($request->clickable_slug)->build(),
-//            "playlist" => PlaylistRepo::getInstance()->find()->setSlug($request->clickable_slug)->build(),
+            "playlist" => PlaylistRepo::getInstance()->find()->setSlug($request->clickable_slug)->build(),
             default => null,
         };
 
@@ -128,12 +128,12 @@ class SearchController extends Controller
             ->setCount($count)->setToJson()->build();
     }
 
-//    private function searchPlaylist($q, $page, $count)
-//    {
-//        return PlaylistRepo::getInstance()->find()->setName($q)
-//            ->setSort(Playlist::SORT_SEARCH)
-//            ->setCount($count)
-//            ->setPage($page)
-//            ->setToJson()->build();
-//    }
+    private function searchPlaylist($q, $page, $count)
+    {
+        return PlaylistRepo::getInstance()->find()->setName($q)
+            ->setSort(Playlist::SORT_SEARCH)
+            ->setCount($count)
+            ->setPage($page)
+            ->setToJson()->build();
+    }
 }

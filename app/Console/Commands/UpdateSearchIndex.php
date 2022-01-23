@@ -55,7 +55,7 @@ class UpdateSearchIndex extends Command
                 if ($item) {
                     $search = new Search();
                     switch ($action) {
-                        case "add":
+                        case "create":
                             $search->index->add($item->toArray(), $type);
                             break;
                         case "delete":

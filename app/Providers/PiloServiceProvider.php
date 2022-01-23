@@ -12,14 +12,9 @@ use App\Observers\ArtistObserver;
 use App\Observers\MusicObserver;
 use App\Observers\PlaylistObserver;
 use App\Observers\VideoObserver;
-use App\View\Components\Admin\Forms\Button;
-use App\View\Components\Admin\Forms\Input;
-use App\View\Components\Admin\Items\AlbumRow;
-use App\View\Components\Admin\Items\MusicRow;
-use App\View\Components\Admin\UI\Table;
 use Illuminate\Pagination\Paginator;
-use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Support\Facades\Response;
 
 class PiloServiceProvider extends ServiceProvider
 {
@@ -40,6 +35,16 @@ class PiloServiceProvider extends ServiceProvider
      */
     public function boot()
     {
+        Response::macro('custom', function ($data, string $message, bool $status, $responseCode = 200) {
+            return response()->json([
+                "data" => $data,
+                "message" => $message,
+                "status" => $status,
+            ], $responseCode);
+        });
+
+
+
         Artist::observe(ArtistObserver::class);
         Music::observe(MusicObserver::class);
         Album::observe(AlbumObserver::class);

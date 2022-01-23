@@ -56,6 +56,12 @@ class Music extends Model
 
     protected $guarded = [];
 
+    public function scopeActive($query)
+    {
+        $query->where('status', self::STATUS_ACTIVE);
+    }
+
+
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);

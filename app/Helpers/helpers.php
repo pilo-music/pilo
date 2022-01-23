@@ -1,7 +1,5 @@
 <?php
 
-use Illuminate\Contracts\Session\Session;
-
 if (!function_exists('get_image')) {
     function get_image($model, $column = "image")
     {
@@ -35,10 +33,7 @@ if (!function_exists('is_past')) {
         $datetime2 = new DateTime($date);
 
         $interval = $datetime1->diff($datetime2);
-        if ($interval->format($format) > $time) {
-            return true;
-        }
-        return false;
+        return $interval->format($format) > $time;
     }
 }
 
@@ -47,10 +42,7 @@ if (!function_exists('setting')) {
     function setting($key, $default = null)
     {
         $setting = \App\Models\Setting::query()->where('key', $key)->first();
-        if ($setting) {
-            return $setting->value;
-        }
-        return $default;
+        return $setting->value ?? $default;
     }
 }
 

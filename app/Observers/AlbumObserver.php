@@ -3,6 +3,8 @@
 namespace App\Observers;
 
 use App\Models\Album;
+use App\Services\Rabbitmq\Publisher;
+use Illuminate\Support\Facades\Artisan;
 
 class AlbumObserver
 {
@@ -18,6 +20,12 @@ class AlbumObserver
         $album->update([
             'stored_at' => now()
         ]);
+
+        new Publisher([
+            'id' => $album->id,
+            'type' => 'album',
+            'action' => 'create'
+        ], 'crud_models');
     }
 
     /**
@@ -29,6 +37,12 @@ class AlbumObserver
     public function updated(Album $album)
     {
         $this->update($album);
+
+        new Publisher([
+            'id' => $album->id,
+            'type' => 'album',
+            'action' => 'update'
+        ], 'crud_models');
     }
 
     /**
@@ -39,7 +53,13 @@ class AlbumObserver
      */
     public function deleted(Album $album)
     {
-       $this->update($album);
+        $this->update($album);
+
+        new Publisher([
+            'id' => $album->id,
+            'type' => 'album',
+            'action' => 'delete'
+        ], 'crud_models');
     }
 
     /**
@@ -64,7 +84,8 @@ class AlbumObserver
     }
 
 
-    private function update($album){
+    private function update($album)
+    {
         $artist = $album->artist;
         $artists = $album->artists()->get();
 
