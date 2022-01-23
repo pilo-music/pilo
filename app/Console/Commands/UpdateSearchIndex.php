@@ -45,7 +45,7 @@ class UpdateSearchIndex extends Command
 
                 $item = match ($type) {
                     "music" => MusicRepo::getInstance()->find()->setId($id)->setColumns(["id", "title", "title_en"])->build(),
-                    "artist" => ArtistRepo::getInstance()->find()->setId($id)->setColumns(["id", "title", "title_en"])->build(),
+                    "artist" => ArtistRepo::getInstance()->find()->setId($id)->setColumns(["id", "name", "name_en"])->build(),
                     "album" => AlbumRepo::getInstance()->find()->setId($id)->setColumns(["id", "title", "title_en"])->build(),
                     "video" => VideoRepo::getInstance()->find()->setId($id)->setColumns(["id", "title", "title_en"])->build(),
                     "playlist" => PlaylistRepo::getInstance()->find()->setId($id)->setColumns(["id", "title"])->build(),
