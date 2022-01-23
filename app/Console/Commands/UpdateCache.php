@@ -55,6 +55,8 @@ class UpdateCache extends Command
 //                        $search->index->update($item->toArray(), $type);
 //                        break;
 //                }
+
+                $msg->ack();
             });
         return 0;
     }
