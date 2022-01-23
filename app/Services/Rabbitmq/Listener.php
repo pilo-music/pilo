@@ -24,6 +24,8 @@ class Listener
 
         $connection = new AMQPStreamConnection($host, $port, $user, $password);
         $channel = $connection->channel();
+
+        $channel->basic_qos(null, 1, null);
         $channel->basic_consume($this->queue, '', false, $this->no_ack, false, $this->nowait, function ($msg) {
             call_user_func($this->callback, $msg);
             if (!$this->no_ack) {

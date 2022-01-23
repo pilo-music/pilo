@@ -24,7 +24,7 @@ class Publisher
         $connection = new AMQPStreamConnection($host, $port, $user, $password);
         $channel = $connection->channel();
 
-        $msg = new AMQPMessage($this->message);
+        $msg = new AMQPMessage($this->message, array('delivery_mode' => AMQPMessage::DELIVERY_MODE_PERSISTENT));
         $channel->basic_publish($msg, $this->exchange, $this->queue);
 
         try {
