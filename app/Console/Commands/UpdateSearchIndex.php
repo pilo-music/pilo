@@ -34,9 +34,10 @@ class UpdateSearchIndex extends Command
      */
     public function handle()
     {
+        $search = new Search();
         new Listener(
             queue: 'update_search',
-            callback: function ($msg) {
+            callback: function ($msg) use ($search) {
                 $body = $msg->body;
                 $body = json_decode($body, true);
                 $id = $body['id'];
@@ -53,7 +54,6 @@ class UpdateSearchIndex extends Command
                 };
 
                 if ($item) {
-                    $search = new Search();
                     switch ($action) {
                         case "create":
                             $search->index->add($item->toArray(), $type);
@@ -67,6 +67,6 @@ class UpdateSearchIndex extends Command
                     }
                 }
             });
-        return 0;
+        return self::SUCCESS;
     }
 }
